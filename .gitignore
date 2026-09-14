@@ -1,26 +1,37 @@
 # Python
 __pycache__/
 *.py[cod]
-*.egg-info/
-*.venv/
-env/
+*$py.class
+*.pyd
+*.so
+.Python
+
+# Virtual environments and tooling
+.venv/
+.venv*/
 venv/
+env/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Packaging and generated artifacts
+dist/
+build/python314/
+build/PaxoInsight/
+*.egg-info/
+*.spec.bak
+
+# Local diagnostics and generated reports
 *.log
+PaxoInsight_Report.*
+PaxoInsight_Kotlin_Report.html
 
-# Archives and outputs
-*.zip
-*.tar.gz
-*.tgz
-*.tar.bz2
-*.tbz2
-*.tar.xz
-*.txz
-
-# macOS
-.DS_Store
-__MACOSX/
-
-# IDE/project files
-*.iml
+# Editors and operating systems
 .idea/
 .vscode/
+.DS_Store
+Thumbs.db
+Desktop.ini
