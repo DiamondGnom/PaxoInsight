@@ -7,12 +7,11 @@ import threading
 import tkinter as tk
 from contextlib import suppress
 from pathlib import Path
-from tkinter import filedialog, messagebox, simpledialog, ttk
+from tkinter import filedialog, messagebox, ttk
 from tkinter import font as tkfont
 
 from .. import APP_NAME, VERSION
 from ..archive_service import (
-    APPLICATION_CONTAINER_EXTENSIONS,
     SUPPORTED_EXTENSIONS,
     archive_extension,
     strip_archive_extension,
@@ -25,6 +24,7 @@ from ..reporting import (
     save_kotlin_html_report,
 )
 from ..workflow import WorkflowService
+from .password_dialog import ask_archive_password
 
 try:
     from tkinterdnd2 import DND_FILES, TkinterDnD
@@ -483,6 +483,20 @@ class PaxoInsightWindow:
             pady=6,
         )
         self.sast_label.grid(row=3, column=0, sticky="ew", pady=(8, 0))
+        self.preparation_hint = tk.Label(
+            state_card,
+            text="",
+            bg="#FFFBEB",
+            fg="#B45309",
+            font=(self.ui_font, 9),
+            justify="left",
+            anchor="w",
+            wraplength=410,
+            padx=8,
+            pady=8,
+        )
+        self.preparation_hint.grid(row=4, column=0, sticky="ew", pady=(8, 0))
+        self.preparation_hint.grid_remove()
 
         self.notebook = ttk.Notebook(body)
         self.notebook.grid(row=1, column=0, columnspan=2, sticky="nsew")
@@ -847,9 +861,7 @@ class PaxoInsightWindow:
         prefix = "Пароль не подошёл. " if incorrect else ""
         prompt = f"{prefix}Введите пароль для «{path.name}»\nПопытка {attempt} из 5:"
         try:
-            response["password"] = simpledialog.askstring(
-                title, prompt, show="*", parent=self.root
-            )
+            response["password"] = ask_archive_password(title, prompt, parent=self.root)
         finally:
             resolved.set()
 
@@ -875,17 +887,17 @@ class PaxoInsightWindow:
         self.metric_score.configure(text=f"{result.integrity_score}/100", fg=score_color)
         self.metric_findings.configure(text=str(len(result.findings)))
         self.sast_label.configure(text=f"SAST: {result.sast_mode}\n{result.sast_reason}")
+        self.preparation_hint.configure(text=result.preparation_advice)
+        if result.preparation_advice:
+            self.preparation_hint.grid()
+        else:
+            self.preparation_hint.grid_remove()
         self._populate_summary(result)
         kotlin_mapping = self._populate_kotlin_mapping(result)
         self._populate_findings(result.findings)
         self._populate_attention(result)
         self._populate_extensions(result.extension_counts)
 
-        remaining_containers = [
-            path
-            for path in result.remaining_archives
-            if archive_extension(path) in APPLICATION_CONTAINER_EXTENSIONS
-        ]
         urgent_findings = any(item.severity in {"critical", "high"} for item in result.findings)
         urgent_files = any(
             (style := classify_attention(path)) and style.key in {"package", "executable"}
@@ -900,9 +912,9 @@ class PaxoInsightWindow:
         elif result.kotlin_files:
             self.notebook.select(self.kotlin_tree.master)
 
-        if remaining_containers and not session.options.unpack_application_containers:
+        if result.preparation_advice:
             self._set_status(
-                "Обнаружены ZIP/JAR-контейнеры. Включите их распаковку и повторите анализ.",
+                "Анализ завершён. Рекомендуется повторная распаковка ZIP/JAR-контейнеров.",
                 "warning",
             )
         elif kotlin_mapping.missing_count:
@@ -944,6 +956,7 @@ class PaxoInsightWindow:
             "kotlin", foreground="#7E22CE", font=(self.mono_font, 10, "bold")
         )
         kotlin_section = False
+        preparation_section = False
         for line in result.to_text().splitlines(keepends=True):
             stripped = line.strip()
             tag = None
@@ -958,6 +971,13 @@ class PaxoInsightWindow:
                 kotlin_section = False
             elif kotlin_section:
                 tag = "kotlin"
+            if stripped == "Рекомендация по подготовке:":
+                preparation_section = True
+                tag = "medium"
+            elif preparation_section and not stripped:
+                preparation_section = False
+            elif preparation_section:
+                tag = "medium"
             self.summary_text.insert("end", line, tag or ())
         self.summary_text.configure(state="disabled")
 
@@ -1275,6 +1295,8 @@ class PaxoInsightWindow:
         for metric in metrics:
             metric.configure(text="—", fg=NAVY)
         self.sast_label.configure(text="SAST: —")
+        self.preparation_hint.configure(text="")
+        self.preparation_hint.grid_remove()
         for text in (self.summary_text,):
             text.configure(state="normal")
             text.delete("1.0", "end")
@@ -1352,7 +1374,7 @@ class PaxoInsightWindow:
         content = tk.Frame(about_tabs, bg=SURFACE, padx=22, pady=18)
         release = tk.Frame(about_tabs, bg=SURFACE, padx=22, pady=18)
         about_tabs.add(content, text="О программе")
-        about_tabs.add(release, text="Релиз 6.0")
+        about_tabs.add(release, text=f"Релиз {VERSION}")
         tk.Label(
             content,
             text="Что делает PaxoInsight",
@@ -1418,7 +1440,7 @@ class PaxoInsightWindow:
 
         tk.Label(
             release,
-            text="PaxoInsight 6.0",
+            text=f"PaxoInsight {VERSION}",
             bg=SURFACE,
             fg=NAVY,
             font=(self.ui_font, 16, "bold"),
@@ -1446,6 +1468,10 @@ class PaxoInsightWindow:
         )
         release_card.pack(fill="x")
         release_items = (
+            "Исправлена вставка пароля: Ctrl+V, Shift+Insert и меню «Вставить».",
+            "Ускорена распаковка большого количества TGZ и TAR-контейнеров.",
+            "Добавлен счётчик файлов при распаковке текущего TAR-архива.",
+            "Добавлена рекомендация повторного анализа BAR и ZIP/JAR-контейнеров.",
             "Обновлённый дизайн.",
             "Добавлены новые форматы архивов и JAR-контейнеров.",
             "Обновлён механизм работы с текущим архивом.",

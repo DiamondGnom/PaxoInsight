@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import io
 import tempfile
 import unittest
 import zipfile
@@ -12,6 +13,91 @@ from paxoinsight.workflow import WorkflowService
 
 
 class AnalysisWorkflowTests(unittest.TestCase):
+    def test_primary_bar_advises_rescan_of_its_remaining_containers(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "application.bar"
+            jar = io.BytesIO()
+            with zipfile.ZipFile(jar, "w") as archive:
+                archive.writestr("inside.txt", "BAR content")
+            with zipfile.ZipFile(source, "w") as archive:
+                archive.writestr("module.jar", jar.getvalue())
+            workflow = WorkflowService()
+            session = workflow.scan(source, AnalysisOptions(), lambda *_: None, Event())
+            try:
+                advice = session.result.preparation_advice
+                self.assertIn(".JAR", advice)
+                self.assertIn("«Распаковывать ZIP/JAR-контейнеры»", advice)
+                self.assertIn("«Повторить анализ»", advice)
+                self.assertIn(advice, session.result.to_text())
+                self.assertEqual(session.result.to_dict()["preparation_advice"], advice)
+                self.assertFalse(source.exists())
+                workflow.rescan(
+                    session, AnalysisOptions(unpack_application_containers=True),
+                    lambda *_: None, Event(),
+                )
+                self.assertEqual(session.result.preparation_advice, "")
+                self.assertNotIn("Рекомендация по подготовке:", session.result.to_text())
+                self.assertEqual((session.content_root / "module" / "inside.txt").read_text(),
+                                 "BAR content")
+            finally:
+                workflow.cleanup(session)
+
+    def test_nested_bar_advice_names_both_disabled_extraction_settings(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "application.zip"
+            with zipfile.ZipFile(source, "w") as archive:
+                archive.writestr("module.BAR", b"container")
+            workflow = WorkflowService()
+            session = workflow.scan(
+                source, AnalysisOptions(expand_nested=False, delete_source_archive=False),
+                lambda *_: None, Event(),
+            )
+            try:
+                advice = session.result.preparation_advice
+                self.assertIn(".BAR", advice)
+                self.assertIn("«Распаковывать вложенные архивы»", advice)
+                self.assertIn("«Распаковывать ZIP/JAR-контейнеры»", advice)
+            finally:
+                workflow.cleanup(session)
+
+    def test_retained_but_already_expanded_bar_does_not_prompt_another_rescan(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "application.zip"
+            bar = io.BytesIO()
+            with zipfile.ZipFile(bar, "w") as archive:
+                archive.writestr("inside.txt", "BAR content")
+            with zipfile.ZipFile(source, "w") as archive:
+                archive.writestr("module.bar", bar.getvalue())
+            workflow = WorkflowService()
+            session = workflow.scan(
+                source,
+                AnalysisOptions(replace_nested_archives=False, unpack_application_containers=True),
+                lambda *_: None, Event(),
+            )
+            try:
+                workflow.rescan(session, AnalysisOptions(), lambda *_: None, Event())
+                self.assertIn("module.bar", session.result.remaining_archives)
+                self.assertIn("module.bar", session.result.expanded_archives)
+                self.assertEqual(session.result.preparation_advice, "")
+            finally:
+                workflow.cleanup(session)
+
+    def test_failed_bar_with_enabled_extraction_does_not_advise_enabling_it_again(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "application.zip"
+            with zipfile.ZipFile(source, "w") as archive:
+                archive.writestr("broken.bar", b"not a ZIP")
+            workflow = WorkflowService()
+            session = workflow.scan(
+                source, AnalysisOptions(unpack_application_containers=True),
+                lambda *_: None, Event(),
+            )
+            try:
+                self.assertIn("broken.bar", session.result.remaining_archives)
+                self.assertEqual(session.result.preparation_advice, "")
+            finally:
+                workflow.cleanup(session)
+
     def test_source_archive_survives_analysis_failure(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)
@@ -20,18 +106,20 @@ class AnalysisWorkflowTests(unittest.TestCase):
                 archive.writestr("data.txt", "important")
             workflow = WorkflowService()
 
-            with patch.object(
-                workflow.analysis,
-                "analyze",
-                side_effect=RuntimeError("simulated analysis failure"),
+            with (
+                patch.object(
+                    workflow.analysis,
+                    "analyze",
+                    side_effect=RuntimeError("simulated analysis failure"),
+                ),
+                self.assertRaisesRegex(RuntimeError, "simulated"),
             ):
-                with self.assertRaisesRegex(RuntimeError, "simulated"):
-                    workflow.scan(
-                        source,
-                        AnalysisOptions(),
-                        lambda _value, _text: None,
-                        Event(),
-                    )
+                workflow.scan(
+                    source,
+                    AnalysisOptions(),
+                    lambda _value, _text: None,
+                    Event(),
+                )
 
             self.assertTrue(source.is_file())
             with zipfile.ZipFile(source, "r") as archive:

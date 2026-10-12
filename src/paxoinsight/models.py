@@ -3,13 +3,13 @@ from __future__ import annotations
 import dataclasses
 import datetime as dt
 import json
+from collections.abc import Callable
 from dataclasses import dataclass, field
 from pathlib import Path
 from threading import Event
-from typing import Any, Callable
+from typing import Any
 
 from . import VERSION
-
 
 ProgressCallback = Callable[[int, str], None]
 PasswordProvider = Callable[[Path, int, bool], str | None]
@@ -42,7 +42,7 @@ class Finding:
     details: list[str] = field(default_factory=list)
 
     @classmethod
-    def from_mapping(cls, value: dict[str, Any]) -> "Finding":
+    def from_mapping(cls, value: dict[str, Any]) -> Finding:
         details = value.get("details", [])
         if isinstance(details, str):
             details = [details]
@@ -81,6 +81,7 @@ class AnalysisResult:
     findings: list[Finding] = field(default_factory=list)
     kotlin_warnings: list[str] = field(default_factory=list)
     analysis_data: dict[str, Any] = field(default_factory=dict)
+    preparation_advice: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         value = dataclasses.asdict(self)
@@ -112,6 +113,8 @@ class AnalysisResult:
             f"Режим SAST: {self.sast_mode}",
             f"Обоснование: {self.sast_reason}",
         ]
+        if self.preparation_advice:
+            lines.extend(["", "Рекомендация по подготовке:", self.preparation_advice])
         if self.kotlin_warnings:
             lines.extend(["", "Предупреждения Kotlin:"])
             lines.extend(f"  - {item}" for item in self.kotlin_warnings)

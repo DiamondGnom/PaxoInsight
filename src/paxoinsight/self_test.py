@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+import io
+import tarfile
 import tempfile
 import zipfile
 from pathlib import Path
 from threading import Event
 
+from . import VERSION
 from .models import AnalysisOptions
 from .workflow import WorkflowService
 
@@ -18,9 +21,16 @@ def run_self_test() -> int:
             archive.writestr("inside.txt", "portable self-test")
 
         source = root / "input.zip"
+        tgz = io.BytesIO()
+        with tarfile.open(fileobj=tgz, mode="w:gz") as archive:
+            member = tarfile.TarInfo("package/data.txt")
+            payload = b"nested TGZ portable self-test"
+            member.size = len(payload)
+            archive.addfile(member, io.BytesIO(payload))
         with zipfile.ZipFile(source, "w") as archive:
-            archive.writestr("root.txt", "PaxoInsight 6.0")
+            archive.writestr("root.txt", f"PaxoInsight {VERSION}")
             archive.write(nested, "library.jar")
+            archive.writestr("bundle.tgz", tgz.getvalue())
 
         workflow = WorkflowService()
         session = None
@@ -40,6 +50,8 @@ def run_self_test() -> int:
                 raise RuntimeError("Самопроверка не получила результат анализа")
             if not (session.content_root / "library" / "inside.txt").is_file():
                 raise RuntimeError("Самопроверка не раскрыла вложенный JAR")
+            if (session.content_root / "bundle" / "package" / "data.txt").read_bytes() != payload:
+                raise RuntimeError("Самопроверка не раскрыла вложенный TGZ")
 
             output = root / "result.7z"
             package = workflow.package(
@@ -56,6 +68,7 @@ def run_self_test() -> int:
             required = {
                 "root.txt",
                 "library/inside.txt",
+                "bundle/package/data.txt",
                 "PaxoInsight_Report.json",
                 "PaxoInsight_Report.txt",
                 "PaxoInsight_Kotlin_Report.html",
