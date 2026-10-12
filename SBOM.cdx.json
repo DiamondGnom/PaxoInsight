@@ -286,7 +286,7 @@
       "description": "Standalone archive analysis and 7Z preparation application",
       "name": "paxoinsight",
       "type": "application",
-      "version": "6.0.0"
+      "version": "6.1.0"
     },
     "properties": [
       {

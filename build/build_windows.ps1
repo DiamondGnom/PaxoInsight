@@ -90,7 +90,12 @@ if ($GuiSelfTest.ExitCode -ne 0) {
 $ReadmeTarget = Join-Path $Distribution "README.txt"
 Copy-Item -LiteralPath (Join-Path $ProjectRoot "README.md") -Destination $ReadmeTarget -Force
 
-$Zip = Join-Path $ProjectRoot "dist\PaxoInsight_v6.0_Python314_Portable.zip"
+$AppVersion = & $Python -c "from paxoinsight import VERSION; print(VERSION)"
+if ($LASTEXITCODE -ne 0) {
+    throw "Cannot determine the application version"
+}
+$AppVersion = $AppVersion.Trim()
+$Zip = Join-Path $ProjectRoot "dist\PaxoInsight_v${AppVersion}_Python314_Portable.zip"
 if (Test-Path -LiteralPath $Zip) {
     Remove-Item -LiteralPath $Zip -Force
 }

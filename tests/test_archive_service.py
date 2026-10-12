@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import gzip
+import io
 import struct
 import tarfile
 import tempfile
@@ -16,7 +17,7 @@ from paxoinsight.archive_service import (
     ArchiveService,
     find_7zip_executable,
 )
-from paxoinsight.models import AnalysisOptions, AnalysisResult
+from paxoinsight.models import AnalysisOptions, AnalysisResult, OperationCancelled
 
 
 def _write_stored_rar(path: Path, name: str, data: bytes) -> None:
@@ -202,6 +203,175 @@ class ArchiveServiceTests(unittest.TestCase):
             )
         finally:
             self.service.cleanup(session)
+
+    def _tgz_bytes(self, files: dict[str, bytes]) -> bytes:
+        stream = io.BytesIO()
+        with tarfile.open(fileobj=stream, mode="w:gz") as archive:
+            for name, data in files.items():
+                member = tarfile.TarInfo(name)
+                member.size = len(data)
+                archive.addfile(member, io.BytesIO(data))
+        return stream.getvalue()
+
+    def test_many_nested_tgz_do_not_rescan_the_workspace_per_archive(self) -> None:
+        source = self.root / "many.zip"
+        payload = self._tgz_bytes({f"src/file-{i}.txt": b"data" for i in range(12)})
+        with zipfile.ZipFile(source, "w") as archive:
+            for index in range(32):
+                archive.writestr(f"package-{index}.tgz", payload)
+        with patch.object(self.service, "_walk_files", wraps=self.service._walk_files) as walks:
+            session = self.service.prepare(
+                source, AnalysisOptions(delete_source_archive=False), lambda *_: None, Event()
+            )
+        try:
+            files = [path for path in session.content_root.rglob("*") if path.is_file()]
+            self.assertEqual(len(files), 32 * 12)
+            self.assertEqual(len(session.expanded_archives), 32)
+            self.assertTrue(all(path.read_bytes() == b"data" for path in files))
+            whole_tree_walks = sum(
+                call.args[0] == session.content_root for call in walks.call_args_list
+            )
+            self.assertLessEqual(whole_tree_walks, 2)
+        finally:
+            self.service.cleanup(session)
+
+    def test_tar_is_extracted_without_preloading_the_member_index(self) -> None:
+        source = self.root / "streamed.tgz"
+        source.write_bytes(self._tgz_bytes({f"file-{i}.txt": b"data" for i in range(25)}))
+        destination = self.root / "streamed"
+        destination.mkdir()
+        with patch.object(
+            tarfile.TarFile, "getmembers", side_effect=AssertionError("TAR pre-scan")
+        ):
+            self.service._extract_tar(source, destination, AnalysisOptions())
+        self.assertEqual(len(list(destination.iterdir())), 25)
+
+    def test_tgz_rejects_unsafe_paths_links_and_special_members(self) -> None:
+        for name in ("../outside.txt", "/absolute.txt", "C:/absolute.txt", "file.txt:stream"):
+            with self.subTest(name=name):
+                source = self.root / "unsafe.tgz"
+                source.write_bytes(self._tgz_bytes({name: b"no"}))
+                with self.assertRaises(ValueError):
+                    self.service.prepare(source, AnalysisOptions(), lambda *_: None, Event())
+                self.assertFalse((self.root / "outside.txt").exists())
+                self.assertTrue(source.is_file())
+        for kind in (tarfile.SYMTYPE, tarfile.LNKTYPE, tarfile.FIFOTYPE, tarfile.CHRTYPE):
+            with self.subTest(kind=kind):
+                source = self.root / "link.tgz"
+                with tarfile.open(source, "w:gz") as archive:
+                    member = tarfile.TarInfo("link")
+                    member.type = kind
+                    member.linkname = "../outside.txt"
+                    archive.addfile(member)
+                with self.assertRaises(ValueError):
+                    self.service.prepare(source, AnalysisOptions(), lambda *_: None, Event())
+
+    def test_streamed_tgz_stops_at_file_and_size_limits(self) -> None:
+        source = self.root / "limited.tgz"
+        source.write_bytes(self._tgz_bytes({"first.txt": b"one", "second.txt": b"two"}))
+        for options in (AnalysisOptions(max_files=1), AnalysisOptions(max_unpacked_bytes=5)):
+            with self.subTest(options=options):
+                with self.assertRaisesRegex(ValueError, "лимит"):
+                    self.service.prepare(source, options, lambda *_: None, Event())
+                self.assertTrue(source.is_file())
+
+    def test_global_nested_limits_keep_the_archive_and_remove_partial_output(self) -> None:
+        payload = self._tgz_bytes({"first.txt": b"one", "second.txt": b"two"})
+        source = self.root / "limited.zip"
+        with zipfile.ZipFile(source, "w") as archive:
+            archive.writestr("nested.tgz", payload)
+            archive.writestr("existing.txt", b"existing")
+        for options in (
+            AnalysisOptions(max_files=3, delete_source_archive=False),
+            AnalysisOptions(max_unpacked_bytes=len(payload) + 10, delete_source_archive=False),
+        ):
+            with self.subTest(options=options):
+                session = self.service.prepare(source, options, lambda *_: None, Event())
+                try:
+                    self.assertTrue((session.content_root / "nested.tgz").is_file())
+                    self.assertFalse((session.content_root / "nested").exists())
+                    self.assertEqual(session.expanded_archives, [])
+                    self.assertEqual(
+                        (session.content_root / "existing.txt").read_bytes(), b"existing"
+                    )
+                finally:
+                    self.service.cleanup(session)
+
+    def test_tgz_depth_limit_and_rescan_do_not_expand_retained_archives_twice(self) -> None:
+        inner = self._tgz_bytes({"data.txt": b"deep"})
+        outer = self._tgz_bytes({"inner.tgz": inner})
+        source = self.root / "levels.zip"
+        with zipfile.ZipFile(source, "w") as archive:
+            archive.writestr("outer.tgz", outer)
+        options = AnalysisOptions(
+            max_depth=1, replace_nested_archives=False, delete_source_archive=False
+        )
+        session = self.service.prepare(source, options, lambda *_: None, Event())
+        try:
+            self.assertTrue((session.content_root / "outer" / "inner.tgz").is_file())
+            self.assertFalse((session.content_root / "outer" / "inner").exists())
+            self.service.reprepare(session, options, lambda *_: None, Event())
+            self.assertEqual(session.expanded_archives, ["outer.tgz", "outer/inner.tgz"])
+            self.assertEqual(
+                (session.content_root / "outer" / "inner" / "data.txt").read_bytes(), b"deep"
+            )
+            self.assertFalse((session.content_root / "outer_extracted_1").exists())
+            self.service.reprepare(session, options, lambda *_: None, Event())
+            self.assertEqual(len(session.expanded_archives), 2)
+        finally:
+            self.service.cleanup(session)
+
+    def test_successfully_replaced_tgz_release_their_quota(self) -> None:
+        payload = self._tgz_bytes({"one.txt": b"a" * 10, "two.txt": b"b" * 10})
+        source = self.root / "quota.zip"
+        with zipfile.ZipFile(source, "w") as archive:
+            for index in range(3):
+                archive.writestr(f"part-{index}.tgz", payload)
+        for options in (
+            AnalysisOptions(max_files=7, delete_source_archive=False),
+            AnalysisOptions(max_unpacked_bytes=len(payload) * 3 + 20, delete_source_archive=False),
+        ):
+            with self.subTest(options=options):
+                session = self.service.prepare(source, options, lambda *_: None, Event())
+                try:
+                    self.assertEqual(len(session.expanded_archives), 3)
+                    self.assertFalse(list(session.content_root.rglob("*.tgz")))
+                    self.assertEqual(len(list(session.content_root.rglob("*.txt"))), 6)
+                finally:
+                    self.service.cleanup(session)
+
+    def test_tar_progress_reports_completed_files_and_bytes(self) -> None:
+        source = self.root / "progress.tgz"
+        source.write_bytes(self._tgz_bytes({"first.txt": b"one", "second.txt": b"two"}))
+        destination = self.root / "progress"
+        destination.mkdir()
+        updates = []
+        self.service._extract_tar(
+            source, destination, AnalysisOptions(), Event(),
+            lambda count, size: updates.append((count, size)),
+        )
+        self.assertEqual(updates[-1], (2, 6))
+        self.assertEqual((destination / "second.txt").read_bytes(), b"two")
+
+    def test_streamed_tar_checks_cancellation_between_members(self) -> None:
+        source = self.root / "cancel.tgz"
+        source.write_bytes(self._tgz_bytes({"first.txt": b"one", "second.txt": b"two"}))
+        destination = self.root / "cancelled"
+        destination.mkdir()
+        cancelled = Event()
+        original_extract = tarfile.TarFile._extract_member
+
+        def cancel_after_member(archive, *args, **kwargs):
+            original_extract(archive, *args, **kwargs)
+            cancelled.set()
+
+        with (
+            patch.object(tarfile.TarFile, "_extract_member", new=cancel_after_member),
+            self.assertRaises(OperationCancelled),
+        ):
+            self.service._extract_tar(source, destination, AnalysisOptions(), cancelled)
+        self.assertTrue((destination / "first.txt").is_file())
+        self.assertFalse((destination / "second.txt").exists())
 
     def test_nested_ear_respects_application_container_option(self) -> None:
         nested = self.root / "module.ear"
@@ -432,11 +602,13 @@ class ArchiveServiceTests(unittest.TestCase):
 
         self.service._seven_zip = self.root / "7z.exe"
         self.service._rarfile = FakeRarModule()
-        with patch("paxoinsight.archive_service.subprocess.run") as runner:
-            with self.assertRaises(ArchivePasswordRequired):
-                self.service._extract_rar(
-                    source, self.root / "output", AnalysisOptions(), password=None
-                )
+        with (
+            patch("paxoinsight.archive_service.subprocess.run") as runner,
+            self.assertRaises(ArchivePasswordRequired),
+        ):
+            self.service._extract_rar(
+                source, self.root / "output", AnalysisOptions(), password=None
+            )
         runner.assert_not_called()
 
     def test_zip_path_traversal_is_rejected(self) -> None:

@@ -2,11 +2,17 @@ from __future__ import annotations
 
 import os
 import time
+from collections.abc import Callable
+from contextlib import suppress
 from pathlib import Path
 from threading import Event
-from typing import Any, Callable
+from typing import Any
 
-from .archive_service import SUPPORTED_EXTENSIONS, archive_extension
+from .archive_service import (
+    APPLICATION_CONTAINER_EXTENSIONS,
+    SUPPORTED_EXTENSIONS,
+    archive_extension,
+)
 from .attention import classify_attention
 from .legacy_backend import load_legacy_backend
 from .models import (
@@ -152,7 +158,10 @@ class AnalysisService:
                 findings.append(
                     Finding(
                         category="cve",
-                        title=f"{cve.get('cve', 'CVE')}: {cve.get('artifact', '')} {cve.get('version', '')}".strip(),
+                        title=(
+                            f"{cve.get('cve', 'CVE')}: {cve.get('artifact', '')} "
+                            f"{cve.get('version', '')}"
+                        ).strip(),
                         severity=str(cve.get("severity", "high")).lower(),
                         details=[str(cve.get("description", "Известная уязвимость зависимости"))],
                     )
@@ -210,10 +219,40 @@ class AnalysisService:
             findings=findings,
             kotlin_warnings=kotlin_warnings,
             analysis_data=self._json_safe(analysis_data),
+            preparation_advice=self._container_preparation_advice(session, remaining_archives),
         )
         session.result = result
         progress(98, "Анализ завершён")
         return result
+
+    @staticmethod
+    def _container_preparation_advice(
+        session: PreparedSession, remaining_archives: list[str]
+    ) -> str:
+        expanded = set(session.expanded_archives)
+        containers = [
+            path for path in remaining_archives
+            if path not in expanded and archive_extension(path) in APPLICATION_CONTAINER_EXTENSIONS
+        ]
+        if not containers:
+            return ""
+        settings = []
+        if not session.options.expand_nested:
+            settings.append("«Распаковывать вложенные архивы»")
+        if not session.options.unpack_application_containers:
+            settings.append("«Распаковывать ZIP/JAR-контейнеры»")
+        # A container that remains despite enabled extraction may be damaged,
+        # encrypted or beyond the depth limit; enabling the same option again
+        # is not the appropriate advice in that case.
+        if not settings:
+            return ""
+        formats = ", ".join(sorted({archive_extension(path).upper() for path in containers}))
+        return (
+            f"Остались нераспакованные ZIP/JAR-контейнеры: {formats} "
+            f"(всего {len(containers)}). "
+            f"Для проверки их содержимого включите {' и '.join(settings)} "
+            "и нажмите «Повторить анализ»."
+        )
 
     def _build_inventory(self, root: Path, cancelled: Event) -> dict[str, Any]:
         special_extensions = set(getattr(self._backend, "SPECIAL_EXTENSIONS", set()))
@@ -244,10 +283,8 @@ class AnalysisService:
                     extension = Path(lower).suffix
                 ext_counts[extension] = ext_counts.get(extension, 0) + 1
                 total_files += 1
-                try:
+                with suppress(OSError):
                     total_bytes += path.stat().st_size
-                except OSError:
-                    pass
                 if lower.endswith(".class"):
                     classes.append(relative)
                 if lower.endswith((".kt", ".kts")):

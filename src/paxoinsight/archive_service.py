@@ -10,8 +10,11 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 import uuid
 import zipfile
+from collections.abc import Callable, Iterator
+from dataclasses import replace
 from pathlib import Path, PurePosixPath
 from threading import Event
 
@@ -228,15 +231,19 @@ class ArchiveService:
                     options,
                     password_provider,
                     cancelled,
+                    lambda count, size: progress(
+                        4,
+                        f"Распаковка {source_path.name}: {count:,} файлов, "
+                        f"{size / 1024**2:.1f} МБ",
+                    ),
                 )
-                self._enforce_limits(content_root, options)
 
             if options.expand_nested:
                 self._expand_nested(
                     session, progress, cancelled, password_provider
                 )
 
-            self._enforce_limits(content_root, options)
+            self._enforce_limits(content_root, options, cancelled)
             progress(
                 35,
                 "Подготовка папки завершена"
@@ -294,7 +301,7 @@ class ArchiveService:
         progress(4, "Повторная подготовка рабочей области")
         if options.expand_nested:
             self._expand_nested(session, progress, cancelled, password_provider)
-        self._enforce_limits(session.content_root, options)
+        self._enforce_limits(session.content_root, options, cancelled)
         progress(35, "Повторная подготовка завершена")
         return session
 
@@ -392,55 +399,58 @@ class ArchiveService:
         cancelled: Event,
         password_provider: PasswordProvider | None,
     ) -> None:
-        processed: set[Path] = set()
-        for relative in session.expanded_archives:
-            previous = session.content_root / Path(relative)
-            if previous.is_file():
-                processed.add(previous.resolve())
+        processed = {session.content_root / Path(name) for name in session.expanded_archives}
+        # Inspect the existing tree once. Later levels inspect only newly
+        # extracted directories, rather than rescanning every previous TGZ.
+        file_count, unpacked_bytes, candidates = self._inspect_tree(
+            session.content_root, session.options, cancelled, processed
+        )
         for depth in range(session.options.max_depth):
             self._check_cancelled(cancelled)
-            candidates = []
-            for path in session.content_root.rglob("*"):
-                if not path.is_file():
-                    continue
-                resolved = path.resolve()
-                if resolved in processed:
-                    continue
-                extension = archive_extension(path)
-                if extension not in SUPPORTED_EXTENSIONS:
-                    continue
-                if (
-                    self._is_application_container(path, extension)
-                    and not session.options.unpack_application_containers
-                ):
-                    continue
-                candidates.append((path, extension))
             if not candidates:
                 break
-
+            next_candidates: list[tuple[Path, str]] = []
             for index, (nested, extension) in enumerate(candidates, start=1):
                 self._check_cancelled(cancelled)
-                processed.add(nested.resolve())
+                processed.add(nested)
                 relative = nested.relative_to(session.content_root).as_posix()
+                percent = 8 + min(24, depth * 5 + int(index / len(candidates) * 5))
+                message = f"Вложенный архив {index}/{len(candidates)}: {relative}"
                 progress(
-                    8 + min(24, depth * 5 + int(index / len(candidates) * 5)),
-                    f"Вложенный архив: {relative}",
+                    percent,
+                    message,
                 )
                 target = self._unique_nested_target(nested)
                 try:
+                    nested_size = nested.stat().st_size
+                    remaining = replace(
+                        session.options,
+                        max_files=session.options.max_files - file_count,
+                        max_unpacked_bytes=session.options.max_unpacked_bytes - unpacked_bytes,
+                    )
                     target.mkdir(parents=True)
                     self._extract_with_password(
                         nested,
                         target,
                         extension,
-                        session.options,
+                        remaining,
                         password_provider,
                         cancelled,
+                        lambda count, size, percent=percent, message=message: progress(
+                            percent, f"{message} — {count:,} файлов, {size / 1024**2:.1f} МБ"
+                        ),
                     )
-                    self._enforce_limits(session.content_root, session.options)
-                    session.expanded_archives.append(relative)
+                    added_files, added_bytes, children = self._inspect_tree(
+                        target, remaining, cancelled, processed
+                    )
                     if session.options.replace_nested_archives:
                         nested.unlink()
+                        file_count -= 1
+                        unpacked_bytes -= nested_size
+                    file_count += added_files
+                    unpacked_bytes += added_bytes
+                    session.expanded_archives.append(relative)
+                    next_candidates.extend(children)
                 except PasswordPromptCancelled:
                     shutil.rmtree(target, ignore_errors=True)
                     # Cancelling a nested password keeps that archive untouched.
@@ -452,6 +462,31 @@ class ArchiveService:
                     shutil.rmtree(target, ignore_errors=True)
                     # Damaged/password protected nested archives remain in the result.
                     continue
+            candidates = next_candidates
+
+    def _inspect_tree(
+        self,
+        root: Path,
+        options: AnalysisOptions,
+        cancelled: Event,
+        processed: set[Path],
+    ) -> tuple[int, int, list[tuple[Path, str]]]:
+        count = total = 0
+        candidates: list[tuple[Path, str]] = []
+        for path, metadata in self._walk_files(root, cancelled):
+            count += 1
+            total += metadata.st_size
+            self._check_workspace_totals(count, total, options)
+            extension = archive_extension(path)
+            if path in processed or extension not in SUPPORTED_EXTENSIONS:
+                continue
+            if (
+                self._is_application_container(path, extension)
+                and not options.unpack_application_containers
+            ):
+                continue
+            candidates.append((path, extension))
+        return count, total, candidates
 
     def _extract_archive(
         self,
@@ -487,15 +522,19 @@ class ArchiveService:
         options: AnalysisOptions,
         password_provider: PasswordProvider | None,
         cancelled: Event,
+        member_progress: Callable[[int, int], None] | None = None,
     ) -> None:
         password: str | None = None
         attempts = 0
         while True:
             self._check_cancelled(cancelled)
             try:
-                self._extract_archive(
-                    source, destination, extension, options, password
-                )
+                if extension in TAR_EXTENSIONS:
+                    self._extract_tar(source, destination, options, cancelled, member_progress)
+                else:
+                    self._extract_archive(
+                        source, destination, extension, options, password
+                    )
                 return
             except Exception as error:
                 if not self._is_password_error(error, password is not None):
@@ -585,17 +624,44 @@ class ArchiveService:
                 ) as source_stream, target.open("wb") as target_stream:
                     shutil.copyfileobj(source_stream, target_stream, 1024 * 1024)
 
-    def _extract_tar(self, source: Path, destination: Path, options: AnalysisOptions) -> None:
-        with tarfile.open(source, "r:*") as archive:
-            members = archive.getmembers()
-            self._check_member_totals(
-                [(item.name, item.size) for item in members if item.isfile()], options
-            )
-            for member in members:
-                self._safe_member_target(destination, member.name)
-                if member.issym() or member.islnk() or member.isdev():
-                    raise ValueError(f"Небезопасная запись TAR: {member.name}")
-            archive.extractall(destination, members=members, filter="data")
+    def _extract_tar(
+        self,
+        source: Path,
+        destination: Path,
+        options: AnalysisOptions,
+        cancelled: Event | None = None,
+        member_progress: Callable[[int, int], None] | None = None,
+    ) -> None:
+        # getmembers() decompresses the entire TGZ, then extraction seeks back
+        # and decompresses it again. Streaming validates and extracts each
+        # member once, without keeping the full TAR index in memory.
+        with tarfile.open(source, "r:*", copybufsize=1024 * 1024, stream=True) as archive:
+            def checked_members() -> Iterator[tarfile.TarInfo]:
+                count = total = 0
+                last_progress = time.monotonic()
+                for member in archive:
+                    if cancelled is not None:
+                        self._check_cancelled(cancelled)
+                    # Validate the name here; the data filter below performs
+                    # the filesystem containment check before extraction.
+                    self._validate_member_name(member.name)
+                    if member.issym() or member.islnk() or member.isdev():
+                        raise ValueError(f"Небезопасная запись TAR: {member.name}")
+                    if member.isfile():
+                        if member.size < 0:
+                            raise ValueError(f"Некорректный размер записи: {member.name}")
+                        count += 1
+                        total += member.size
+                        self._check_workspace_totals(count, total, options)
+                    yield member
+                    now = time.monotonic()
+                    if member_progress is not None and now - last_progress >= 0.25:
+                        member_progress(count, total)
+                        last_progress = now
+                if member_progress is not None:
+                    member_progress(count, total)
+
+            archive.extractall(destination, members=checked_members(), filter="data")
 
     def _extract_7z(
         self,
@@ -677,8 +743,7 @@ class ArchiveService:
             completed = subprocess.run(
                 command,
                 stdin=subprocess.DEVNULL,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
+                capture_output=True,
                 text=True,
                 encoding="utf-8",
                 errors="replace",
@@ -726,7 +791,7 @@ class ArchiveService:
         )
 
     @staticmethod
-    def _safe_member_target(base: Path, member_name: str) -> Path:
+    def _validate_member_name(member_name: str) -> PurePosixPath:
         normalized = member_name.replace("\\", "/").replace("\r", "")
         pure = PurePosixPath(normalized)
         drive, _ = ntpath.splitdrive(normalized)
@@ -735,6 +800,11 @@ class ArchiveService:
         )
         if drive or pure.is_absolute() or invalid_part:
             raise ValueError(f"Небезопасный путь в архиве: {member_name}")
+        return pure
+
+    @staticmethod
+    def _safe_member_target(base: Path, member_name: str) -> Path:
+        pure = ArchiveService._validate_member_name(member_name)
         target = (base / Path(*pure.parts)).resolve()
         if not ArchiveService._is_within(target, base.resolve()):
             raise ValueError(f"Выход за пределы рабочей папки: {member_name}")
@@ -763,21 +833,46 @@ class ArchiveService:
                 raise ValueError("Архив превышает лимит распакованного объёма")
 
     @staticmethod
-    def _enforce_limits(root: Path, options: AnalysisOptions) -> None:
-        count = 0
+    def _walk_files(
+        root: Path, cancelled: Event | None = None
+    ) -> Iterator[tuple[Path, os.stat_result]]:
+        pending = [root]
+        while pending:
+            current = pending.pop()
+            with os.scandir(current) as entries:
+                for entry in entries:
+                    if cancelled is not None:
+                        ArchiveService._check_cancelled(cancelled)
+                    metadata = entry.stat(follow_symlinks=False)
+                    attributes = getattr(metadata, "st_file_attributes", 0)
+                    reparse = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0)
+                    if stat.S_ISLNK(metadata.st_mode) or attributes & reparse:
+                        raise ValueError(
+                            f"Ссылки и точки повторной обработки запрещены: {entry.path}"
+                        )
+                    path = Path(entry.path)
+                    if stat.S_ISDIR(metadata.st_mode):
+                        pending.append(path)
+                    elif stat.S_ISREG(metadata.st_mode):
+                        yield path, metadata
+                    else:
+                        raise ValueError(f"Неподдерживаемый объект в рабочей папке: {entry.path}")
+
+    @staticmethod
+    def _check_workspace_totals(count: int, total: int, options: AnalysisOptions) -> None:
+        if count > options.max_files:
+            raise ValueError("Превышен лимит количества распакованных файлов")
+        if total > options.max_unpacked_bytes:
+            raise ValueError("Превышен лимит распакованного объёма")
+
+    @classmethod
+    def _enforce_limits(
+        cls, root: Path, options: AnalysisOptions, cancelled: Event | None = None
+    ) -> None:
         total = 0
-        for current_root, directories, files in os.walk(root):
-            directories[:] = [item for item in directories if not Path(current_root, item).is_symlink()]
-            for filename in files:
-                path = Path(current_root, filename)
-                if path.is_symlink():
-                    raise ValueError(f"Символические ссылки запрещены: {path}")
-                count += 1
-                total += path.stat().st_size
-                if count > options.max_files:
-                    raise ValueError("Превышен лимит количества распакованных файлов")
-                if total > options.max_unpacked_bytes:
-                    raise ValueError("Превышен лимит распакованного объёма")
+        for count, (_path, metadata) in enumerate(cls._walk_files(root, cancelled), start=1):
+            total += metadata.st_size
+            cls._check_workspace_totals(count, total, options)
 
     @staticmethod
     def _unique_nested_target(archive_path: Path) -> Path:
