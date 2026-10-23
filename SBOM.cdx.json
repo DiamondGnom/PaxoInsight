@@ -1,10 +1,10 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "serialNumber": "urn:uuid:f2c71046-97d0-4056-ab20-3aafd17f568a",
+  "serialNumber": "urn:uuid:c5cb6858-4849-444b-8ed6-b1a5e30cc162",
   "version": 1,
   "metadata": {
-    "timestamp": "2026-10-23T10:05:45+00:00",
+    "timestamp": "2026-10-23T11:22:37+00:00",
     "component": {
       "type": "application",
       "name": "PaxoInsight Standalone",
@@ -2834,7 +2834,7 @@
       "hashes": [
         {
           "alg": "SHA-256",
-          "content": "61239410be91d94996a00eb6ccee990ad6e2945168db3a3c7d58c3d043b0142a"
+          "content": "6291e51acc75e909c0701a3a9af498691ce57f259c08d624ef9ed3f159945368"
         }
       ],
       "properties": [

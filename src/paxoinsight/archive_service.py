@@ -92,6 +92,10 @@ class ArchivePasswordRequired(RuntimeError):
     """An archive is encrypted or the supplied password is invalid."""
 
 
+class ArchiveContentMismatch(RuntimeError):
+    """Native extraction did not preserve the archive's declared contents."""
+
+
 def archive_extension(path: str | Path) -> str:
     name = str(path).lower()
     for extension in COMPOUND_EXTENSIONS:
@@ -471,6 +475,11 @@ class ArchiveService:
                 except OperationCancelled:
                     shutil.rmtree(target, ignore_errors=True)
                     raise
+                except ArchiveContentMismatch:
+                    shutil.rmtree(target, ignore_errors=True)
+                    # Never finalize/delete a source after silent native data loss,
+                    # including a mismatch in an archive nested inside it.
+                    raise
                 except Exception:
                     shutil.rmtree(target, ignore_errors=True)
                     # Damaged/password protected nested archives remain in the result.
@@ -521,7 +530,7 @@ class ArchiveService:
         elif extension == ".rar":
             # Jakarta/Java resource adapters also use .rar, but their actual
             # format is JAR/ZIP. A WinRAR archive keeps the 7-Zip route.
-            if zipfile.is_zipfile(source):
+            if self._is_zip_resource_adapter(source):
                 self._extract_zip(source, destination, options, password, cancelled)
             else:
                 self._extract_rar(source, destination, options, password, cancelled)
@@ -575,6 +584,8 @@ class ArchiveService:
 
     @staticmethod
     def _is_password_error(error: Exception, password_was_supplied: bool) -> bool:
+        if isinstance(error, ArchiveContentMismatch):
+            return False
         if isinstance(error, ArchivePasswordRequired):
             return True
         error_name = type(error).__name__.lower()
@@ -744,6 +755,10 @@ class ArchiveService:
             raise RuntimeError("Компонент проверки структуры RAR недоступен")
 
         encrypted = False
+        root = destination.resolve()
+        expected_files: dict[Path, int] = {}
+        expected_directories: set[Path] = set()
+        seen: set[Path] = set()
         with RarMetadataFile(source) as archive:
             encrypted = archive.needs_password()
             if encrypted:
@@ -755,12 +770,40 @@ class ArchiveService:
                 [(item.filename, item.file_size) for item in infos], options
             )
             for info in infos:
-                self._safe_member_target(destination, info.filename)
+                target = self._safe_member_target(destination, info.filename)
                 is_symlink = getattr(info, "is_symlink", lambda: False)()
                 if is_symlink or getattr(info, "file_redir", None):
                     raise ValueError(
                         f"Ссылки внутри RAR запрещены: {info.filename}"
                     )
+                if target in seen:
+                    raise ArchiveContentMismatch(
+                        f"Повторяющийся путь внутри RAR: {info.filename}"
+                    )
+                seen.add(target)
+                is_directory = getattr(
+                    info, "isdir", lambda name=info.filename: name.endswith(("/", "\\"))
+                )()
+                if target == root:
+                    if not is_directory:
+                        raise ArchiveContentMismatch("Путь файла RAR совпадает с рабочим каталогом")
+                    continue
+                if is_directory:
+                    expected_directories.add(target)
+                else:
+                    expected_files[target] = info.file_size
+
+        # Include implicit parent directories, and reject file/directory aliases
+        # before 7-Zip's overwrite mode has a chance to discard an earlier entry.
+        for target in seen:
+            if target == root:
+                continue
+            for parent in target.parents:
+                if parent == root:
+                    break
+                expected_directories.add(parent)
+        if expected_directories.intersection(expected_files):
+            raise ArchiveContentMismatch("Конфликт путей файла и каталога внутри RAR")
 
         destination.mkdir(parents=True, exist_ok=True)
         with source.open("rb") as stream:
@@ -834,6 +877,40 @@ class ArchiveService:
             if encrypted:
                 raise ArchivePasswordRequired("Неверный пароль для RAR")
             raise RuntimeError(f"7-Zip не смог распаковать RAR (код {returncode})")
+        self._verify_rar_output(
+            destination, expected_files, expected_directories, cancelled
+        )
+
+    @classmethod
+    def _verify_rar_output(
+        cls, destination: Path, expected_files: dict[Path, int],
+        expected_directories: set[Path], cancelled: Event | None,
+    ) -> None:
+        """Fail closed on omitted, renamed, truncated or unexpected native output.
+
+        7-Zip checks archive CRCs; this linear pass independently checks the
+        declared paths and sizes before any source archive may be deleted.
+        """
+        for path, metadata in cls._walk_files(
+            destination, cancelled, include_directories=True
+        ):
+            relative = path.relative_to(destination).as_posix()
+            if stat.S_ISDIR(metadata.st_mode):
+                if path not in expected_directories:
+                    raise ArchiveContentMismatch(f"Лишний каталог после распаковки RAR: {relative}")
+                expected_directories.remove(path)
+            else:
+                size = expected_files.pop(path, None)
+                if size is None:
+                    raise ArchiveContentMismatch(f"Лишний файл после распаковки RAR: {relative}")
+                if metadata.st_size != size:
+                    raise ArchiveContentMismatch(
+                        f"Не совпадает размер файла после распаковки RAR: {relative}"
+                    )
+        if expected_files or expected_directories:
+            missing = next(iter(expected_files or expected_directories))
+            relative = missing.relative_to(destination).as_posix()
+            raise ArchiveContentMismatch(f"После распаковки RAR отсутствует запись: {relative}")
 
     def _extract_gzip(
         self, source: Path, destination: Path, options: AnalysisOptions,
@@ -846,9 +923,18 @@ class ArchiveService:
             budget.copy(source_stream, target)
 
     @staticmethod
-    def _is_application_container(path: Path, extension: str) -> bool:
+    def _is_zip_resource_adapter(path: Path) -> bool:
+        # is_zipfile alone accepts a real RAR containing a stored ZIP near EOF,
+        # then ZipFile reads that member instead of the outer RAR. Require a
+        # ZIP header at byte zero; ordinary RAR3/RAR5 always takes the native route.
+        with path.open("rb") as stream:
+            signature = stream.read(4)
+        return signature in (b"PK\x03\x04", b"PK\x05\x06") and zipfile.is_zipfile(path)
+
+    @classmethod
+    def _is_application_container(cls, path: Path, extension: str) -> bool:
         return extension in APPLICATION_CONTAINER_EXTENSIONS or (
-            extension == ".rar" and zipfile.is_zipfile(path)
+            extension == ".rar" and cls._is_zip_resource_adapter(path)
         )
 
     @staticmethod

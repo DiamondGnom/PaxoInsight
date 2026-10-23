@@ -29,6 +29,7 @@ build/kotlin-6.1.3/
 build/desktop-6.1.4/
 build/desktop-6.1.5/
 build/release-6.3/
+build/release-6.3-rar-fix/
 build/PaxoInsight/
 *.egg-info/
 *.spec.bak
