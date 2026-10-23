@@ -1,0 +1,2333 @@
+
+## ArchiveService.package_7z, frozen source line 308
+ 308            RESUME                   0
+
+ 316            LOAD_FAST_BORROW         1 (session)
+                LOAD_ATTR                0 (result)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        12 (to L1)
+                NOT_TAKEN
+
+ 317            LOAD_GLOBAL              3 (RuntimeError + NULL)
+                LOAD_CONST               0 ('Сначала необходимо завершить анализ')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 318    L1:     LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR                4 (_py7zr)
+                POP_JUMP_IF_NOT_NONE    12 (to L2)
+                NOT_TAKEN
+
+ 319            LOAD_GLOBAL              3 (RuntimeError + NULL)
+                LOAD_CONST               2 ('Компонент создания 7Z недоступен')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 321    L2:     LOAD_FAST_BORROW         1 (session)
+                LOAD_ATTR                6 (content_root)
+                LOAD_ATTR                9 (resolve + NULL|self)
+                CALL                     0
+                STORE_FAST               6 (content_root)
+
+ 322            LOAD_FAST_BORROW         6 (content_root)
+                LOAD_ATTR               11 (is_dir + NULL|self)
+                CALL                     0
+                TO_BOOL
+                POP_JUMP_IF_TRUE        12 (to L3)
+                NOT_TAKEN
+
+ 323            LOAD_GLOBAL              3 (RuntimeError + NULL)
+                LOAD_CONST               3 ('Временная рабочая область уже удалена')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 325    L3:     LOAD_GLOBAL             13 (Path + NULL)
+                LOAD_FAST_BORROW         2 (output_path)
+                CALL                     1
+                LOAD_ATTR               15 (expanduser + NULL|self)
+                CALL                     0
+                LOAD_ATTR                9 (resolve + NULL|self)
+                CALL                     0
+                STORE_FAST               7 (destination)
+
+ 326            LOAD_FAST_BORROW         7 (destination)
+                LOAD_ATTR               16 (suffix)
+                LOAD_ATTR               19 (lower + NULL|self)
+                CALL                     0
+                LOAD_CONST               4 ('.7z')
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_FALSE       18 (to L4)
+                NOT_TAKEN
+
+ 327            LOAD_FAST_BORROW         7 (destination)
+                LOAD_ATTR               21 (with_suffix + NULL|self)
+                LOAD_CONST               4 ('.7z')
+                CALL                     1
+                STORE_FAST               7 (destination)
+
+ 328    L4:     LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR               23 (_is_within + NULL|self)
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 118 (destination, content_root)
+                CALL                     2
+                TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L5)
+                NOT_TAKEN
+
+ 329            LOAD_GLOBAL             25 (ValueError + NULL)
+                LOAD_CONST               5 ('Выходной архив нельзя сохранить внутрь упаковываемой папки')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 330    L5:     LOAD_FAST_BORROW         7 (destination)
+                LOAD_ATTR               26 (parent)
+                LOAD_ATTR               29 (mkdir + NULL|self)
+                LOAD_CONST               6 (True)
+                LOAD_CONST               6 (True)
+                LOAD_CONST               7 (('parents', 'exist_ok'))
+                CALL_KW                  2
+                POP_TOP
+
+ 331            LOAD_FAST_BORROW         7 (destination)
+                LOAD_ATTR               31 (with_name + NULL|self)
+                LOAD_CONST               8 ('.')
+                LOAD_FAST_BORROW         7 (destination)
+                LOAD_ATTR               32 (name)
+                FORMAT_SIMPLE
+                LOAD_CONST               8 ('.')
+                LOAD_GLOBAL             34 (uuid)
+                LOAD_ATTR               36 (uuid4)
+                PUSH_NULL
+                CALL                     0
+                LOAD_ATTR               38 (hex)
+                FORMAT_SIMPLE
+                LOAD_CONST               9 ('.partial')
+                BUILD_STRING             5
+                CALL                     1
+                STORE_FAST               8 (partial)
+
+ 333            LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR               41 (_package_entries + NULL|self)
+                LOAD_FAST_BORROW         6 (content_root)
+                CALL                     1
+                STORE_FAST               9 (entries)
+
+ 334            LOAD_GLOBAL             43 (sum + NULL)
+                LOAD_CONST              10 (<code object <genexpr> at 0x0000025B5B282D50, file "paxoinsight\archive_service.py", line 334>)
+                MAKE_FUNCTION
+                LOAD_FAST_BORROW         9 (entries)
+                GET_ITER
+                CALL                     0
+                CALL                     1
+                STORE_FAST              10 (file_count)
+
+ 335            LOAD_FAST_BORROW         9 (entries)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        12 (to L6)
+                NOT_TAKEN
+
+ 336            LOAD_GLOBAL              3 (RuntimeError + NULL)
+                LOAD_CONST              11 ('Рабочая область пуста — нечего упаковывать')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 338    L6:     NOP
+
+ 339    L7:     LOAD_FAST_BORROW         4 (progress)
+                PUSH_NULL
+                LOAD_SMALL_INT           2
+                LOAD_CONST              12 ('Подготовка списка файлов')
+                CALL                     2
+                POP_TOP
+
+ 340            LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR                4 (_py7zr)
+                LOAD_ATTR               45 (SevenZipFile + NULL|self)
+                LOAD_FAST_BORROW         8 (partial)
+                LOAD_CONST              13 ('w')
+                LOAD_CONST              14 (('mode',))
+                CALL_KW                  2
+                COPY                     1
+                LOAD_SPECIAL             1 (__exit__)
+                SWAP                     2
+                SWAP                     3
+                LOAD_SPECIAL             0 (__enter__)
+                CALL                     0
+        L8:     STORE_FAST              11 (archive)
+
+ 341            LOAD_GLOBAL             47 (len + NULL)
+                LOAD_FAST_BORROW         9 (entries)
+                CALL                     1
+                STORE_FAST              12 (total)
+
+ 342            LOAD_GLOBAL             49 (enumerate + NULL)
+                LOAD_FAST_BORROW         9 (entries)
+                LOAD_SMALL_INT           1
+                LOAD_CONST              15 (('start',))
+                CALL_KW                  2
+                GET_ITER
+        L9:     FOR_ITER               114 (to L10)
+                UNPACK_SEQUENCE          2
+                STORE_FAST_STORE_FAST  222 (index, item)
+
+ 343            LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR               51 (_check_cancelled + NULL|self)
+                LOAD_FAST_BORROW         5 (cancelled)
+                CALL                     1
+                POP_TOP
+
+ 344            LOAD_FAST_BORROW        14 (item)
+                LOAD_ATTR               53 (relative_to + NULL|self)
+                LOAD_FAST_BORROW         6 (content_root)
+                CALL                     1
+                LOAD_ATTR               55 (as_posix + NULL|self)
+                CALL                     0
+                STORE_FAST              15 (relative)
+
+ 345            LOAD_FAST_BORROW        11 (archive)
+                LOAD_ATTR               57 (write + NULL|self)
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 239 (item, relative)
+                LOAD_CONST              16 (('arcname',))
+                CALL_KW                  2
+                POP_TOP
+
+ 346            LOAD_SMALL_INT           5
+                LOAD_GLOBAL             59 (int + NULL)
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 220 (index, total)
+                BINARY_OP               11 (/)
+                LOAD_SMALL_INT          80
+                BINARY_OP                5 (*)
+                CALL                     1
+                BINARY_OP                0 (+)
+                STORE_FAST              16 (percent)
+
+ 347            LOAD_FAST_BORROW         4 (progress)
+                PUSH_NULL
+                LOAD_FAST_BORROW        16 (percent)
+                LOAD_CONST              17 ('Упаковка: ')
+                LOAD_FAST_BORROW        15 (relative)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     2
+                POP_TOP
+                JUMP_BACKWARD          116 (to L9)
+
+ 342   L10:     END_FOR
+                POP_ITER
+
+ 348            LOAD_FAST_BORROW         3 (include_report)
+                TO_BOOL
+                POP_JUMP_IF_FALSE      122 (to L13)
+       L11:     NOT_TAKEN
+
+ 349   L12:     LOAD_FAST_BORROW        11 (archive)
+                LOAD_ATTR               61 (writestr + NULL|self)
+                LOAD_FAST_BORROW         1 (session)
+                LOAD_ATTR                0 (result)
+                LOAD_ATTR               63 (to_json + NULL|self)
+                CALL                     0
+                LOAD_CONST              18 ('PaxoInsight_Report.json')
+                CALL                     2
+                POP_TOP
+
+ 350            LOAD_FAST_BORROW        11 (archive)
+                LOAD_ATTR               61 (writestr + NULL|self)
+                LOAD_FAST_BORROW         1 (session)
+                LOAD_ATTR                0 (result)
+                LOAD_ATTR               65 (to_text + NULL|self)
+                CALL                     0
+                LOAD_CONST              19 ('PaxoInsight_Report.txt')
+                CALL                     2
+                POP_TOP
+
+ 351            LOAD_FAST_BORROW        11 (archive)
+                LOAD_ATTR               61 (writestr + NULL|self)
+
+ 352            LOAD_GLOBAL             67 (build_kotlin_html_report + NULL)
+                LOAD_FAST_BORROW         1 (session)
+                LOAD_ATTR                0 (result)
+                CALL                     1
+
+ 353            LOAD_CONST              20 ('PaxoInsight_Kotlin_Report.html')
+
+ 351            CALL                     2
+                POP_TOP
+
+ 340   L13:     LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                CALL                     3
+                POP_TOP
+
+ 356   L14:     LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR               51 (_check_cancelled + NULL|self)
+                LOAD_FAST_BORROW         5 (cancelled)
+                CALL                     1
+                POP_TOP
+
+ 357            LOAD_FAST_BORROW         4 (progress)
+                PUSH_NULL
+                LOAD_SMALL_INT          90
+                LOAD_CONST              21 ('Проверка целостности нового 7Z')
+                CALL                     2
+                POP_TOP
+
+ 358            LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR                4 (_py7zr)
+                LOAD_ATTR               45 (SevenZipFile + NULL|self)
+                LOAD_FAST_BORROW         8 (partial)
+                LOAD_CONST              22 ('r')
+                LOAD_CONST              14 (('mode',))
+                CALL_KW                  2
+                COPY                     1
+                LOAD_SPECIAL             1 (__exit__)
+                SWAP                     2
+                SWAP                     3
+                LOAD_SPECIAL             0 (__enter__)
+                CALL                     0
+       L15:     STORE_FAST              11 (archive)
+
+ 359            LOAD_GLOBAL             69 (set + NULL)
+                LOAD_FAST_BORROW        11 (archive)
+                LOAD_ATTR               71 (getnames + NULL|self)
+                CALL                     0
+                CALL                     1
+                STORE_FAST              17 (archive_names)
+
+ 361            LOAD_FAST_BORROW         9 (entries)
+                GET_ITER
+
+ 360            LOAD_FAST_AND_CLEAR     14 (item)
+                SWAP                     2
+       L16:     BUILD_SET                0
+                SWAP                     2
+
+ 361   L17:     FOR_ITER                33 (to L18)
+                STORE_FAST_LOAD_FAST   238 (item, item)
+                LOAD_ATTR               53 (relative_to + NULL|self)
+                LOAD_FAST_BORROW         6 (content_root)
+                CALL                     1
+                LOAD_ATTR               55 (as_posix + NULL|self)
+                CALL                     0
+                SET_ADD                  2
+                JUMP_BACKWARD           35 (to L17)
+       L18:     END_FOR
+                POP_ITER
+
+ 360   L19:     STORE_FAST              18 (expected_names)
+                STORE_FAST              14 (item)
+
+ 363            LOAD_FAST_BORROW         3 (include_report)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       20 (to L20)
+                NOT_TAKEN
+
+ 364            LOAD_FAST_BORROW        18 (expected_names)
+                LOAD_ATTR               73 (update + NULL|self)
+
+ 365            BUILD_SET                0
+                LOAD_CONST              31 (frozenset({'PaxoInsight_Report.txt', 'PaxoInsight_Report.json', 'PaxoInsight_Kotlin_Report.html'}))
+                SET_UPDATE               1
+
+ 364            CALL                     1
+                POP_TOP
+
+ 371   L20:     LOAD_FAST_BORROW        18 (expected_names)
+                LOAD_ATTR               75 (difference + NULL|self)
+                LOAD_FAST_BORROW        17 (archive_names)
+                CALL                     1
+                STORE_FAST              19 (missing)
+
+ 372            LOAD_FAST_BORROW        19 (missing)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       48 (to L23)
+       L21:     NOT_TAKEN
+
+ 373   L22:     LOAD_CONST              23 (', ')
+                LOAD_ATTR               77 (join + NULL|self)
+                LOAD_GLOBAL             79 (sorted + NULL)
+                LOAD_FAST_BORROW        19 (missing)
+                CALL                     1
+                LOAD_CONST              24 (slice(None, 5, None))
+                BINARY_OP               26 ([])
+                CALL                     1
+                STORE_FAST              20 (preview)
+
+ 374            LOAD_GLOBAL              3 (RuntimeError + NULL)
+                LOAD_CONST              25 ('Проверка 7Z не пройдена, отсутствуют записи: ')
+                LOAD_FAST_BORROW        20 (preview)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 375   L23:     LOAD_FAST_BORROW        11 (archive)
+                LOAD_ATTR               81 (test + NULL|self)
+                CALL                     0
+                LOAD_CONST              26 (False)
+                IS_OP                    0 (is)
+                POP_JUMP_IF_FALSE       12 (to L24)
+                NOT_TAKEN
+
+ 376            LOAD_GLOBAL              3 (RuntimeError + NULL)
+                LOAD_CONST              27 ('Проверка контрольных сумм 7Z не пройдена')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 377   L24:     LOAD_FAST_BORROW        11 (archive)
+                LOAD_ATTR               83 (testzip + NULL|self)
+                CALL                     0
+                STORE_FAST              21 (damaged)
+
+ 378            LOAD_FAST_BORROW        21 (damaged)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       15 (to L27)
+       L25:     NOT_TAKEN
+
+ 379   L26:     LOAD_GLOBAL              3 (RuntimeError + NULL)
+                LOAD_CONST              28 ('Повреждённая запись в новом 7Z: ')
+                LOAD_FAST_BORROW        21 (damaged)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 378   L27:     NOP
+
+ 358   L28:     LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                CALL                     3
+                POP_TOP
+
+ 381   L29:     LOAD_FAST_BORROW         4 (progress)
+                PUSH_NULL
+                LOAD_SMALL_INT          96
+                LOAD_CONST              29 ('Вычисление SHA-256')
+                CALL                     2
+                POP_TOP
+
+ 382            LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR               85 (_sha256 + NULL|self)
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 133 (partial, cancelled)
+                CALL                     2
+                STORE_FAST              22 (sha256)
+
+ 383            LOAD_FAST_BORROW         8 (partial)
+                LOAD_ATTR               87 (stat + NULL|self)
+                CALL                     0
+                LOAD_ATTR               88 (st_size)
+                STORE_FAST              23 (size)
+
+ 384            LOAD_GLOBAL             90 (os)
+                LOAD_ATTR               92 (replace)
+                PUSH_NULL
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 135 (partial, destination)
+                CALL                     2
+                POP_TOP
+
+ 385            LOAD_FAST_BORROW_LOAD_FAST_BORROW 113 (destination, session)
+                STORE_ATTR              47 (output_archive)
+
+ 386            LOAD_FAST_BORROW         4 (progress)
+                PUSH_NULL
+                LOAD_SMALL_INT         100
+                LOAD_CONST              30 ('Новый архив создан и проверен')
+                CALL                     2
+                POP_TOP
+
+ 387            LOAD_GLOBAL             97 (PackageResult + NULL)
+                LOAD_GLOBAL             99 (str + NULL)
+                LOAD_FAST_BORROW         7 (destination)
+                CALL                     1
+                LOAD_FAST_BORROW        23 (size)
+                LOAD_FAST_BORROW        22 (sha256)
+                LOAD_FAST_BORROW        10 (file_count)
+                LOAD_CONST               6 (True)
+                CALL                     5
+
+ 389   L30:     NOP
+
+ 390   L31:     LOAD_FAST_BORROW         8 (partial)
+                LOAD_ATTR              101 (exists + NULL|self)
+                CALL                     0
+                TO_BOOL
+                POP_JUMP_IF_FALSE       18 (to L33)
+                NOT_TAKEN
+
+ 391            LOAD_FAST_BORROW         8 (partial)
+                LOAD_ATTR              103 (unlink + NULL|self)
+                CALL                     0
+                POP_TOP
+       L32:     RETURN_VALUE
+
+ 390   L33:     RETURN_VALUE
+
+ 340   L34:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L35)
+                NOT_TAKEN
+                RERAISE                  2
+       L35:     POP_TOP
+       L36:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                POP_TOP
+                EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 481 (to L14)
+
+  --   L37:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L38:     SWAP                     2
+                POP_TOP
+
+ 360            SWAP                     2
+                STORE_FAST              14 (item)
+                RERAISE                  0
+
+ 358   L39:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L40)
+                NOT_TAKEN
+                RERAISE                  2
+       L40:     POP_TOP
+       L41:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 194 (to L29)
+
+  --   L42:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L43:     PUSH_EXC_INFO
+
+ 392            LOAD_GLOBAL            104 (OSError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE        4 (to L45)
+                NOT_TAKEN
+                POP_TOP
+
+ 393   L44:     POP_EXCEPT
+                RETURN_VALUE
+
+ 392   L45:     RERAISE                  0
+
+  --   L46:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L47:     PUSH_EXC_INFO
+
+ 389   L48:     NOP
+
+ 390   L49:     LOAD_FAST                8 (partial)
+                LOAD_ATTR              101 (exists + NULL|self)
+                CALL                     0
+                TO_BOOL
+                POP_JUMP_IF_FALSE       18 (to L51)
+                NOT_TAKEN
+
+ 391            LOAD_FAST                8 (partial)
+                LOAD_ATTR              103 (unlink + NULL|self)
+                CALL                     0
+                POP_TOP
+       L50:     RERAISE                  0
+
+ 390   L51:     RERAISE                  0
+
+  --   L52:     PUSH_EXC_INFO
+
+ 392            LOAD_GLOBAL            104 (OSError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE        4 (to L54)
+                NOT_TAKEN
+                POP_TOP
+
+ 393   L53:     POP_EXCEPT
+                RERAISE                  0
+
+ 392   L54:     RERAISE                  0
+
+  --   L55:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L56:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L7 to L8 -> L47 [0]
+  L8 to L11 -> L34 [2] lasti
+  L12 to L13 -> L34 [2] lasti
+  L13 to L15 -> L47 [0]
+  L15 to L16 -> L39 [2] lasti
+  L16 to L19 -> L38 [4]
+  L19 to L21 -> L39 [2] lasti
+  L22 to L25 -> L39 [2] lasti
+  L26 to L27 -> L39 [2] lasti
+  L28 to L30 -> L47 [0]
+  L31 to L32 -> L43 [1]
+  L34 to L36 -> L37 [4] lasti
+  L36 to L38 -> L47 [0]
+  L38 to L39 -> L39 [2] lasti
+  L39 to L41 -> L42 [4] lasti
+  L41 to L43 -> L47 [0]
+  L43 to L44 -> L46 [2] lasti
+  L45 to L46 -> L46 [2] lasti
+  L47 to L48 -> L56 [1] lasti
+  L49 to L50 -> L52 [2]
+  L50 to L52 -> L56 [1] lasti
+  L52 to L53 -> L55 [3] lasti
+  L53 to L54 -> L56 [1] lasti
+  L54 to L55 -> L55 [3] lasti
+  L55 to L56 -> L56 [1] lasti
+
+Disassembly of <code object <genexpr> at 0x0000025B5B282D50, file "paxoinsight\archive_service.py", line 334>:
+ 334           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+               LOAD_FAST                0 (.0)
+       L2:     FOR_ITER                30 (to L5)
+               STORE_FAST_LOAD_FAST    17 (item, item)
+               LOAD_ATTR                1 (is_file + NULL|self)
+               CALL                     0
+               TO_BOOL
+       L3:     POP_JUMP_IF_TRUE         3 (to L4)
+               NOT_TAKEN
+               JUMP_BACKWARD           26 (to L2)
+       L4:     LOAD_SMALL_INT           1
+               YIELD_VALUE              0
+               RESUME                   5
+               POP_TOP
+               JUMP_BACKWARD           32 (to L2)
+       L5:     END_FOR
+               POP_ITER
+               LOAD_CONST               1 (None)
+               RETURN_VALUE
+
+  --   L6:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L3 -> L6 [0] lasti
+  L4 to L6 -> L6 [0] lasti
+
+## ArchiveService._extract_zip, frozen source line 598
+ 598            RESUME                   0
+
+ 605            LOAD_GLOBAL              0 (zipfile)
+                LOAD_ATTR                2 (ZipFile)
+                PUSH_NULL
+                LOAD_FAST_BORROW         1 (source)
+                LOAD_CONST               0 ('r')
+                CALL                     2
+                COPY                     1
+                LOAD_SPECIAL             1 (__exit__)
+                SWAP                     2
+                SWAP                     3
+                LOAD_SPECIAL             0 (__enter__)
+                CALL                     0
+        L1:     STORE_FAST               5 (archive)
+
+ 606            LOAD_FAST_BORROW         5 (archive)
+                LOAD_ATTR                5 (infolist + NULL|self)
+                CALL                     0
+                STORE_FAST               6 (infos)
+
+ 607            LOAD_FAST                0 (self)
+                LOAD_ATTR                7 (_check_member_totals + NULL|self)
+
+ 608            LOAD_FAST_BORROW         6 (infos)
+                GET_ITER
+                LOAD_FAST_AND_CLEAR      7 (item)
+                SWAP                     2
+        L2:     BUILD_LIST               0
+                SWAP                     2
+        L3:     FOR_ITER                26 (to L4)
+                STORE_FAST_LOAD_FAST   119 (item, item)
+                LOAD_ATTR                8 (filename)
+                LOAD_FAST_BORROW         7 (item)
+                LOAD_ATTR               10 (file_size)
+                BUILD_TUPLE              2
+                LIST_APPEND              2
+                JUMP_BACKWARD           28 (to L3)
+        L4:     END_FOR
+                POP_ITER
+        L5:     SWAP                     2
+                STORE_FAST               7 (item)
+                LOAD_FAST_BORROW         3 (options)
+
+ 607            CALL                     2
+                POP_TOP
+
+ 610            LOAD_FAST_BORROW         4 (password)
+                POP_JUMP_IF_NOT_NONE    70 (to L16)
+                NOT_TAKEN
+                LOAD_GLOBAL             12 (any)
+                COPY                     1
+                LOAD_COMMON_CONSTANT     4 (<built-in function any>)
+                IS_OP                    0 (is)
+                POP_JUMP_IF_FALSE       28 (to L12)
+        L6:     NOT_TAKEN
+        L7:     POP_TOP
+                LOAD_CONST               2 (<code object <genexpr> at 0x0000025B5BAAEAF0, file "paxoinsight\archive_service.py", line 610>)
+                MAKE_FUNCTION
+                LOAD_FAST_BORROW         6 (infos)
+                GET_ITER
+                CALL                     0
+        L8:     FOR_ITER                12 (to L11)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         3 (to L10)
+        L9:     NOT_TAKEN
+                JUMP_BACKWARD           11 (to L8)
+       L10:     POP_ITER
+                LOAD_CONST               3 (True)
+                JUMP_FORWARD            17 (to L13)
+       L11:     END_FOR
+                POP_ITER
+                LOAD_CONST               4 (False)
+                JUMP_FORWARD            13 (to L13)
+       L12:     PUSH_NULL
+                LOAD_CONST               2 (<code object <genexpr> at 0x0000025B5BAAEAF0, file "paxoinsight\archive_service.py", line 610>)
+                MAKE_FUNCTION
+                LOAD_FAST_BORROW         6 (infos)
+                GET_ITER
+                CALL                     0
+                CALL                     1
+       L13:     TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L16)
+       L14:     NOT_TAKEN
+
+ 611   L15:     LOAD_GLOBAL             15 (ArchivePasswordRequired + NULL)
+                LOAD_CONST               5 ('ZIP защищён паролем')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 612   L16:     LOAD_FAST_BORROW         4 (password)
+                POP_JUMP_IF_NONE        18 (to L17)
+                NOT_TAKEN
+                LOAD_FAST_BORROW         4 (password)
+                LOAD_ATTR               17 (encode + NULL|self)
+                LOAD_CONST               6 ('utf-8')
+                CALL                     1
+                JUMP_FORWARD             1 (to L18)
+       L17:     LOAD_CONST               1 (None)
+       L18:     STORE_FAST               8 (password_bytes)
+
+ 613            LOAD_FAST_BORROW         6 (infos)
+                GET_ITER
+       L19:     EXTENDED_ARG             1
+                FOR_ITER               307 (to L30)
+                STORE_FAST               9 (info)
+
+ 614            LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR               19 (_safe_member_target + NULL|self)
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 41 (destination, info)
+                LOAD_ATTR                8 (filename)
+                CALL                     2
+                STORE_FAST              10 (target)
+
+ 615            LOAD_FAST_BORROW         9 (info)
+                LOAD_ATTR               20 (external_attr)
+                LOAD_SMALL_INT          16
+                BINARY_OP                9 (>>)
+                LOAD_CONST               7 (65535)
+                BINARY_OP                1 (&)
+                STORE_FAST              11 (mode)
+
+ 616            LOAD_GLOBAL             22 (stat)
+                LOAD_ATTR               24 (S_ISLNK)
+                PUSH_NULL
+                LOAD_FAST_BORROW        11 (mode)
+                CALL                     1
+                TO_BOOL
+                POP_JUMP_IF_FALSE       25 (to L20)
+                NOT_TAKEN
+
+ 617            LOAD_GLOBAL             27 (ValueError + NULL)
+                LOAD_CONST               8 ('Символические ссылки запрещены: ')
+                LOAD_FAST_BORROW         9 (info)
+                LOAD_ATTR                8 (filename)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 618   L20:     LOAD_FAST_BORROW         9 (info)
+                LOAD_ATTR               29 (is_dir + NULL|self)
+                CALL                     0
+                TO_BOOL
+                POP_JUMP_IF_TRUE        34 (to L24)
+       L21:     NOT_TAKEN
+       L22:     LOAD_FAST_BORROW         9 (info)
+                LOAD_ATTR                8 (filename)
+                LOAD_ATTR               31 (endswith + NULL|self)
+                LOAD_CONST               9 ('/')
+                CALL                     1
+                TO_BOOL
+                POP_JUMP_IF_FALSE       22 (to L25)
+       L23:     NOT_TAKEN
+
+ 619   L24:     LOAD_FAST_BORROW        10 (target)
+                LOAD_ATTR               33 (mkdir + NULL|self)
+                LOAD_CONST               3 (True)
+                LOAD_CONST               3 (True)
+                LOAD_CONST              10 (('parents', 'exist_ok'))
+                CALL_KW                  2
+                POP_TOP
+
+ 620            JUMP_BACKWARD          185 (to L19)
+
+ 621   L25:     LOAD_FAST_BORROW        10 (target)
+                LOAD_ATTR               34 (parent)
+                LOAD_ATTR               33 (mkdir + NULL|self)
+                LOAD_CONST               3 (True)
+                LOAD_CONST               3 (True)
+                LOAD_CONST              10 (('parents', 'exist_ok'))
+                CALL_KW                  2
+                POP_TOP
+
+ 622            LOAD_FAST_BORROW         5 (archive)
+                LOAD_ATTR               37 (open + NULL|self)
+
+ 623            LOAD_FAST_BORROW         9 (info)
+                LOAD_CONST               0 ('r')
+                LOAD_FAST_BORROW         8 (password_bytes)
+
+ 622            LOAD_CONST              11 (('pwd',))
+                CALL_KW                  3
+                COPY                     1
+                LOAD_SPECIAL             1 (__exit__)
+                SWAP                     2
+                SWAP                     3
+                LOAD_SPECIAL             0 (__enter__)
+                CALL                     0
+
+ 624   L26:     STORE_FAST_LOAD_FAST   202 (source_stream, target)
+                LOAD_ATTR               37 (open + NULL|self)
+                LOAD_CONST              12 ('wb')
+                CALL                     1
+                COPY                     1
+                LOAD_SPECIAL             1 (__exit__)
+                SWAP                     2
+                SWAP                     3
+                LOAD_SPECIAL             0 (__enter__)
+                CALL                     0
+       L27:     STORE_FAST              13 (target_stream)
+
+ 625            LOAD_GLOBAL             38 (shutil)
+                LOAD_ATTR               40 (copyfileobj)
+                PUSH_NULL
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 205 (source_stream, target_stream)
+                LOAD_CONST              13 (1048576)
+                CALL                     3
+                POP_TOP
+
+ 624   L28:     LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                CALL                     3
+                POP_TOP
+
+ 622   L29:     LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                CALL                     3
+                POP_TOP
+                EXTENDED_ARG             1
+                JUMP_BACKWARD          310 (to L19)
+
+ 613   L30:     END_FOR
+                POP_ITER
+
+ 605   L31:     LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                LOAD_CONST               1 (None)
+                CALL                     3
+                POP_TOP
+                LOAD_CONST               1 (None)
+                RETURN_VALUE
+
+  --   L32:     SWAP                     2
+                POP_TOP
+
+ 608            SWAP                     2
+                STORE_FAST               7 (item)
+                RERAISE                  0
+
+ 624   L33:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L34)
+                NOT_TAKEN
+                RERAISE                  2
+       L34:     POP_TOP
+       L35:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 44 (to L29)
+
+  --   L36:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+ 622   L37:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L38)
+                NOT_TAKEN
+                RERAISE                  2
+       L38:     POP_TOP
+       L39:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                POP_TOP
+                EXTENDED_ARG             1
+                JUMP_BACKWARD          364 (to L19)
+
+  --   L40:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+ 605   L41:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L42)
+                NOT_TAKEN
+                RERAISE                  2
+       L42:     POP_TOP
+       L43:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                POP_TOP
+                LOAD_CONST               1 (None)
+                RETURN_VALUE
+
+  --   L44:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L41 [2] lasti
+  L2 to L5 -> L32 [6]
+  L5 to L6 -> L41 [2] lasti
+  L7 to L9 -> L41 [2] lasti
+  L10 to L14 -> L41 [2] lasti
+  L15 to L21 -> L41 [2] lasti
+  L22 to L23 -> L41 [2] lasti
+  L24 to L26 -> L41 [2] lasti
+  L26 to L27 -> L37 [5] lasti
+  L27 to L28 -> L33 [7] lasti
+  L28 to L29 -> L37 [5] lasti
+  L29 to L31 -> L41 [2] lasti
+  L32 to L33 -> L41 [2] lasti
+  L33 to L35 -> L36 [9] lasti
+  L35 to L37 -> L37 [5] lasti
+  L37 to L39 -> L40 [7] lasti
+  L39 to L41 -> L41 [2] lasti
+  L41 to L43 -> L44 [4] lasti
+
+Disassembly of <code object <genexpr> at 0x0000025B5BAAEAF0, file "paxoinsight\archive_service.py", line 610>:
+ 610           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+               LOAD_FAST                0 (.0)
+       L2:     FOR_ITER                23 (to L3)
+               STORE_FAST_LOAD_FAST    17 (item, item)
+               LOAD_ATTR                0 (flag_bits)
+               LOAD_SMALL_INT           1
+               BINARY_OP                1 (&)
+               YIELD_VALUE              0
+               RESUME                   5
+               POP_TOP
+               JUMP_BACKWARD           25 (to L2)
+       L3:     END_FOR
+               POP_ITER
+               LOAD_CONST               1 (None)
+               RETURN_VALUE
+
+  --   L4:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L4 -> L4 [0] lasti
+
+## ArchiveService._extract_tar, frozen source line 627
+  --           MAKE_CELL                0 (self)
+               MAKE_CELL                3 (options)
+               MAKE_CELL                4 (cancelled)
+               MAKE_CELL                5 (member_progress)
+               MAKE_CELL                7 (archive)
+
+ 627           RESUME                   0
+
+ 638           LOAD_GLOBAL              0 (tarfile)
+               LOAD_ATTR                2 (open)
+               PUSH_NULL
+               LOAD_FAST_BORROW         1 (source)
+               LOAD_CONST               0 ('r:*')
+               LOAD_CONST               8 (1048576)
+               LOAD_CONST               1 (True)
+               LOAD_CONST               2 (('copybufsize', 'stream'))
+               CALL_KW                  4
+               COPY                     1
+               LOAD_SPECIAL             1 (__exit__)
+               SWAP                     2
+               SWAP                     3
+               LOAD_SPECIAL             0 (__enter__)
+               CALL                     0
+       L1:     STORE_DEREF              7 (archive)
+
+ 639           LOAD_CONST               3 (<code object __annotate__ at 0x0000025B5BAB7B40, file "paxoinsight\archive_service.py", line 639>)
+               MAKE_FUNCTION
+               LOAD_FAST_BORROW         7 (archive)
+               LOAD_FAST_BORROW         4 (cancelled)
+               LOAD_FAST_BORROW         5 (member_progress)
+               LOAD_FAST_BORROW         3 (options)
+               LOAD_FAST_BORROW         0 (self)
+               BUILD_TUPLE              5
+               LOAD_CONST               4 (<code object checked_members at 0x0000025B5942E730, file "paxoinsight\archive_service.py", line 639>)
+               MAKE_FUNCTION
+               SET_FUNCTION_ATTRIBUTE   8 (closure)
+               SET_FUNCTION_ATTRIBUTE  16 (annotate)
+               STORE_FAST               6 (checked_members)
+
+ 664           LOAD_DEREF               7 (archive)
+               LOAD_ATTR                5 (extractall + NULL|self)
+               LOAD_FAST_BORROW_LOAD_FAST_BORROW 38 (destination, checked_members)
+               PUSH_NULL
+               CALL                     0
+               LOAD_CONST               5 ('data')
+               LOAD_CONST               6 (('members', 'filter'))
+               CALL_KW                  3
+               POP_TOP
+
+ 638   L2:     LOAD_CONST               7 (None)
+               LOAD_CONST               7 (None)
+               LOAD_CONST               7 (None)
+               CALL                     3
+               POP_TOP
+               LOAD_CONST               7 (None)
+               RETURN_VALUE
+       L3:     PUSH_EXC_INFO
+               WITH_EXCEPT_START
+               TO_BOOL
+               POP_JUMP_IF_TRUE         2 (to L4)
+               NOT_TAKEN
+               RERAISE                  2
+       L4:     POP_TOP
+       L5:     POP_EXCEPT
+               POP_TOP
+               POP_TOP
+               POP_TOP
+               LOAD_CONST               7 (None)
+               RETURN_VALUE
+
+  --   L6:     COPY                     3
+               POP_EXCEPT
+               RERAISE                  1
+ExceptionTable:
+  L1 to L2 -> L3 [2] lasti
+  L3 to L5 -> L6 [4] lasti
+
+Disassembly of <code object __annotate__ at 0x0000025B5BAB7B40, file "paxoinsight\archive_service.py", line 639>:
+639           RESUME                   0
+              LOAD_FAST_BORROW         0 (format)
+              LOAD_SMALL_INT           2
+              COMPARE_OP             132 (>)
+              POP_JUMP_IF_FALSE        3 (to L1)
+              NOT_TAKEN
+              LOAD_COMMON_CONSTANT     1 (NotImplementedError)
+              RAISE_VARARGS            1
+      L1:     LOAD_CONST               1 ('return')
+              LOAD_CONST               2 ('Iterator[tarfile.TarInfo]')
+              BUILD_MAP                1
+              RETURN_VALUE
+
+Disassembly of <code object checked_members at 0x0000025B5942E730, file "paxoinsight\archive_service.py", line 639>:
+  --            COPY_FREE_VARS           5
+
+ 639            RETURN_GENERATOR
+                POP_TOP
+        L1:     RESUME                   0
+
+ 640            LOAD_SMALL_INT           0
+                COPY                     1
+                STORE_FAST_STORE_FAST    1 (count, total)
+
+ 641            LOAD_GLOBAL              0 (time)
+                LOAD_ATTR                2 (monotonic)
+                PUSH_NULL
+                CALL                     0
+                STORE_FAST               2 (last_progress)
+
+ 642            LOAD_DEREF               5 (archive)
+                GET_ITER
+        L2:     EXTENDED_ARG             1
+                FOR_ITER               308 (to L19)
+                STORE_FAST               3 (member)
+
+ 643            LOAD_DEREF               6 (cancelled)
+                POP_JUMP_IF_NONE        18 (to L3)
+                NOT_TAKEN
+
+ 644            LOAD_DEREF               9 (self)
+                LOAD_ATTR                5 (_check_cancelled + NULL|self)
+                LOAD_DEREF               6 (cancelled)
+                CALL                     1
+                POP_TOP
+
+ 647    L3:     LOAD_DEREF               9 (self)
+                LOAD_ATTR                7 (_validate_member_name + NULL|self)
+                LOAD_FAST_BORROW         3 (member)
+                LOAD_ATTR                8 (name)
+                CALL                     1
+                POP_TOP
+
+ 648            LOAD_FAST_BORROW         3 (member)
+                LOAD_ATTR               11 (issym + NULL|self)
+                CALL                     0
+                TO_BOOL
+                POP_JUMP_IF_TRUE        45 (to L9)
+        L4:     NOT_TAKEN
+        L5:     LOAD_FAST_BORROW         3 (member)
+                LOAD_ATTR               13 (islnk + NULL|self)
+                CALL                     0
+                TO_BOOL
+                POP_JUMP_IF_TRUE        23 (to L9)
+        L6:     NOT_TAKEN
+        L7:     LOAD_FAST_BORROW         3 (member)
+                LOAD_ATTR               15 (isdev + NULL|self)
+                CALL                     0
+                TO_BOOL
+                POP_JUMP_IF_FALSE       25 (to L10)
+        L8:     NOT_TAKEN
+
+ 649    L9:     LOAD_GLOBAL             17 (ValueError + NULL)
+                LOAD_CONST               2 ('Небезопасная запись TAR: ')
+                LOAD_FAST_BORROW         3 (member)
+                LOAD_ATTR                8 (name)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 650   L10:     LOAD_FAST_BORROW         3 (member)
+                LOAD_ATTR               19 (isfile + NULL|self)
+                CALL                     0
+                TO_BOOL
+                POP_JUMP_IF_FALSE       87 (to L14)
+       L11:     NOT_TAKEN
+
+ 651   L12:     LOAD_FAST_BORROW         3 (member)
+                LOAD_ATTR               20 (size)
+                LOAD_SMALL_INT           0
+                COMPARE_OP              18 (bool(<))
+                POP_JUMP_IF_FALSE       25 (to L13)
+                NOT_TAKEN
+
+ 652            LOAD_GLOBAL             17 (ValueError + NULL)
+                LOAD_CONST               3 ('Некорректный размер записи: ')
+                LOAD_FAST_BORROW         3 (member)
+                LOAD_ATTR                8 (name)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 653   L13:     LOAD_FAST_BORROW         0 (count)
+                LOAD_SMALL_INT           1
+                BINARY_OP               13 (+=)
+                STORE_FAST               0 (count)
+
+ 654            LOAD_FAST_BORROW_LOAD_FAST_BORROW 19 (total, member)
+                LOAD_ATTR               20 (size)
+                BINARY_OP               13 (+=)
+                STORE_FAST               1 (total)
+
+ 655            LOAD_DEREF               9 (self)
+                LOAD_ATTR               23 (_check_workspace_totals + NULL|self)
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 1 (count, total)
+                LOAD_DEREF               8 (options)
+                CALL                     3
+                POP_TOP
+
+ 656   L14:     LOAD_FAST_BORROW         3 (member)
+                YIELD_VALUE              0
+                RESUME                   5
+                POP_TOP
+
+ 657            LOAD_GLOBAL              0 (time)
+                LOAD_ATTR                2 (monotonic)
+                PUSH_NULL
+                CALL                     0
+                STORE_FAST               4 (now)
+
+ 658            LOAD_DEREF               7 (member_progress)
+       L15:     POP_JUMP_IF_NOT_NONE     4 (to L16)
+                NOT_TAKEN
+                EXTENDED_ARG             1
+                JUMP_BACKWARD          282 (to L2)
+       L16:     LOAD_FAST_BORROW_LOAD_FAST_BORROW 66 (now, last_progress)
+                BINARY_OP               10 (-)
+                LOAD_CONST               4 (0.25)
+                COMPARE_OP             188 (bool(>=))
+       L17:     POP_JUMP_IF_TRUE         4 (to L18)
+                NOT_TAKEN
+                EXTENDED_ARG             1
+                JUMP_BACKWARD          298 (to L2)
+
+ 659   L18:     LOAD_DEREF               7 (member_progress)
+                PUSH_NULL
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 1 (count, total)
+                CALL                     2
+                POP_TOP
+
+ 660            LOAD_FAST                4 (now)
+                STORE_FAST               2 (last_progress)
+                EXTENDED_ARG             1
+                JUMP_BACKWARD          311 (to L2)
+
+ 642   L19:     END_FOR
+                POP_ITER
+
+ 661            LOAD_DEREF               7 (member_progress)
+                POP_JUMP_IF_NONE        11 (to L20)
+                NOT_TAKEN
+
+ 662            LOAD_DEREF               7 (member_progress)
+                PUSH_NULL
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 1 (count, total)
+                CALL                     2
+                POP_TOP
+                LOAD_CONST               1 (None)
+                RETURN_VALUE
+
+ 661   L20:     LOAD_CONST               1 (None)
+                RETURN_VALUE
+
+  --   L21:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+                RERAISE                  1
+ExceptionTable:
+  L1 to L4 -> L21 [0] lasti
+  L5 to L6 -> L21 [0] lasti
+  L7 to L8 -> L21 [0] lasti
+  L9 to L11 -> L21 [0] lasti
+  L12 to L15 -> L21 [0] lasti
+  L16 to L17 -> L21 [0] lasti
+  L18 to L21 -> L21 [0] lasti
+
+## ArchiveService._extract_7z, frozen source line 666
+ 666            RESUME                   0
+
+ 673            LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR                0 (_py7zr)
+                POP_JUMP_IF_NOT_NONE    12 (to L1)
+                NOT_TAKEN
+
+ 674            LOAD_GLOBAL              3 (RuntimeError + NULL)
+                LOAD_CONST               1 ('Компонент распаковки 7Z недоступен')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 675    L1:     LOAD_CONST               2 ('mode')
+                LOAD_CONST               3 ('r')
+                BUILD_MAP                1
+                STORE_FAST               5 (kwargs)
+
+ 676            LOAD_FAST_BORROW         4 (password)
+                POP_JUMP_IF_NONE         5 (to L2)
+                NOT_TAKEN
+
+ 677            LOAD_FAST_BORROW_LOAD_FAST_BORROW 69 (password, kwargs)
+                LOAD_CONST               4 ('password')
+                STORE_SUBSCR
+
+ 678    L2:     LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR                0 (_py7zr)
+                LOAD_ATTR                4 (SevenZipFile)
+                PUSH_NULL
+                LOAD_FAST_BORROW         1 (source)
+                BUILD_TUPLE              1
+                BUILD_MAP                0
+                LOAD_FAST_BORROW         5 (kwargs)
+                DICT_MERGE               1
+                CALL_FUNCTION_EX
+                COPY                     1
+                LOAD_SPECIAL             1 (__exit__)
+                SWAP                     2
+                SWAP                     3
+                LOAD_SPECIAL             0 (__enter__)
+                CALL                     0
+        L3:     STORE_FAST               6 (archive)
+
+ 679            LOAD_FAST_BORROW         6 (archive)
+                LOAD_ATTR                7 (needs_password + NULL|self)
+                CALL                     0
+                TO_BOOL
+                POP_JUMP_IF_FALSE       16 (to L4)
+                NOT_TAKEN
+                LOAD_FAST_BORROW         4 (password)
+                POP_JUMP_IF_NOT_NONE    12 (to L4)
+                NOT_TAKEN
+
+ 680            LOAD_GLOBAL              9 (ArchivePasswordRequired + NULL)
+                LOAD_CONST               5 ('7Z защищён паролем')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 681    L4:     LOAD_FAST_BORROW         6 (archive)
+                LOAD_ATTR               11 (list + NULL|self)
+                CALL                     0
+                STORE_FAST               7 (infos)
+
+ 682            BUILD_LIST               0
+                STORE_FAST               8 (members)
+
+ 683            LOAD_FAST_BORROW         7 (infos)
+                GET_ITER
+        L5:     FOR_ITER               134 (to L9)
+                STORE_FAST               9 (info)
+
+ 684            LOAD_GLOBAL             13 (str + NULL)
+                LOAD_GLOBAL             15 (getattr + NULL)
+                LOAD_FAST_BORROW         9 (info)
+                LOAD_CONST               6 ('filename')
+                LOAD_CONST               7 ('')
+                CALL                     3
+                CALL                     1
+                STORE_FAST              10 (name)
+
+ 685            LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR               17 (_safe_member_target + NULL|self)
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 42 (destination, name)
+                CALL                     2
+                POP_TOP
+
+ 686            LOAD_GLOBAL             19 (int + NULL)
+                LOAD_GLOBAL             15 (getattr + NULL)
+                LOAD_FAST_BORROW         9 (info)
+                LOAD_CONST               8 ('uncompressed')
+                LOAD_SMALL_INT           0
+                CALL                     3
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE         3 (to L6)
+                NOT_TAKEN
+                POP_TOP
+                LOAD_SMALL_INT           0
+        L6:     CALL                     1
+                STORE_FAST              11 (size)
+
+ 687            LOAD_FAST_BORROW         8 (members)
+                LOAD_ATTR               21 (append + NULL|self)
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 171 (name, size)
+                BUILD_TUPLE              2
+                CALL                     1
+                POP_TOP
+
+ 688            LOAD_GLOBAL             23 (bool + NULL)
+                LOAD_GLOBAL             15 (getattr + NULL)
+                LOAD_FAST_BORROW         9 (info)
+                LOAD_CONST               9 ('is_symlink')
+                LOAD_CONST              10 (False)
+                CALL                     3
+                CALL                     1
+                TO_BOOL
+        L7:     POP_JUMP_IF_TRUE         3 (to L8)
+                NOT_TAKEN
+                JUMP_BACKWARD          122 (to L5)
+
+ 689    L8:     LOAD_GLOBAL             25 (ValueError + NULL)
+                LOAD_CONST              11 ('Символические ссылки запрещены: ')
+                LOAD_FAST_BORROW        10 (name)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 683    L9:     END_FOR
+                POP_ITER
+
+ 690            LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR               27 (_check_member_totals + NULL|self)
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 131 (members, options)
+                CALL                     2
+                POP_TOP
+
+ 691            LOAD_FAST_BORROW         6 (archive)
+                LOAD_ATTR               29 (extractall + NULL|self)
+                LOAD_FAST_BORROW         2 (destination)
+                LOAD_CONST              12 (('path',))
+                CALL_KW                  1
+                POP_TOP
+
+ 678   L10:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     3
+                POP_TOP
+                LOAD_CONST               0 (None)
+                RETURN_VALUE
+       L11:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L12)
+                NOT_TAKEN
+                RERAISE                  2
+       L12:     POP_TOP
+       L13:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                POP_TOP
+                LOAD_CONST               0 (None)
+                RETURN_VALUE
+
+  --   L14:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L3 to L7 -> L11 [2] lasti
+  L8 to L10 -> L11 [2] lasti
+  L11 to L13 -> L14 [4] lasti
+
+## ArchiveService._extract_rar, frozen source line 693
+ 693            RESUME                   0
+
+ 700            LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR                0 (_seven_zip)
+                POP_JUMP_IF_NOT_NONE    12 (to L1)
+                NOT_TAKEN
+
+ 701            LOAD_GLOBAL              3 (RuntimeError + NULL)
+
+ 702            LOAD_CONST               1 ('Для распаковки RAR не найден 7-Zip. Установите 7-Zip либо укажите путь к 7z.exe в переменной PAXOINSIGHT_7ZIP.')
+
+ 701            CALL                     1
+                RAISE_VARARGS            1
+
+ 705    L1:     LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR                4 (_rarfile)
+                POP_JUMP_IF_NOT_NONE    12 (to L2)
+                NOT_TAKEN
+
+ 706            LOAD_GLOBAL              3 (RuntimeError + NULL)
+                LOAD_CONST               2 ('Компонент проверки структуры RAR недоступен')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 708    L2:     LOAD_CONST               3 (False)
+                STORE_FAST               5 (encrypted)
+
+ 709            LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR                4 (_rarfile)
+                LOAD_ATTR                7 (RarFile + NULL|self)
+                LOAD_FAST_BORROW         1 (source)
+                CALL                     1
+                COPY                     1
+                LOAD_SPECIAL             1 (__exit__)
+                SWAP                     2
+                SWAP                     3
+                LOAD_SPECIAL             0 (__enter__)
+                CALL                     0
+        L3:     STORE_FAST               6 (archive)
+
+ 710            LOAD_FAST_BORROW         6 (archive)
+                LOAD_ATTR                9 (needs_password + NULL|self)
+                CALL                     0
+                STORE_FAST               5 (encrypted)
+
+ 711            LOAD_FAST_BORROW         5 (encrypted)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       33 (to L5)
+                NOT_TAKEN
+
+ 712            LOAD_FAST_BORROW         4 (password)
+                POP_JUMP_IF_NOT_NONE    12 (to L4)
+                NOT_TAKEN
+
+ 713            LOAD_GLOBAL             11 (ArchivePasswordRequired + NULL)
+                LOAD_CONST               4 ('RAR защищён паролем')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 714    L4:     LOAD_FAST_BORROW         6 (archive)
+                LOAD_ATTR               13 (setpassword + NULL|self)
+                LOAD_FAST_BORROW         4 (password)
+                CALL                     1
+                POP_TOP
+
+ 715    L5:     LOAD_FAST_BORROW         6 (archive)
+                LOAD_ATTR               15 (infolist + NULL|self)
+                CALL                     0
+                STORE_FAST               7 (infos)
+
+ 716            LOAD_FAST                0 (self)
+                LOAD_ATTR               17 (_check_member_totals + NULL|self)
+
+ 717            LOAD_FAST_BORROW         7 (infos)
+                GET_ITER
+                LOAD_FAST_AND_CLEAR      8 (item)
+                SWAP                     2
+        L6:     BUILD_LIST               0
+                SWAP                     2
+        L7:     FOR_ITER                26 (to L8)
+                STORE_FAST_LOAD_FAST   136 (item, item)
+                LOAD_ATTR               18 (filename)
+                LOAD_FAST_BORROW         8 (item)
+                LOAD_ATTR               20 (file_size)
+                BUILD_TUPLE              2
+                LIST_APPEND              2
+                JUMP_BACKWARD           28 (to L7)
+        L8:     END_FOR
+                POP_ITER
+        L9:     SWAP                     2
+                STORE_FAST               8 (item)
+                LOAD_FAST_BORROW         3 (options)
+
+ 716            CALL                     2
+                POP_TOP
+
+ 719            LOAD_FAST_BORROW         7 (infos)
+                GET_ITER
+       L10:     FOR_ITER               100 (to L13)
+                STORE_FAST               9 (info)
+
+ 720            LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR               23 (_safe_member_target + NULL|self)
+                LOAD_FAST_BORROW_LOAD_FAST_BORROW 41 (destination, info)
+                LOAD_ATTR               18 (filename)
+                CALL                     2
+                POP_TOP
+
+ 721            LOAD_GLOBAL             25 (getattr + NULL)
+                LOAD_FAST_BORROW         9 (info)
+                LOAD_CONST               5 ('is_symlink')
+                LOAD_CONST               6 (<code object <lambda> at 0x0000025B5BAF26B0, file "paxoinsight\archive_service.py", line 721>)
+                MAKE_FUNCTION
+                CALL                     3
+                PUSH_NULL
+                CALL                     0
+                STORE_FAST              10 (is_symlink)
+
+ 722            LOAD_FAST_BORROW        10 (is_symlink)
+                TO_BOOL
+                POP_JUMP_IF_TRUE        22 (to L12)
+                NOT_TAKEN
+                LOAD_GLOBAL             25 (getattr + NULL)
+                LOAD_FAST_BORROW         9 (info)
+                LOAD_CONST               7 ('file_redir')
+                LOAD_CONST               0 (None)
+                CALL                     3
+                TO_BOOL
+       L11:     POP_JUMP_IF_TRUE         3 (to L12)
+                NOT_TAKEN
+                JUMP_BACKWARD           78 (to L10)
+
+ 723   L12:     LOAD_GLOBAL             27 (ValueError + NULL)
+
+ 724            LOAD_CONST               8 ('Ссылки внутри RAR запрещены: ')
+                LOAD_FAST_BORROW         9 (info)
+                LOAD_ATTR               18 (filename)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 723            CALL                     1
+                RAISE_VARARGS            1
+
+ 719   L13:     END_FOR
+                POP_ITER
+
+ 709   L14:     LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                LOAD_CONST               0 (None)
+                CALL                     3
+                POP_TOP
+
+ 727   L15:     LOAD_FAST_BORROW         2 (destination)
+                LOAD_ATTR               29 (mkdir + NULL|self)
+                LOAD_CONST               9 (True)
+                LOAD_CONST               9 (True)
+                LOAD_CONST              10 (('parents', 'exist_ok'))
+                CALL_KW                  2
+                POP_TOP
+
+ 728            LOAD_FAST_BORROW         4 (password)
+                POP_JUMP_IF_NONE         6 (to L16)
+                NOT_TAKEN
+                LOAD_CONST              11 ('-p')
+                LOAD_FAST_BORROW         4 (password)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                JUMP_FORWARD             1 (to L17)
+       L16:     LOAD_CONST              11 ('-p')
+       L17:     STORE_FAST              11 (password_argument)
+
+ 730            LOAD_GLOBAL             31 (str + NULL)
+                LOAD_FAST_BORROW         0 (self)
+                LOAD_ATTR                0 (_seven_zip)
+                CALL                     1
+
+ 731            LOAD_CONST              12 ('x')
+
+ 732            LOAD_CONST              13 ('-y')
+
+ 733            LOAD_CONST              14 ('-aoa')
+
+ 734            LOAD_CONST              15 ('-bb0')
+
+ 735            LOAD_CONST              16 ('-bd')
+
+ 736            LOAD_CONST              17 ('-sccUTF-8')
+
+ 737            LOAD_CONST              18 ('-o')
+                LOAD_FAST_BORROW         2 (destination)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 738            LOAD_FAST_BORROW        11 (password_argument)
+
+ 739            LOAD_GLOBAL             31 (str + NULL)
+                LOAD_FAST_BORROW         1 (source)
+                CALL                     1
+
+ 729            BUILD_LIST              10
+                STORE_FAST              12 (command)
+
+ 741            LOAD_GLOBAL             32 (os)
+                LOAD_ATTR               34 (name)
+                LOAD_CONST              19 ('nt')
+                COMPARE_OP              88 (bool(==))
+                POP_JUMP_IF_FALSE       17 (to L18)
+                NOT_TAKEN
+                LOAD_GLOBAL             36 (subprocess)
+                LOAD_ATTR               38 (CREATE_NO_WINDOW)
+                JUMP_FORWARD             1 (to L19)
+       L18:     LOAD_SMALL_INT           0
+       L19:     STORE_FAST              13 (creation_flags)
+
+ 742            NOP
+
+ 743   L20:     LOAD_GLOBAL             36 (subprocess)
+                LOAD_ATTR               40 (run)
+                PUSH_NULL
+
+ 744            LOAD_FAST_BORROW        12 (command)
+
+ 745            LOAD_GLOBAL             36 (subprocess)
+                LOAD_ATTR               42 (DEVNULL)
+
+ 746            LOAD_CONST               9 (True)
+
+ 747            LOAD_CONST               9 (True)
+
+ 748            LOAD_CONST              20 ('utf-8')
+
+ 749            LOAD_CONST              21 ('replace')
+
+ 750            LOAD_CONST               3 (False)
+
+ 751            LOAD_CONST              22 (1800)
+
+ 752            LOAD_FAST_BORROW        13 (creation_flags)
+
+ 743            LOAD_CONST              23 (('stdin', 'capture_output', 'text', 'encoding', 'errors', 'shell', 'timeout', 'creationflags'))
+                CALL_KW                  9
+                STORE_FAST              14 (completed)
+
+ 761   L21:     LOAD_FAST               14 (completed)
+                LOAD_ATTR               48 (returncode)
+                LOAD_SMALL_INT           0
+                COMPARE_OP             119 (bool(!=))
+                POP_JUMP_IF_FALSE      142 (to L26)
+                NOT_TAKEN
+
+ 762            LOAD_FAST                5 (encrypted)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       12 (to L22)
+                NOT_TAKEN
+
+ 763            LOAD_GLOBAL             11 (ArchivePasswordRequired + NULL)
+                LOAD_CONST              26 ('Неверный пароль для RAR')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 764   L22:     LOAD_FAST               14 (completed)
+                LOAD_ATTR               50 (stderr)
+                COPY                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE        13 (to L23)
+                NOT_TAKEN
+                POP_TOP
+                LOAD_FAST               14 (completed)
+                LOAD_ATTR               52 (stdout)
+       L23:     LOAD_ATTR               55 (strip + NULL|self)
+                CALL                     0
+                STORE_FAST              16 (details)
+
+ 765            LOAD_GLOBAL             57 (len + NULL)
+                LOAD_FAST               16 (details)
+                CALL                     1
+                LOAD_CONST              27 (1000)
+                COMPARE_OP             148 (bool(>))
+                POP_JUMP_IF_FALSE        6 (to L24)
+                NOT_TAKEN
+
+ 766            LOAD_FAST               16 (details)
+                LOAD_CONST              32 (-1000)
+                LOAD_CONST               0 (None)
+                BINARY_SLICE
+                STORE_FAST              16 (details)
+
+ 767   L24:     LOAD_GLOBAL              3 (RuntimeError + NULL)
+
+ 768            LOAD_CONST              28 ('7-Zip не смог распаковать RAR (код ')
+                LOAD_FAST               14 (completed)
+                LOAD_ATTR               48 (returncode)
+                FORMAT_SIMPLE
+                LOAD_CONST              29 (')')
+                BUILD_STRING             3
+
+ 769            LOAD_FAST               16 (details)
+                TO_BOOL
+                POP_JUMP_IF_FALSE       16 (to L25)
+                NOT_TAKEN
+                LOAD_CONST              30 (':\n')
+                LOAD_FAST               16 (details)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 768            BINARY_OP                0 (+)
+
+ 767            CALL                     1
+                RAISE_VARARGS            1
+
+ 769   L25:     LOAD_CONST              31 ('')
+
+ 768            BINARY_OP                0 (+)
+
+ 767            CALL                     1
+                RAISE_VARARGS            1
+
+ 761   L26:     LOAD_CONST               0 (None)
+                RETURN_VALUE
+
+  --   L27:     SWAP                     2
+                POP_TOP
+
+ 717            SWAP                     2
+                STORE_FAST               8 (item)
+                RERAISE                  0
+
+ 709   L28:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L29)
+                NOT_TAKEN
+                RERAISE                  2
+       L29:     POP_TOP
+       L30:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                POP_TOP
+                EXTENDED_ARG             1
+                JUMP_BACKWARD_NO_INTERRUPT 340 (to L15)
+
+  --   L31:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+       L32:     PUSH_EXC_INFO
+
+ 754            LOAD_GLOBAL             36 (subprocess)
+                LOAD_ATTR               44 (TimeoutExpired)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       31 (to L35)
+                NOT_TAKEN
+                STORE_FAST              15 (error)
+
+ 755   L33:     LOAD_GLOBAL              3 (RuntimeError + NULL)
+
+ 756            LOAD_CONST              24 ('7-Zip превысил время ожидания при распаковке RAR: ')
+                LOAD_FAST                1 (source)
+                LOAD_ATTR               34 (name)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 755            CALL                     1
+
+ 757            LOAD_FAST               15 (error)
+
+ 755            RAISE_VARARGS            2
+
+  --   L34:     LOAD_CONST               0 (None)
+                STORE_FAST              15 (error)
+                DELETE_FAST             15 (error)
+                RERAISE                  1
+
+ 758   L35:     LOAD_GLOBAL             46 (OSError)
+                CHECK_EXC_MATCH
+                POP_JUMP_IF_FALSE       21 (to L40)
+       L36:     NOT_TAKEN
+       L37:     STORE_FAST              15 (error)
+
+ 759   L38:     LOAD_GLOBAL              3 (RuntimeError + NULL)
+                LOAD_CONST              25 ('Не удалось запустить 7-Zip: ')
+                LOAD_FAST               15 (error)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     1
+                LOAD_FAST               15 (error)
+                RAISE_VARARGS            2
+
+  --   L39:     LOAD_CONST               0 (None)
+                STORE_FAST              15 (error)
+                DELETE_FAST             15 (error)
+                RERAISE                  1
+
+ 758   L40:     RERAISE                  0
+
+  --   L41:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L3 to L6 -> L28 [2] lasti
+  L6 to L9 -> L27 [6]
+  L9 to L11 -> L28 [2] lasti
+  L12 to L14 -> L28 [2] lasti
+  L20 to L21 -> L32 [0]
+  L27 to L28 -> L28 [2] lasti
+  L28 to L30 -> L31 [4] lasti
+  L32 to L33 -> L41 [1] lasti
+  L33 to L34 -> L34 [1] lasti
+  L34 to L36 -> L41 [1] lasti
+  L37 to L38 -> L41 [1] lasti
+  L38 to L39 -> L39 [1] lasti
+  L39 to L41 -> L41 [1] lasti
+
+Disassembly of <code object <lambda> at 0x0000025B5BAF26B0, file "paxoinsight\archive_service.py", line 721>:
+721           RESUME                   0
+              LOAD_CONST               0 (False)
+              RETURN_VALUE
+
+## ArchiveService._validate_member_name, frozen source line 793
+793           RESUME                   0
+
+795           LOAD_FAST_BORROW         0 (member_name)
+              LOAD_ATTR                1 (replace + NULL|self)
+              LOAD_CONST               0 ('\\')
+              LOAD_CONST               1 ('/')
+              CALL                     2
+              LOAD_ATTR                1 (replace + NULL|self)
+              LOAD_CONST               2 ('\r')
+              LOAD_CONST               3 ('')
+              CALL                     2
+              STORE_FAST               1 (normalized)
+
+796           LOAD_GLOBAL              3 (PurePosixPath + NULL)
+              LOAD_FAST_BORROW         1 (normalized)
+              CALL                     1
+              STORE_FAST               2 (pure)
+
+797           LOAD_GLOBAL              4 (ntpath)
+              LOAD_ATTR                6 (splitdrive)
+              PUSH_NULL
+              LOAD_FAST_BORROW         1 (normalized)
+              CALL                     1
+              UNPACK_SEQUENCE          2
+              STORE_FAST_STORE_FAST   52 (drive, _)
+
+798           LOAD_GLOBAL              8 (any)
+              COPY                     1
+              LOAD_COMMON_CONSTANT     4 (<built-in function any>)
+              IS_OP                    0 (is)
+              POP_JUMP_IF_FALSE       38 (to L4)
+              NOT_TAKEN
+              POP_TOP
+              LOAD_CONST               4 (<code object <genexpr> at 0x0000025B5BAAEE50, file "paxoinsight\archive_service.py", line 798>)
+              MAKE_FUNCTION
+
+799           LOAD_FAST_BORROW         2 (pure)
+              LOAD_ATTR               10 (parts)
+              GET_ITER
+
+798           CALL                     0
+      L1:     FOR_ITER                12 (to L3)
+              TO_BOOL
+              POP_JUMP_IF_TRUE         3 (to L2)
+              NOT_TAKEN
+              JUMP_BACKWARD           11 (to L1)
+      L2:     POP_ITER
+              LOAD_CONST               5 (True)
+              JUMP_FORWARD            27 (to L5)
+      L3:     END_FOR
+              POP_ITER
+              LOAD_CONST               6 (False)
+              JUMP_FORWARD            23 (to L5)
+      L4:     PUSH_NULL
+              LOAD_CONST               4 (<code object <genexpr> at 0x0000025B5BAAEE50, file "paxoinsight\archive_service.py", line 798>)
+              MAKE_FUNCTION
+
+799           LOAD_FAST_BORROW         2 (pure)
+              LOAD_ATTR               10 (parts)
+              GET_ITER
+
+798           CALL                     0
+              CALL                     1
+      L5:     STORE_FAST               5 (invalid_part)
+
+801           LOAD_FAST_BORROW         3 (drive)
+              TO_BOOL
+              POP_JUMP_IF_TRUE        31 (to L6)
+              NOT_TAKEN
+              LOAD_FAST_BORROW         2 (pure)
+              LOAD_ATTR               13 (is_absolute + NULL|self)
+              CALL                     0
+              TO_BOOL
+              POP_JUMP_IF_TRUE         9 (to L6)
+              NOT_TAKEN
+              LOAD_FAST_BORROW         5 (invalid_part)
+              TO_BOOL
+              POP_JUMP_IF_FALSE       15 (to L7)
+              NOT_TAKEN
+
+802   L6:     LOAD_GLOBAL             15 (ValueError + NULL)
+              LOAD_CONST               7 ('Небезопасный путь в архиве: ')
+              LOAD_FAST_BORROW         0 (member_name)
+              FORMAT_SIMPLE
+              BUILD_STRING             2
+              CALL                     1
+              RAISE_VARARGS            1
+
+803   L7:     LOAD_FAST_BORROW         2 (pure)
+              RETURN_VALUE
+
+Disassembly of <code object <genexpr> at 0x0000025B5BAAEE50, file "paxoinsight\archive_service.py", line 798>:
+ 798           RETURN_GENERATOR
+               POP_TOP
+       L1:     RESUME                   0
+               LOAD_FAST                0 (.0)
+
+ 799   L2:     FOR_ITER                22 (to L4)
+               STORE_FAST_LOAD_FAST    17 (part, part)
+               LOAD_CONST               3 (frozenset({'', '.', '..'}))
+               CONTAINS_OP              0 (in)
+               COPY                     1
+               TO_BOOL
+               POP_JUMP_IF_TRUE         6 (to L3)
+               NOT_TAKEN
+               POP_TOP
+               LOAD_CONST               1 (':')
+               LOAD_FAST_BORROW         1 (part)
+               CONTAINS_OP              0 (in)
+       L3:     YIELD_VALUE              0
+               RESUME                   5
+               POP_TOP
+               JUMP_BACKWARD           24 (to L2)
+       L4:     END_FOR
+               POP_ITER
+               LOAD_CONST               2 (None)
+               RETURN_VALUE
+
+  --   L5:     CALL_INTRINSIC_1         3 (INTRINSIC_STOPITERATION_ERROR)
+               RERAISE                  1
+ExceptionTable:
+  L1 to L5 -> L5 [0] lasti
+
+## ArchiveService._copy_directory, frozen source line 900
+ 900            RESUME                   0
+
+ 910            LOAD_GLOBAL              0 (hashlib)
+                LOAD_ATTR                2 (sha256)
+                PUSH_NULL
+                CALL                     0
+                STORE_FAST               7 (digest)
+
+ 911            LOAD_SMALL_INT           0
+                STORE_FAST               8 (total_bytes)
+
+ 912            LOAD_SMALL_INT           0
+                STORE_FAST               9 (file_count)
+
+ 913            LOAD_FAST_BORROW         3 (excluded_root)
+                LOAD_ATTR                5 (resolve + NULL|self)
+                CALL                     0
+                STORE_FAST              10 (excluded)
+
+ 915            LOAD_GLOBAL              6 (os)
+                LOAD_ATTR                8 (walk)
+                PUSH_NULL
+                LOAD_FAST_BORROW         1 (source)
+                LOAD_CONST               1 (False)
+                LOAD_CONST               2 (('followlinks',))
+                CALL_KW                  2
+                GET_ITER
+        L1:     EXTENDED_ARG             2
+                FOR_ITER               723 (to L20)
+                UNPACK_SEQUENCE          3
+                STORE_FAST_STORE_FAST  188 (current_root, directories)
+                STORE_FAST              13 (files)
+
+ 916            LOAD_FAST_BORROW         0 (cls)
+                LOAD_ATTR               11 (_check_cancelled + NULL|self)
+                LOAD_FAST_BORROW         6 (cancelled)
+                CALL                     1
+                POP_TOP
+
+ 917            LOAD_GLOBAL             13 (Path + NULL)
+                LOAD_FAST_BORROW        11 (current_root)
+                CALL                     1
+                STORE_FAST              14 (current)
+
+ 918            BUILD_LIST               0
+                STORE_FAST              15 (kept_directories)
+
+ 919            LOAD_GLOBAL             15 (sorted + NULL)
+                LOAD_FAST_BORROW        12 (directories)
+                LOAD_GLOBAL             16 (str)
+                LOAD_ATTR               18 (lower)
+                LOAD_CONST               3 (('key',))
+                CALL_KW                  2
+                GET_ITER
+        L2:     FOR_ITER               151 (to L5)
+                STORE_FAST              16 (name)
+
+ 920            LOAD_FAST_BORROW        14 (current)
+                LOAD_FAST_BORROW        16 (name)
+                BINARY_OP               11 (/)
+                STORE_FAST              17 (directory)
+
+ 921            LOAD_FAST_BORROW         0 (cls)
+                LOAD_ATTR               21 (_is_link_or_reparse + NULL|self)
+                LOAD_FAST_BORROW        17 (directory)
+                CALL                     1
+                TO_BOOL
+                POP_JUMP_IF_FALSE       15 (to L3)
+                NOT_TAKEN
+
+ 922            LOAD_GLOBAL             23 (ValueError + NULL)
+
+ 923            LOAD_CONST               4 ('Ссылки и точки повторной обработки запрещены: ')
+                LOAD_FAST_BORROW        17 (directory)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 922            CALL                     1
+                RAISE_VARARGS            1
+
+ 925    L3:     LOAD_FAST_BORROW        17 (directory)
+                LOAD_ATTR                5 (resolve + NULL|self)
+                CALL                     0
+                LOAD_FAST_BORROW        10 (excluded)
+                COMPARE_OP              88 (bool(==))
+                POP_JUMP_IF_FALSE        3 (to L4)
+                NOT_TAKEN
+
+ 926            JUMP_BACKWARD           72 (to L2)
+
+ 927    L4:     LOAD_FAST_BORROW        17 (directory)
+                LOAD_ATTR               25 (relative_to + NULL|self)
+                LOAD_FAST_BORROW         1 (source)
+                CALL                     1
+                STORE_FAST              18 (relative)
+
+ 928            LOAD_FAST_BORROW         2 (destination)
+                LOAD_FAST_BORROW        18 (relative)
+                BINARY_OP               11 (/)
+                LOAD_ATTR               27 (mkdir + NULL|self)
+                LOAD_CONST               5 (True)
+                LOAD_CONST               5 (True)
+                LOAD_CONST               6 (('parents', 'exist_ok'))
+                CALL_KW                  2
+                POP_TOP
+
+ 929            LOAD_FAST_BORROW         0 (cls)
+                LOAD_ATTR               29 (_update_tree_digest + NULL|self)
+                LOAD_FAST_BORROW         7 (digest)
+                LOAD_CONST               7 (b'D')
+                LOAD_FAST_BORROW        18 (relative)
+                CALL                     3
+                POP_TOP
+
+ 930            LOAD_FAST_BORROW        15 (kept_directories)
+                LOAD_ATTR               31 (append + NULL|self)
+                LOAD_FAST_BORROW        16 (name)
+                CALL                     1
+                POP_TOP
+                JUMP_BACKWARD          153 (to L2)
+
+ 919    L5:     END_FOR
+                POP_ITER
+
+ 931            LOAD_FAST_BORROW_LOAD_FAST_BORROW 252 (kept_directories, directories)
+                LOAD_CONST               8 (slice(None, None, None))
+                STORE_SUBSCR
+
+ 933            LOAD_GLOBAL             15 (sorted + NULL)
+                LOAD_FAST_BORROW        13 (files)
+                LOAD_GLOBAL             16 (str)
+                LOAD_ATTR               18 (lower)
+                LOAD_CONST               3 (('key',))
+                CALL_KW                  2
+                GET_ITER
+        L6:     EXTENDED_ARG             1
+                FOR_ITER               468 (to L19)
+                STORE_FAST              16 (name)
+
+ 934            LOAD_FAST_BORROW         0 (cls)
+                LOAD_ATTR               11 (_check_cancelled + NULL|self)
+                LOAD_FAST_BORROW         6 (cancelled)
+                CALL                     1
+                POP_TOP
+
+ 935            LOAD_FAST_BORROW        14 (current)
+                LOAD_FAST_BORROW        16 (name)
+                BINARY_OP               11 (/)
+                STORE_FAST              19 (path)
+
+ 936            LOAD_FAST_BORROW         0 (cls)
+                LOAD_ATTR               21 (_is_link_or_reparse + NULL|self)
+                LOAD_FAST_BORROW        19 (path)
+                CALL                     1
+                TO_BOOL
+                POP_JUMP_IF_FALSE       15 (to L7)
+                NOT_TAKEN
+
+ 937            LOAD_GLOBAL             23 (ValueError + NULL)
+
+ 938            LOAD_CONST               4 ('Ссылки и точки повторной обработки запрещены: ')
+                LOAD_FAST_BORROW        19 (path)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+
+ 937            CALL                     1
+                RAISE_VARARGS            1
+
+ 940    L7:     LOAD_FAST_BORROW        19 (path)
+                LOAD_ATTR               33 (stat + NULL|self)
+                CALL                     0
+                STORE_FAST              20 (metadata)
+
+ 941            LOAD_GLOBAL             32 (stat)
+                LOAD_ATTR               34 (S_ISREG)
+                PUSH_NULL
+                LOAD_FAST_BORROW        20 (metadata)
+                LOAD_ATTR               36 (st_mode)
+                CALL                     1
+                TO_BOOL
+                POP_JUMP_IF_TRUE        15 (to L8)
+                NOT_TAKEN
+
+ 942            LOAD_GLOBAL             23 (ValueError + NULL)
+                LOAD_CONST               9 ('Неподдерживаемый объект в папке: ')
+                LOAD_FAST_BORROW        19 (path)
+                FORMAT_SIMPLE
+                BUILD_STRING             2
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 944    L8:     LOAD_FAST_BORROW         9 (file_count)
+                LOAD_SMALL_INT           1
+                BINARY_OP               13 (+=)
+                STORE_FAST               9 (file_count)
+
+ 945            LOAD_FAST_BORROW_LOAD_FAST_BORROW 148 (file_count, options)
+                LOAD_ATTR               38 (max_files)
+                COMPARE_OP             148 (bool(>))
+                POP_JUMP_IF_FALSE       12 (to L9)
+                NOT_TAKEN
+
+ 946            LOAD_GLOBAL             23 (ValueError + NULL)
+                LOAD_CONST              10 ('Превышен лимит количества файлов в папке')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 947    L9:     LOAD_FAST_BORROW        19 (path)
+                LOAD_ATTR               25 (relative_to + NULL|self)
+                LOAD_FAST_BORROW         1 (source)
+                CALL                     1
+                STORE_FAST              18 (relative)
+
+ 948            LOAD_FAST_BORROW         0 (cls)
+                LOAD_ATTR               29 (_update_tree_digest + NULL|self)
+                LOAD_FAST_BORROW         7 (digest)
+                LOAD_CONST              11 (b'F')
+                LOAD_FAST_BORROW        18 (relative)
+                CALL                     3
+                POP_TOP
+
+ 949            LOAD_FAST_BORROW         2 (destination)
+                LOAD_FAST_BORROW        18 (relative)
+                BINARY_OP               11 (/)
+                STORE_FAST              21 (target)
+
+ 950            LOAD_FAST_BORROW        21 (target)
+                LOAD_ATTR               40 (parent)
+                LOAD_ATTR               27 (mkdir + NULL|self)
+                LOAD_CONST               5 (True)
+                LOAD_CONST               5 (True)
+                LOAD_CONST               6 (('parents', 'exist_ok'))
+                CALL_KW                  2
+                POP_TOP
+
+ 951            LOAD_FAST_BORROW        19 (path)
+                LOAD_ATTR               43 (open + NULL|self)
+                LOAD_CONST              12 ('rb')
+                CALL                     1
+                COPY                     1
+                LOAD_SPECIAL             1 (__exit__)
+                SWAP                     2
+                SWAP                     3
+                LOAD_SPECIAL             0 (__enter__)
+                CALL                     0
+       L10:     STORE_FAST              22 (source_stream)
+                LOAD_FAST_BORROW        21 (target)
+                LOAD_ATTR               43 (open + NULL|self)
+                LOAD_CONST              13 ('wb')
+                CALL                     1
+                COPY                     1
+                LOAD_SPECIAL             1 (__exit__)
+                SWAP                     2
+                SWAP                     3
+                LOAD_SPECIAL             0 (__enter__)
+                CALL                     0
+       L11:     STORE_FAST              23 (target_stream)
+
+ 952   L12:     NOP
+
+ 953            LOAD_FAST_BORROW         0 (cls)
+                LOAD_ATTR               11 (_check_cancelled + NULL|self)
+                LOAD_FAST_BORROW         6 (cancelled)
+                CALL                     1
+                POP_TOP
+
+ 954            LOAD_FAST_BORROW        22 (source_stream)
+                LOAD_ATTR               45 (read + NULL|self)
+                LOAD_CONST              19 (1048576)
+                CALL                     1
+                STORE_FAST              24 (chunk)
+
+ 955            LOAD_FAST_BORROW        24 (chunk)
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L13)
+                NOT_TAKEN
+
+ 956            JUMP_FORWARD            81 (to L15)
+
+ 957   L13:     LOAD_FAST_BORROW         8 (total_bytes)
+                LOAD_GLOBAL             47 (len + NULL)
+                LOAD_FAST_BORROW        24 (chunk)
+                CALL                     1
+                BINARY_OP               13 (+=)
+                STORE_FAST               8 (total_bytes)
+
+ 958            LOAD_FAST_BORROW_LOAD_FAST_BORROW 132 (total_bytes, options)
+                LOAD_ATTR               48 (max_unpacked_bytes)
+                COMPARE_OP             148 (bool(>))
+                POP_JUMP_IF_FALSE       12 (to L14)
+                NOT_TAKEN
+
+ 959            LOAD_GLOBAL             23 (ValueError + NULL)
+                LOAD_CONST              14 ('Папка превышает лимит обрабатываемого объёма')
+                CALL                     1
+                RAISE_VARARGS            1
+
+ 960   L14:     LOAD_FAST_BORROW         7 (digest)
+                LOAD_ATTR               51 (update + NULL|self)
+                LOAD_FAST_BORROW        24 (chunk)
+                CALL                     1
+                POP_TOP
+
+ 961            LOAD_FAST_BORROW        23 (target_stream)
+                LOAD_ATTR               53 (write + NULL|self)
+                LOAD_FAST_BORROW        24 (chunk)
+                CALL                     1
+                POP_TOP
+                JUMP_BACKWARD          125 (to L12)
+
+ 951   L15:     LOAD_CONST              15 (None)
+                LOAD_CONST              15 (None)
+                LOAD_CONST              15 (None)
+                CALL                     3
+                POP_TOP
+       L16:     LOAD_CONST              15 (None)
+                LOAD_CONST              15 (None)
+                LOAD_CONST              15 (None)
+                CALL                     3
+                POP_TOP
+
+ 965   L17:     LOAD_FAST_BORROW         9 (file_count)
+                LOAD_CONST              16 (1000)
+                BINARY_OP                6 (%)
+                LOAD_SMALL_INT           0
+                COMPARE_OP              88 (bool(==))
+                POP_JUMP_IF_TRUE         4 (to L18)
+                NOT_TAKEN
+                EXTENDED_ARG             1
+                JUMP_BACKWARD          455 (to L6)
+
+ 966   L18:     LOAD_FAST_BORROW         5 (progress)
+                PUSH_NULL
+                LOAD_SMALL_INT           3
+                LOAD_CONST              17 ('Скопировано файлов: ')
+                LOAD_FAST_BORROW         9 (file_count)
+                LOAD_CONST              18 (',')
+                FORMAT_WITH_SPEC
+                BUILD_STRING             2
+                CALL                     2
+                POP_TOP
+                EXTENDED_ARG             1
+                JUMP_BACKWARD          471 (to L6)
+
+ 933   L19:     END_FOR
+                POP_ITER
+                EXTENDED_ARG             2
+                JUMP_BACKWARD          726 (to L1)
+
+ 915   L20:     END_FOR
+                POP_ITER
+
+ 968            LOAD_FAST_BORROW_LOAD_FAST_BORROW 135 (total_bytes, digest)
+                LOAD_ATTR               55 (hexdigest + NULL|self)
+                CALL                     0
+                BUILD_TUPLE              2
+                RETURN_VALUE
+
+ 951   L21:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L22)
+                NOT_TAKEN
+                RERAISE                  2
+       L22:     POP_TOP
+       L23:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 81 (to L16)
+
+  --   L24:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+
+ 951   L25:     PUSH_EXC_INFO
+                WITH_EXCEPT_START
+                TO_BOOL
+                POP_JUMP_IF_TRUE         2 (to L26)
+                NOT_TAKEN
+                RERAISE                  2
+       L26:     POP_TOP
+       L27:     POP_EXCEPT
+                POP_TOP
+                POP_TOP
+                POP_TOP
+                JUMP_BACKWARD_NO_INTERRUPT 92 (to L17)
+
+  --   L28:     COPY                     3
+                POP_EXCEPT
+                RERAISE                  1
+ExceptionTable:
+  L10 to L11 -> L25 [4] lasti
+  L11 to L15 -> L21 [6] lasti
+  L15 to L16 -> L25 [4] lasti
+  L21 to L23 -> L24 [8] lasti
+  L23 to L25 -> L25 [4] lasti
+  L25 to L27 -> L28 [6] lasti

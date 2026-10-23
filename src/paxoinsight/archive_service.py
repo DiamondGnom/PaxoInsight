@@ -18,6 +18,7 @@ from dataclasses import replace
 from pathlib import Path, PurePosixPath
 from threading import Event
 
+from .archive_io import Bounded7zFactory, ExtractionBudget, GuardedArchiveOutput
 from .legacy_backend import load_legacy_backend
 from .models import (
     AnalysisOptions,
@@ -28,6 +29,7 @@ from .models import (
     PreparedSession,
     ProgressCallback,
 )
+from .rar_metadata import RarMetadataFile
 from .reporting import build_kotlin_html_report
 
 COMPOUND_EXTENSIONS = (".tar.gz", ".tar.bz2", ".tar.xz")
@@ -116,7 +118,7 @@ def find_7zip_executable() -> Path | None:
             candidates.append(Path(override).expanduser())
 
     application_dir = Path(sys.executable).resolve().parent
-    for name in ("7z.exe", "7za.exe", "7zr.exe", "7z"):
+    for name in ("7z.exe", "7za.exe", "7zr.exe", "7zz", "7z"):
         candidates.extend((application_dir / name, application_dir / "bin" / name))
         discovered = shutil.which(name)
         if discovered:
@@ -165,7 +167,9 @@ def find_7zip_executable() -> Path | None:
 
 
 class ArchiveService:
-    def __init__(self) -> None:
+    def __init__(self, workspace_parent: Path | None = None) -> None:
+        self.workspace_parent = (workspace_parent or Path(tempfile.gettempdir())).resolve()
+        self.workspace_parent.mkdir(parents=True, exist_ok=True)
         self._legacy = load_legacy_backend()
         self._py7zr = getattr(self._legacy, "py7zr", None)
         self._rarfile = getattr(self._legacy, "rarfile", None)
@@ -193,7 +197,7 @@ class ArchiveService:
                 f"Неподдерживаемый формат архива: {extension or source_path.name}"
             )
 
-        session_root = Path(tempfile.mkdtemp(prefix="PaxoInsight-"))
+        session_root = Path(tempfile.mkdtemp(prefix="PaxoInsight-", dir=self.workspace_parent))
         (session_root / MARKER_NAME).write_text("PaxoInsight 6 session\n", encoding="utf-8")
         content_root = session_root / "content"
         content_root.mkdir()
@@ -272,7 +276,7 @@ class ArchiveService:
         if session is None:
             return
         root = session.session_root.resolve()
-        temp_root = Path(tempfile.gettempdir()).resolve()
+        temp_root = self.workspace_parent
         try:
             allowed = root.parent == temp_root and root.name.startswith("PaxoInsight-")
             if allowed and (root / MARKER_NAME).is_file():
@@ -337,7 +341,14 @@ class ArchiveService:
 
         try:
             progress(2, "Подготовка списка файлов")
-            with self._py7zr.SevenZipFile(partial, mode="w") as archive:
+            with (
+                partial.open("xb", buffering=0) as raw,
+                GuardedArchiveOutput(
+                    raw, destination.parent, cancelled,
+                    2 * session.options.max_unpacked_bytes + 64 * 1024**2,
+                ) as output,
+                self._py7zr.SevenZipFile(output, mode="w") as archive,
+            ):
                 total = len(entries)
                 for index, item in enumerate(entries, start=1):
                     self._check_cancelled(cancelled)
@@ -425,9 +436,11 @@ class ArchiveService:
                     nested_size = nested.stat().st_size
                     remaining = replace(
                         session.options,
-                        max_files=session.options.max_files - file_count,
+                        max_files=session.options.max_files - file_count - 1,
                         max_unpacked_bytes=session.options.max_unpacked_bytes - unpacked_bytes,
                     )
+                    if remaining.max_files < 0:
+                        raise ValueError("Достигнут лимит распакованных объектов")
                     target.mkdir(parents=True)
                     self._extract_with_password(
                         nested,
@@ -447,7 +460,7 @@ class ArchiveService:
                         nested.unlink()
                         file_count -= 1
                         unpacked_bytes -= nested_size
-                    file_count += added_files
+                    file_count += added_files + 1  # Count the new extraction directory too.
                     unpacked_bytes += added_bytes
                     session.expanded_archives.append(relative)
                     next_candidates.extend(children)
@@ -473,10 +486,12 @@ class ArchiveService:
     ) -> tuple[int, int, list[tuple[Path, str]]]:
         count = total = 0
         candidates: list[tuple[Path, str]] = []
-        for path, metadata in self._walk_files(root, cancelled):
+        for path, metadata in self._walk_files(root, cancelled, include_directories=True):
             count += 1
-            total += metadata.st_size
+            total += metadata.st_size if stat.S_ISREG(metadata.st_mode) else 0
             self._check_workspace_totals(count, total, options)
+            if not stat.S_ISREG(metadata.st_mode):
+                continue
             extension = archive_extension(path)
             if path in processed or extension not in SUPPORTED_EXTENSIONS:
                 continue
@@ -495,22 +510,23 @@ class ArchiveService:
         extension: str,
         options: AnalysisOptions,
         password: str | None = None,
+        cancelled: Event | None = None,
     ) -> None:
         if extension in ZIP_EXTENSIONS:
-            self._extract_zip(source, destination, options, password)
+            self._extract_zip(source, destination, options, password, cancelled)
         elif extension in TAR_EXTENSIONS:
             self._extract_tar(source, destination, options)
         elif extension == ".7z":
-            self._extract_7z(source, destination, options, password)
+            self._extract_7z(source, destination, options, password, cancelled)
         elif extension == ".rar":
             # Jakarta/Java resource adapters also use .rar, but their actual
             # format is JAR/ZIP. A WinRAR archive keeps the 7-Zip route.
             if zipfile.is_zipfile(source):
-                self._extract_zip(source, destination, options, password)
+                self._extract_zip(source, destination, options, password, cancelled)
             else:
-                self._extract_rar(source, destination, options, password)
+                self._extract_rar(source, destination, options, password, cancelled)
         elif extension == ".gz":
-            self._extract_gzip(source, destination, options)
+            self._extract_gzip(source, destination, options, cancelled)
         else:
             raise ValueError(f"Распаковка {extension} не поддерживается")
 
@@ -533,7 +549,7 @@ class ArchiveService:
                     self._extract_tar(source, destination, options, cancelled, member_progress)
                 else:
                     self._extract_archive(
-                        source, destination, extension, options, password
+                        source, destination, extension, options, password, cancelled
                     )
                 return
             except Exception as error:
@@ -601,7 +617,9 @@ class ArchiveService:
         destination: Path,
         options: AnalysisOptions,
         password: str | None,
+        cancelled: Event | None = None,
     ) -> None:
+        budget = ExtractionBudget(destination, options, cancelled)
         with zipfile.ZipFile(source, "r") as archive:
             infos = archive.infolist()
             self._check_member_totals(
@@ -616,13 +634,10 @@ class ArchiveService:
                 if stat.S_ISLNK(mode):
                     raise ValueError(f"Символические ссылки запрещены: {info.filename}")
                 if info.is_dir() or info.filename.endswith("/"):
-                    target.mkdir(parents=True, exist_ok=True)
+                    budget.directory(target)
                     continue
-                target.parent.mkdir(parents=True, exist_ok=True)
-                with archive.open(
-                    info, "r", pwd=password_bytes
-                ) as source_stream, target.open("wb") as target_stream:
-                    shutil.copyfileobj(source_stream, target_stream, 1024 * 1024)
+                with archive.open(info, "r", pwd=password_bytes) as source_stream:
+                    budget.copy(source_stream, target)
 
     def _extract_tar(
         self,
@@ -636,32 +651,30 @@ class ArchiveService:
         # and decompresses it again. Streaming validates and extracts each
         # member once, without keeping the full TAR index in memory.
         with tarfile.open(source, "r:*", copybufsize=1024 * 1024, stream=True) as archive:
-            def checked_members() -> Iterator[tarfile.TarInfo]:
-                count = total = 0
-                last_progress = time.monotonic()
-                for member in archive:
-                    if cancelled is not None:
-                        self._check_cancelled(cancelled)
-                    # Validate the name here; the data filter below performs
-                    # the filesystem containment check before extraction.
-                    self._validate_member_name(member.name)
-                    if member.issym() or member.islnk() or member.isdev():
-                        raise ValueError(f"Небезопасная запись TAR: {member.name}")
-                    if member.isfile():
-                        if member.size < 0:
-                            raise ValueError(f"Некорректный размер записи: {member.name}")
-                        count += 1
-                        total += member.size
-                        self._check_workspace_totals(count, total, options)
-                    yield member
-                    now = time.monotonic()
-                    if member_progress is not None and now - last_progress >= 0.25:
-                        member_progress(count, total)
-                        last_progress = now
-                if member_progress is not None:
+            budget = ExtractionBudget(destination, options, cancelled)
+            count = total = 0
+            last_progress = time.monotonic()
+            for entries, member in enumerate(archive, start=1):
+                budget.check()
+                target = self._safe_member_target(destination, member.name)
+                if not (member.isfile() or member.isdir()):
+                    raise ValueError(f"Небезопасная запись TAR: {member.name}")
+                if member.size < 0:
+                    raise ValueError(f"Некорректный размер записи: {member.name}")
+                total += member.size
+                self._check_workspace_totals(entries, total, options)
+                if member.isdir():
+                    budget.directory(target)
+                else:
+                    count += 1
+                    with archive.extractfile(member) as source_stream:
+                        budget.copy(source_stream, target)
+                now = time.monotonic()
+                if member_progress is not None and now - last_progress >= 0.25:
                     member_progress(count, total)
-
-            archive.extractall(destination, members=checked_members(), filter="data")
+                    last_progress = now
+            if member_progress is not None:
+                member_progress(count, total)
 
     def _extract_7z(
         self,
@@ -669,13 +682,24 @@ class ArchiveService:
         destination: Path,
         options: AnalysisOptions,
         password: str | None,
+        cancelled: Event | None = None,
     ) -> None:
         if self._py7zr is None:
             raise RuntimeError("Компонент распаковки 7Z недоступен")
-        kwargs = {"mode": "r"}
+        kwargs = {"mode": "r", "max_extract_size": options.max_unpacked_bytes}
         if password is not None:
             kwargs["password"] = password
-        with self._py7zr.SevenZipFile(source, **kwargs) as archive:
+        try:
+            opened = self._py7zr.SevenZipFile(source, **kwargs)
+        except TypeError as error:
+            # py7zr can decode an encrypted header with a wrong password into
+            # random bytes and report "Unknown field" instead of a password error.
+            if password is not None and str(error).startswith("Unknown field:"):
+                raise ArchivePasswordRequired(
+                    "Неверный пароль или повреждённый зашифрованный заголовок 7Z"
+                ) from error
+            raise
+        with opened as archive:
             if archive.needs_password() and password is None:
                 raise ArchivePasswordRequired("7Z защищён паролем")
             infos = archive.list()
@@ -688,7 +712,20 @@ class ArchiveService:
                 if bool(getattr(info, "is_symlink", False)):
                     raise ValueError(f"Символические ссылки запрещены: {name}")
             self._check_member_totals(members, options)
-            archive.extractall(path=destination)
+            budget = ExtractionBudget(destination, options, cancelled)
+            for member in archive.files:
+                if member.is_symlink or member.is_junction or member.is_socket:
+                    raise ValueError("Ссылки и специальные объекты внутри 7Z запрещены")
+            for info in infos:
+                if info.is_directory:
+                    budget.directory(self._safe_member_target(destination, info.filename))
+            factory = Bounded7zFactory(budget)
+            try:
+                # py7zr, not tarfile: names/links checked above; all output goes
+                # through the bounded writer, without restoring file permissions.
+                archive.extractall(path=destination, factory=factory)  # nosec B202
+            finally:
+                factory.close()
 
     def _extract_rar(
         self,
@@ -696,6 +733,7 @@ class ArchiveService:
         destination: Path,
         options: AnalysisOptions,
         password: str | None,
+        cancelled: Event | None = None,
     ) -> None:
         if self._seven_zip is None:
             raise RuntimeError(
@@ -706,7 +744,7 @@ class ArchiveService:
             raise RuntimeError("Компонент проверки структуры RAR недоступен")
 
         encrypted = False
-        with self._rarfile.RarFile(source) as archive:
+        with RarMetadataFile(source) as archive:
             encrypted = archive.needs_password()
             if encrypted:
                 if password is None:
@@ -725,64 +763,87 @@ class ArchiveService:
                     )
 
         destination.mkdir(parents=True, exist_ok=True)
-        password_argument = f"-p{password}" if password is not None else "-p"
+        with source.open("rb") as stream:
+            signature = stream.read(8)
+        if signature.startswith(b"Rar!\x1a\x07\x01\x00"):
+            rar_type = "Rar5"
+        elif signature.startswith(b"Rar!\x1a\x07\x00"):
+            rar_type = "Rar"
+        else:
+            raise ValueError("Ожидается обычный RAR3/RAR5; самораспаковывающиеся SFX запрещены")
+        if password is not None and any(character in password for character in "\r\n"):
+            raise ValueError("Пароль RAR не должен содержать перевод строки")
         command = [
             str(self._seven_zip),
             "x",
+            "-t" + rar_type,
             "-y",
             "-aoa",
             "-bb0",
             "-bd",
             "-sccUTF-8",
+            "-mmt=2",
             f"-o{destination}",
-            password_argument,
+            *(["-p"] if password is None else []),
+            "--",
             str(source),
         ]
         creation_flags = subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0
+        process = None
         try:
-            completed = subprocess.run(
+            process = subprocess.Popen(
                 command,
-                stdin=subprocess.DEVNULL,
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
+                stdin=subprocess.PIPE if password is not None else subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
                 shell=False,
-                timeout=1800,
                 creationflags=creation_flags,
             )
-        except subprocess.TimeoutExpired as error:
-            raise RuntimeError(
-                f"7-Zip превысил время ожидания при распаковке RAR: {source.name}"
-            ) from error
+            if password is not None:
+                # With no -p option, 7-Zip prompts on stdin. Never put an archive
+                # password in argv, environment, log output or an on-disk file.
+                try:
+                    process.stdin.write((password + "\n").encode("utf-8"))
+                    process.stdin.close()
+                except BrokenPipeError:
+                    pass
+            deadline = time.monotonic() + 1800
+            while True:
+                if cancelled is not None:
+                    self._check_cancelled(cancelled)
+                self._enforce_limits(destination, options, cancelled)
+                if shutil.disk_usage(destination).free < 512 * 1024**2:
+                    raise ValueError("Недостаточно свободного места для распаковки")
+                returncode = process.poll()
+                if returncode is not None:
+                    break
+                if time.monotonic() >= deadline:
+                    raise RuntimeError("7-Zip превысил время ожидания при распаковке RAR")
+                time.sleep(0.1)
         except OSError as error:
             raise RuntimeError(f"Не удалось запустить 7-Zip: {error}") from error
+        finally:
+            if process is not None:
+                if process.poll() is None:
+                    process.kill()
+                process.wait()
+                if process.stdin is not None:
+                    process.stdin.close()
 
-        if completed.returncode != 0:
+        if returncode != 0:
             if encrypted:
                 raise ArchivePasswordRequired("Неверный пароль для RAR")
-            details = (completed.stderr or completed.stdout).strip()
-            if len(details) > 1000:
-                details = details[-1000:]
-            raise RuntimeError(
-                f"7-Zip не смог распаковать RAR (код {completed.returncode})"
-                + (f":\n{details}" if details else "")
-            )
+            raise RuntimeError(f"7-Zip не смог распаковать RAR (код {returncode})")
 
-    def _extract_gzip(self, source: Path, destination: Path, options: AnalysisOptions) -> None:
+    def _extract_gzip(
+        self, source: Path, destination: Path, options: AnalysisOptions,
+        cancelled: Event | None = None,
+    ) -> None:
         target_name = source.stem or "content"
         target = self._safe_member_target(destination, target_name)
-        target.parent.mkdir(parents=True, exist_ok=True)
-        total = 0
-        with gzip.open(source, "rb") as source_stream, target.open("wb") as target_stream:
-            while True:
-                chunk = source_stream.read(1024 * 1024)
-                if not chunk:
-                    break
-                total += len(chunk)
-                if total > options.max_unpacked_bytes:
-                    raise ValueError("Превышен лимит распакованного объёма")
-                target_stream.write(chunk)
+        budget = ExtractionBudget(destination, options, cancelled)
+        with gzip.open(source, "rb") as source_stream:
+            budget.copy(source_stream, target)
 
     @staticmethod
     def _is_application_container(path: Path, extension: str) -> bool:
@@ -792,13 +853,18 @@ class ArchiveService:
 
     @staticmethod
     def _validate_member_name(member_name: str) -> PurePosixPath:
-        normalized = member_name.replace("\\", "/").replace("\r", "")
+        if (
+            not member_name or len(member_name.encode("utf-8")) > 4096
+            or any(ord(character) < 32 or ord(character) == 127 for character in member_name)
+        ):
+            raise ValueError("Некорректное имя записи в архиве")
+        normalized = member_name.replace("\\", "/")
         pure = PurePosixPath(normalized)
         drive, _ = ntpath.splitdrive(normalized)
         invalid_part = any(
             part in {"", ".", ".."} or ":" in part for part in pure.parts
         )
-        if drive or pure.is_absolute() or invalid_part:
+        if drive or pure.is_absolute() or invalid_part or len(pure.parts) > 64:
             raise ValueError(f"Небезопасный путь в архиве: {member_name}")
         return pure
 
@@ -834,7 +900,7 @@ class ArchiveService:
 
     @staticmethod
     def _walk_files(
-        root: Path, cancelled: Event | None = None
+        root: Path, cancelled: Event | None = None, *, include_directories: bool = False,
     ) -> Iterator[tuple[Path, os.stat_result]]:
         pending = [root]
         while pending:
@@ -853,6 +919,8 @@ class ArchiveService:
                     path = Path(entry.path)
                     if stat.S_ISDIR(metadata.st_mode):
                         pending.append(path)
+                        if include_directories:
+                            yield path, metadata
                     elif stat.S_ISREG(metadata.st_mode):
                         yield path, metadata
                     else:
@@ -870,8 +938,9 @@ class ArchiveService:
         cls, root: Path, options: AnalysisOptions, cancelled: Event | None = None
     ) -> None:
         total = 0
-        for count, (_path, metadata) in enumerate(cls._walk_files(root, cancelled), start=1):
-            total += metadata.st_size
+        entries = cls._walk_files(root, cancelled, include_directories=True)
+        for count, (_path, metadata) in enumerate(entries, start=1):
+            total += metadata.st_size if stat.S_ISREG(metadata.st_mode) else 0
             cls._check_workspace_totals(count, total, options)
 
     @staticmethod
@@ -891,7 +960,7 @@ class ArchiveService:
     def _package_entries(root: Path) -> list[Path]:
         entries: list[Path] = []
         for path in sorted(root.rglob("*"), key=lambda item: item.as_posix().lower()):
-            if path.is_symlink():
+            if ArchiveService._is_link_or_reparse(path):
                 raise ValueError(f"Символические ссылки нельзя включать в 7Z: {path}")
             if path.is_file() or (path.is_dir() and not any(path.iterdir())):
                 entries.append(path)
@@ -908,9 +977,9 @@ class ArchiveService:
         cancelled: Event,
     ) -> tuple[int, str]:
         digest = hashlib.sha256()
-        total_bytes = 0
         file_count = 0
         excluded = excluded_root.resolve()
+        budget = ExtractionBudget(destination, options, cancelled)
 
         for current_root, directories, files in os.walk(source, followlinks=False):
             cls._check_cancelled(cancelled)
@@ -925,7 +994,7 @@ class ArchiveService:
                 if directory.resolve() == excluded:
                     continue
                 relative = directory.relative_to(source)
-                (destination / relative).mkdir(parents=True, exist_ok=True)
+                budget.directory(destination / relative)
                 cls._update_tree_digest(digest, b"D", relative)
                 kept_directories.append(name)
             directories[:] = kept_directories
@@ -942,30 +1011,24 @@ class ArchiveService:
                     raise ValueError(f"Неподдерживаемый объект в папке: {path}")
 
                 file_count += 1
-                if file_count > options.max_files:
-                    raise ValueError("Превышен лимит количества файлов в папке")
                 relative = path.relative_to(source)
                 cls._update_tree_digest(digest, b"F", relative)
                 target = destination / relative
-                target.parent.mkdir(parents=True, exist_ok=True)
-                with path.open("rb") as source_stream, target.open("wb") as target_stream:
+                with path.open("rb") as source_stream, budget.open_file(target) as target_stream:
                     while True:
                         cls._check_cancelled(cancelled)
                         chunk = source_stream.read(1024 * 1024)
                         if not chunk:
                             break
-                        total_bytes += len(chunk)
-                        if total_bytes > options.max_unpacked_bytes:
-                            raise ValueError("Папка превышает лимит обрабатываемого объёма")
+                        budget.write(target_stream, chunk)
                         digest.update(chunk)
-                        target_stream.write(chunk)
                 # The workspace must stay writable: source files may carry the
                 # Windows read-only attribute, but nested archives can be
                 # replaced only inside this private copy.
                 if file_count % 1000 == 0:
                     progress(3, f"Скопировано файлов: {file_count:,}")
 
-        return total_bytes, digest.hexdigest()
+        return budget.total, digest.hexdigest()
 
     @staticmethod
     def _update_tree_digest(digest, kind: bytes, relative: Path) -> None:

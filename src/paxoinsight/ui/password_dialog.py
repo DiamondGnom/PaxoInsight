@@ -4,43 +4,83 @@ import os
 import tkinter as tk
 from tkinter import simpledialog
 
+from .appearance import Color, Theme
+
 
 class PasswordDialog(simpledialog.Dialog):
     """Masked password input with paste support independent of keyboard layout."""
 
     def __init__(self, parent: tk.Misc, title: str, prompt: str) -> None:
         self.prompt = prompt
+        self.theme = getattr(parent, "_paxo_theme", None) or Theme(parent)
         super().__init__(parent, title)
 
     def body(self, master: tk.Misc) -> tk.Entry:
-        tk.Label(master, text=self.prompt, justify="left", wraplength=470).grid(
-            row=0, column=0, columnspan=2, sticky="w", padx=8, pady=(8, 6)
-        )
-        self.entry = tk.Entry(master, show="*", width=42)
+        self.theme.configure(self, bg=Color.CARD)
+        self.theme.configure(master, bg=Color.CARD)
+        self.theme.widget(
+            tk.Label,
+            master,
+            text=self.prompt,
+            justify="left",
+            wraplength=470,
+            bg=Color.CARD,
+            fg=Color.TEXT,
+        ).grid(row=0, column=0, columnspan=2, sticky="w", padx=8, pady=(8, 6))
+        self.entry = self.theme.widget(tk.Entry, master, show="*", width=42)
         self.entry.grid(row=1, column=0, sticky="ew", padx=(8, 4), pady=4)
         master.columnconfigure(0, weight=1)
-        tk.Button(master, text="Вставить", command=self._paste).grid(
-            row=1, column=1, padx=(4, 8), pady=4
-        )
-        tk.Label(master, text="Вставка: Ctrl+V или Shift+Insert", anchor="w").grid(
-            row=2, column=0, columnspan=2, sticky="w", padx=8, pady=(2, 6)
-        )
+        self.theme.widget(
+            tk.Button,
+            master,
+            text="Вставить",
+            command=self._paste,
+            bg=Color.SUBTLE,
+            fg=Color.HEADING,
+            activebackground=Color.SUBTLE_HOVER,
+            activeforeground=Color.TEXT,
+        ).grid(row=1, column=1, padx=(4, 8), pady=4)
+        self.theme.widget(
+            tk.Label,
+            master,
+            text="Вставка: Ctrl+V или Shift+Insert",
+            anchor="w",
+            bg=Color.CARD,
+            fg=Color.MUTED,
+        ).grid(row=2, column=0, columnspan=2, sticky="w", padx=8, pady=(2, 6))
         self.entry.bind("<<Paste>>", self._paste)
         self.entry.bind("<Control-KeyPress>", self._control_key)
         self.entry.bind("<Shift-Insert>", self._paste)
-        self.paste_menu = tk.Menu(self.entry, tearoff=False)
+        self.paste_menu = self.theme.widget(tk.Menu, self.entry, tearoff=False)
         self.paste_menu.add_command(label="Вставить", command=self._paste)
         self.entry.bind("<Button-3>", self._popup_menu)
         return self.entry
 
     def buttonbox(self) -> None:
-        box = tk.Frame(self)
-        tk.Button(box, text="ОК", width=10, command=self.ok, default="active").pack(
-            side="left", padx=5, pady=5
-        )
-        tk.Button(box, text="Отмена", width=10, command=self.cancel).pack(
-            side="left", padx=5, pady=5
-        )
+        box = self.theme.widget(tk.Frame, self, bg=Color.CARD)
+        self.theme.widget(
+            tk.Button,
+            box,
+            text="ОК",
+            width=10,
+            command=self.ok,
+            default="active",
+            bg=Color.ACCENT,
+            fg=Color.ON_ACCENT,
+            activebackground=Color.ACCENT_HOVER,
+            activeforeground=Color.ON_ACCENT,
+        ).pack(side="left", padx=5, pady=5)
+        self.theme.widget(
+            tk.Button,
+            box,
+            text="Отмена",
+            width=10,
+            command=self.cancel,
+            bg=Color.SUBTLE,
+            fg=Color.HEADING,
+            activebackground=Color.SUBTLE_HOVER,
+            activeforeground=Color.TEXT,
+        ).pack(side="left", padx=5, pady=5)
         self.bind("<Return>", self.ok)
         self.bind("<Escape>", self.cancel)
         box.pack()

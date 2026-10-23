@@ -8,11 +8,50 @@ from pathlib import Path
 from threading import Event
 from unittest.mock import patch
 
+from kotlin_fixtures import class_bytes
+
+from paxoinsight.jvm_class import parse_class
 from paxoinsight.models import AnalysisOptions
+from paxoinsight.reporting import build_kotlin_html_report
 from paxoinsight.workflow import WorkflowService
 
 
 class AnalysisWorkflowTests(unittest.TestCase):
+    def test_kotlin_single_index_reports_partial_and_rescan_refreshes_it(self):
+        with tempfile.TemporaryDirectory() as temp:
+            source = Path(temp) / "project"
+            kotlin = source / "src/main/kotlin/p/Models.kt"
+            binary = source / "build/classes/kotlin/main/p/User.class"
+            kotlin.parent.mkdir(parents=True)
+            binary.parent.mkdir(parents=True)
+            kotlin.write_text("package p\nclass User\nclass Account", encoding="utf-8")
+            binary.write_bytes(class_bytes("p/User", "Models.kt"))
+            workflow = WorkflowService()
+            with patch("paxoinsight.kotlin_analysis.parse_class", wraps=parse_class) as parsed:
+                session = workflow.scan(source, AnalysisOptions(), lambda *_: None, Event())
+                self.assertEqual(parsed.call_count, 1)
+            try:
+                result = session.result
+                self.assertEqual(result.analysis_data["kotlin_mapping"]["records"][0]["status"],
+                                 "partial")
+                self.assertIn("частично 1", result.sast_reason)
+                self.assertTrue(result.kotlin_warnings)
+                self.assertEqual(result.to_dict()["analysis_data"]["kotlin_mapping"]["coverage"]
+                                 ["estimated_percent"], 50.0)
+                self.assertIn("p/Account.class", build_kotlin_html_report(result))
+                self.assertIn("p/Account.class", result.to_text())
+                missing = session.content_root / "build/classes/kotlin/main/p/Account.class"
+                missing.write_bytes(class_bytes("p/Account", "Models.kt"))
+                workflow.rescan(session, AnalysisOptions(), lambda *_: None, Event())
+                self.assertEqual(session.result.analysis_data["kotlin_mapping"]["records"][0]
+                                 ["status"], "confirmed")
+                self.assertFalse(session.result.kotlin_warnings)
+                self.assertEqual(session.result.analysis_data["kotlin_mapping"]["coverage"]
+                                 ["confirmed_percent"], 100.0)
+                self.assertFalse((source / "build/classes/kotlin/main/p/Account.class").exists())
+            finally:
+                workflow.cleanup(session)
+
     def test_primary_bar_advises_rescan_of_its_remaining_containers(self) -> None:
         with tempfile.TemporaryDirectory() as temp:
             source = Path(temp) / "application.bar"
@@ -152,7 +191,8 @@ class AnalysisWorkflowTests(unittest.TestCase):
                 )
                 self.assertEqual(session.result.kotlin_files, ["Main.kt"])
                 kotlin_mapping = session.result.analysis_data["kotlin_mapping"]
-                self.assertEqual(kotlin_mapping["unmatched_main"], ["Main.kt"])
+                self.assertEqual(kotlin_mapping["records"][0]["status"], "unverified")
+                self.assertEqual(kotlin_mapping["unmatched_main"], [])
                 self.assertEqual(kotlin_mapping["total_matched"], 0)
                 report = session.result.to_text()
                 self.assertIn("Файлы повышенного внимания:", report)

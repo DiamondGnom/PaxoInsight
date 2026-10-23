@@ -3,6 +3,6 @@
 from __future__ import annotations
 
 APP_NAME = "PaxoInsight"
-VERSION = "6.1"
+VERSION = "6.3"
 
 __all__ = ["APP_NAME", "VERSION"]

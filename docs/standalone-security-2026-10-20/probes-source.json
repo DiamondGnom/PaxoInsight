@@ -1,0 +1,94 @@
+{
+  "mode": "source",
+  "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+  "py7zr": "1.1.3",
+  "native_environment": "Build environment; not native DLLs loaded by the EXE.",
+  "results": [
+    {
+      "test": "zip_traversal",
+      "rejected": true,
+      "exception": "ValueError"
+    },
+    {
+      "test": "zip_absolute",
+      "rejected": true,
+      "exception": "ValueError"
+    },
+    {
+      "test": "zip_duplicates",
+      "rejected": true,
+      "exception": "FileExistsError"
+    },
+    {
+      "test": "zip_implicit_directories",
+      "rejected": true,
+      "exception": "ValueError"
+    },
+    {
+      "test": "tar_directories",
+      "rejected": true,
+      "exception": "ValueError"
+    },
+    {
+      "test": "tar_symlink",
+      "rejected": true,
+      "exception": "ValueError"
+    },
+    {
+      "test": "tar_hardlink",
+      "rejected": true,
+      "exception": "ValueError"
+    },
+    {
+      "test": "tar_duplicates",
+      "rejected": true,
+      "exception": "FileExistsError"
+    },
+    {
+      "test": "7z_actual_write_limit",
+      "simulated_false_listing_size": 1,
+      "configured_limit": 32,
+      "exception": "DecompressionBombError",
+      "bytes_written": 0
+    },
+    {
+      "test": "zip_low_disk",
+      "simulated_free_bytes": 0,
+      "exception": "ValueError",
+      "bytes_written": 0
+    },
+    {
+      "test": "zip_bzip2_memory_allocation",
+      "real_crafted_zip_not_mocked_listing": true,
+      "sample_expansion_bounded_to": 16777216,
+      "declared_size_and_application_limit": 32,
+      "largest_decoder_allocation": 16777216,
+      "output_bytes": 32
+    },
+    {
+      "test": "rar_password_transport",
+      "mocked_native_process": true,
+      "password_in_argv": false,
+      "password_via_stdin": true,
+      "forced_rar_type": true,
+      "shell": false
+    },
+    {
+      "test": "xml_internal_dtd",
+      "rejected": true,
+      "exception": "DTDForbidden"
+    },
+    {
+      "test": "html_report_escaping",
+      "script_escaped": true,
+      "external_script_tag": false,
+      "external_stylesheet_tag": false
+    },
+    {
+      "test": "folder_copy_directory_budget",
+      "configured_limit": 3,
+      "exception_during_copy": null,
+      "directories_copied_before_final_validation": 5
+    }
+  ]
+}

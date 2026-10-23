@@ -121,6 +121,22 @@ class AnalysisResult:
         if self.kotlin_files:
             lines.extend(["", "Kotlin-файлы:"])
             lines.extend(f"  - {item}" for item in self.kotlin_files)
+        mapping_data = self.analysis_data.get("kotlin_mapping")
+        if isinstance(mapping_data, dict) and mapping_data.get("schema_version") == 2:
+            from .kotlin_coverage import coverage_for_mapping, coverage_text
+            from .reporting import STATUS_LABELS, extract_kotlin_mapping, kotlin_table_rows
+
+            lines.extend(["", coverage_text(coverage_for_mapping(mapping_data)),
+                          "Процент оценивает сопоставление с байткодом, не покрытие SAST."])
+            lines.extend(["", "Структурное сопоставление Kotlin / JVM:"])
+            for row in kotlin_table_rows(extract_kotlin_mapping(self)):
+                label = STATUS_LABELS.get(row["status"], row["status"])
+                lines.append(f"  [{label}] {row['source']}")
+                lines.append(f"    {row['context']} | {row['declaration']}")
+                if row["expected"]:
+                    lines.append(f"    Ожидается: {row['expected']}")
+                lines.append(f"    Реальные .class: {', '.join(row['classes']) or 'не найдены'}")
+                lines.append(f"    Основание: {row['reason']}")
         if self.attention_files:
             lines.extend(["", "Файлы повышенного внимания:"])
             lines.extend(f"  - {item}" for item in self.attention_files)

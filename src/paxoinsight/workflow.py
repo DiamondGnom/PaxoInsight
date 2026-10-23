@@ -16,8 +16,8 @@ from .models import (
 
 
 class WorkflowService:
-    def __init__(self) -> None:
-        self.archives = ArchiveService()
+    def __init__(self, workspace_parent: Path | None = None) -> None:
+        self.archives = ArchiveService(workspace_parent)
         self.analysis = AnalysisService()
 
     def scan(

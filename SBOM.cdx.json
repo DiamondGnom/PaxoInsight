@@ -1,404 +1,3078 @@
 {
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.6",
+  "serialNumber": "urn:uuid:f2c71046-97d0-4056-ab20-3aafd17f568a",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2026-10-23T10:05:45+00:00",
+    "component": {
+      "type": "application",
+      "name": "PaxoInsight Standalone",
+      "version": "6.3",
+      "bom-ref": "paxoinsight"
+    },
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "desktop_sbom.py",
+          "version": "1.0"
+        }
+      ]
+    },
+    "properties": [
+      {
+        "name": "paxoinsight:scope",
+        "value": "Actual bundled Python distributions and PE binaries; static native subcomponents may require upstream SBOMs"
+      }
+    ]
+  },
   "components": [
     {
-      "bom-ref": "requirements-L3",
-      "description": "requirements line 3: brotli==1.2.0",
-      "externalReferences": [
-        {
-          "comment": "implicit dist url",
-          "type": "distribution",
-          "url": "https://pypi.org/simple/brotli/"
-        }
-      ],
+      "type": "library",
       "name": "brotli",
-      "purl": "pkg:pypi/brotli@1.2.0",
-      "type": "library",
-      "version": "1.2.0"
+      "version": "1.2.0",
+      "bom-ref": "pkg:pypi/brotli@1.2.0",
+      "purl": "pkg:pypi/brotli@1.2.0"
     },
     {
-      "bom-ref": "requirements-L4",
-      "description": "requirements line 4: cffi==2.1.1",
-      "externalReferences": [
-        {
-          "comment": "implicit dist url",
-          "type": "distribution",
-          "url": "https://pypi.org/simple/cffi/"
-        }
-      ],
+      "type": "library",
       "name": "cffi",
-      "purl": "pkg:pypi/cffi@2.1.1",
-      "type": "library",
-      "version": "2.1.1"
+      "version": "2.1.1",
+      "bom-ref": "pkg:pypi/cffi@2.1.1",
+      "purl": "pkg:pypi/cffi@2.1.1"
     },
     {
-      "bom-ref": "requirements-L5",
-      "description": "requirements line 5: cryptography==50.0.1",
-      "externalReferences": [
-        {
-          "comment": "implicit dist url",
-          "type": "distribution",
-          "url": "https://pypi.org/simple/cryptography/"
-        }
-      ],
+      "type": "library",
       "name": "cryptography",
-      "purl": "pkg:pypi/cryptography@50.0.1",
-      "type": "library",
-      "version": "50.0.1"
+      "version": "50.0.2",
+      "bom-ref": "pkg:pypi/cryptography@50.0.2",
+      "purl": "pkg:pypi/cryptography@50.0.2"
     },
     {
-      "bom-ref": "requirements-L6",
-      "description": "requirements line 6: inflate64==1.0.4",
-      "externalReferences": [
-        {
-          "comment": "implicit dist url",
-          "type": "distribution",
-          "url": "https://pypi.org/simple/inflate64/"
-        }
-      ],
+      "type": "library",
+      "name": "defusedxml",
+      "version": "0.7.1",
+      "bom-ref": "pkg:pypi/defusedxml@0.7.1",
+      "purl": "pkg:pypi/defusedxml@0.7.1"
+    },
+    {
+      "type": "library",
       "name": "inflate64",
-      "purl": "pkg:pypi/inflate64@1.0.4",
-      "type": "library",
-      "version": "1.0.4"
+      "version": "1.0.4",
+      "bom-ref": "pkg:pypi/inflate64@1.0.4",
+      "purl": "pkg:pypi/inflate64@1.0.4"
     },
     {
-      "bom-ref": "requirements-L7",
-      "description": "requirements line 7: multivolumefile==0.2.3",
-      "externalReferences": [
-        {
-          "comment": "implicit dist url",
-          "type": "distribution",
-          "url": "https://pypi.org/simple/multivolumefile/"
-        }
-      ],
+      "type": "library",
       "name": "multivolumefile",
-      "purl": "pkg:pypi/multivolumefile@0.2.3",
-      "type": "library",
-      "version": "0.2.3"
+      "version": "0.2.3",
+      "bom-ref": "pkg:pypi/multivolumefile@0.2.3",
+      "purl": "pkg:pypi/multivolumefile@0.2.3"
     },
     {
-      "bom-ref": "requirements-L8",
-      "description": "requirements line 8: psutil==7.2.2",
-      "externalReferences": [
-        {
-          "comment": "implicit dist url",
-          "type": "distribution",
-          "url": "https://pypi.org/simple/psutil/"
-        }
-      ],
+      "type": "library",
       "name": "psutil",
-      "purl": "pkg:pypi/psutil@7.2.2",
-      "type": "library",
-      "version": "7.2.2"
+      "version": "7.2.2",
+      "bom-ref": "pkg:pypi/psutil@7.2.2",
+      "purl": "pkg:pypi/psutil@7.2.2"
     },
     {
-      "bom-ref": "requirements-L9",
-      "description": "requirements line 9: py7zr==1.1.3",
-      "externalReferences": [
-        {
-          "comment": "implicit dist url",
-          "type": "distribution",
-          "url": "https://pypi.org/simple/py7zr/"
-        }
-      ],
+      "type": "library",
       "name": "py7zr",
-      "purl": "pkg:pypi/py7zr@1.1.3",
-      "type": "library",
-      "version": "1.1.3"
+      "version": "1.1.4",
+      "bom-ref": "pkg:pypi/py7zr@1.1.4",
+      "purl": "pkg:pypi/py7zr@1.1.4"
     },
     {
-      "bom-ref": "requirements-L10",
-      "description": "requirements line 10: pybcj==1.0.8",
-      "externalReferences": [
-        {
-          "comment": "implicit dist url",
-          "type": "distribution",
-          "url": "https://pypi.org/simple/pybcj/"
-        }
-      ],
+      "type": "library",
       "name": "pybcj",
-      "purl": "pkg:pypi/pybcj@1.0.8",
-      "type": "library",
-      "version": "1.0.8"
+      "version": "1.0.8",
+      "bom-ref": "pkg:pypi/pybcj@1.0.8",
+      "purl": "pkg:pypi/pybcj@1.0.8"
     },
     {
-      "bom-ref": "requirements-L12",
-      "description": "requirements line 12: pycparser==3.0",
-      "externalReferences": [
-        {
-          "comment": "implicit dist url",
-          "type": "distribution",
-          "url": "https://pypi.org/simple/pycparser/"
-        }
-      ],
-      "name": "pycparser",
-      "purl": "pkg:pypi/pycparser@3.0",
       "type": "library",
-      "version": "3.0"
-    },
-    {
-      "bom-ref": "requirements-L11",
-      "description": "requirements line 11: pycryptodomex==3.23.0",
-      "externalReferences": [
-        {
-          "comment": "implicit dist url",
-          "type": "distribution",
-          "url": "https://pypi.org/simple/pycryptodomex/"
-        }
-      ],
       "name": "pycryptodomex",
-      "purl": "pkg:pypi/pycryptodomex@3.23.0",
-      "type": "library",
-      "version": "3.23.0"
+      "version": "3.24.1",
+      "bom-ref": "pkg:pypi/pycryptodomex@3.24.1",
+      "purl": "pkg:pypi/pycryptodomex@3.24.1"
     },
     {
-      "bom-ref": "requirements-L13",
-      "description": "requirements line 13: pyppmd==1.3.1",
-      "externalReferences": [
-        {
-          "comment": "implicit dist url",
-          "type": "distribution",
-          "url": "https://pypi.org/simple/pyppmd/"
-        }
-      ],
+      "type": "library",
+      "name": "pycparser",
+      "version": "3.11",
+      "bom-ref": "pkg:pypi/pycparser@3.11",
+      "purl": "pkg:pypi/pycparser@3.11"
+    },
+    {
+      "type": "library",
       "name": "pyppmd",
-      "purl": "pkg:pypi/pyppmd@1.3.1",
-      "type": "library",
-      "version": "1.3.1"
+      "version": "1.3.1",
+      "bom-ref": "pkg:pypi/pyppmd@1.3.1",
+      "purl": "pkg:pypi/pyppmd@1.3.1"
     },
     {
-      "bom-ref": "requirements-L14",
-      "description": "requirements line 14: rarfile==4.5",
-      "externalReferences": [
-        {
-          "comment": "implicit dist url",
-          "type": "distribution",
-          "url": "https://pypi.org/simple/rarfile/"
-        }
-      ],
+      "type": "library",
       "name": "rarfile",
-      "purl": "pkg:pypi/rarfile@4.5",
-      "type": "library",
-      "version": "4.5"
+      "version": "4.5",
+      "bom-ref": "pkg:pypi/rarfile@4.5",
+      "purl": "pkg:pypi/rarfile@4.5"
     },
     {
-      "bom-ref": "requirements-L15",
-      "description": "requirements line 15: texttable==1.7.0",
-      "externalReferences": [
-        {
-          "comment": "implicit dist url",
-          "type": "distribution",
-          "url": "https://pypi.org/simple/texttable/"
-        }
-      ],
+      "type": "library",
       "name": "texttable",
-      "purl": "pkg:pypi/texttable@1.7.0",
-      "type": "library",
-      "version": "1.7.0"
+      "version": "1.7.2",
+      "bom-ref": "pkg:pypi/texttable@1.7.2",
+      "purl": "pkg:pypi/texttable@1.7.2"
     },
     {
-      "bom-ref": "requirements-L16",
-      "description": "requirements line 16: tkinterdnd2==0.6.3",
+      "type": "library",
+      "name": "tkinterdnd2",
+      "version": "0.6.4",
+      "bom-ref": "pkg:pypi/tkinterdnd2@0.6.4",
+      "purl": "pkg:pypi/tkinterdnd2@0.6.4"
+    },
+    {
+      "type": "platform",
+      "name": "CPython",
+      "version": "3.14.8",
+      "bom-ref": "cpython-3.14.8",
       "externalReferences": [
         {
-          "comment": "implicit dist url",
           "type": "distribution",
-          "url": "https://pypi.org/simple/tkinterdnd2/"
+          "url": "https://www.python.org/ftp/python/3.14.8/python-3.14.8-amd64.zip",
+          "hashes": [
+            {
+              "alg": "SHA-256",
+              "content": "4873947a8afc037846b180312b83c744a4146a851cfd316a75c3125a4d8299da"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_asyncio.pyd",
+      "bom-ref": "file:_internal/_asyncio.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "58b3e50104db6bf9d76e3d8106f9f477d34109a887d547ee086b0289e6a4e224"
         }
       ],
-      "name": "tkinterdnd2",
-      "purl": "pkg:pypi/tkinterdnd2@0.6.3",
-      "type": "library",
-      "version": "0.6.3"
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_asyncio.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_brotli.cp314-win_amd64.pyd",
+      "bom-ref": "file:_internal/_brotli.cp314-win_amd64.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "44f02bcf2b15519a487cf653e16b5f9c65f26d0be559592878988ad47148fc5e"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_brotli.cp314-win_amd64.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_bz2.pyd",
+      "bom-ref": "file:_internal/_bz2.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b02f580daa0b390b2228d2a8186ef119be658c89cc64d0bd909550786ed993f2"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_bz2.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_cffi_backend.cp314-win_amd64.pyd",
+      "bom-ref": "file:_internal/_cffi_backend.cp314-win_amd64.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9e99b2184c60f21a88cafc374386ded3559e8694ed7cf111f2869e066d303334"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_cffi_backend.cp314-win_amd64.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_ctypes.pyd",
+      "bom-ref": "file:_internal/_ctypes.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b96680c6bcad9e9403711ec0977866325e8e5aab93b56e83c3df6280ae72a82a"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_ctypes.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_decimal.pyd",
+      "bom-ref": "file:_internal/_decimal.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "196c42414c16e804874988783b8a356bf1d012d32e99efbc6e360e94920c46ec"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_decimal.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_elementtree.pyd",
+      "bom-ref": "file:_internal/_elementtree.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "31aff8dca815a05904b5d3020fbdd5bdb596b6a07a36f31728996f28e06dab24"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_elementtree.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_hashlib.pyd",
+      "bom-ref": "file:_internal/_hashlib.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5dee7b9fff3e6d0abe20601b9e62f3a14cd048167ee0b80781131dc81dec9469"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_hashlib.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_lzma.pyd",
+      "bom-ref": "file:_internal/_lzma.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9099ef451fe61d8feef9e02894902b88fdc8ee404e3f8b7412b150878c973803"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_lzma.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_multiprocessing.pyd",
+      "bom-ref": "file:_internal/_multiprocessing.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "18041441b3f558925f903bc7af644a4d84b1cd746a4998748b4fffd82e767a6b"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_multiprocessing.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_overlapped.pyd",
+      "bom-ref": "file:_internal/_overlapped.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "eca5d3df23b762c846801194b6c971aae4eb288e1fc2914752b3a6c2df5aebfb"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_overlapped.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_queue.pyd",
+      "bom-ref": "file:_internal/_queue.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1e2e1ede7eeaf30a80ece546420dec67a02716e25d3a7c638e4deb0c21e973a1"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_queue.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_socket.pyd",
+      "bom-ref": "file:_internal/_socket.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "18a77c4e1f4a71ca60b9dbbba809e98cd324f3e1470d091689b87754a8c65588"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_socket.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_ssl.pyd",
+      "bom-ref": "file:_internal/_ssl.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "49df86fe76ed8fd97bb11a485286b49f5f5ebe953383648976a39c9de6f0524d"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_ssl.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_tkinter.pyd",
+      "bom-ref": "file:_internal/_tkinter.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "36675f9038cc1f1fea08b68ef38c5da94b41efbcd3a421421198f49f01afd8d0"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_tkinter.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_uuid.pyd",
+      "bom-ref": "file:_internal/_uuid.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7e2cdd954b44b1be1fac1c354f774dab5f5becfce59688e62338427b125c62bf"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_uuid.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_wmi.pyd",
+      "bom-ref": "file:_internal/_wmi.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5366924c1c96d9c9f82f95967fbf73244d4b4930f39103d7e7ba2b01046e0a46"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_wmi.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_zstd.pyd",
+      "bom-ref": "file:_internal/_zstd.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "526d977236cc63895902977f216bf3ca93a4233489240656b295eafb6f518d07"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/_zstd.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-console-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-console-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "015bd08815c7b934a8952c3a7578e9ce59f21136e8a880d42bbd414bec2c6058"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-console-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-datetime-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-datetime-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5534812cdbdae94ba45cb216e5eb9af686b853948df54365103555abbbaf9d9a"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-datetime-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-debug-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-debug-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "837d2b1b2cd03e03fc6ccb050698b6b5763af17c201304872342a5eae9e0a2d2"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-debug-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-errorhandling-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-errorhandling-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "de43b165f568c276c00e95acd454e3092f352a18e95874595f4f4658c06d2ec7"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-errorhandling-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-fibers-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-fibers-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3cebc45bf479ad74cfabf2c6bfd4994d7ad639ed1221025981d19cedf9ce0416"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-fibers-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-fibers-l1-1-1.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-fibers-l1-1-1.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5ef70308bcca628ce6b0e2856b15b1c7ae340c3f9bbbc4c1071d8c191a34a5c3"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-fibers-l1-1-1.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-file-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-file-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "250ac829f2617bcac1c6e5b8c4f630462e20765863ba573526a3e11bbfb94a9a"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-file-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-file-l1-2-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-file-l1-2-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ae14079a114733f60ce87b92cba42acd8083c2cd67594e53bc37dc0b97a4b465"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-file-l1-2-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-file-l2-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-file-l2-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "914bf26a298713119477ea0a8e7bd43171b91344ebe24fb47ad77c49686e3d87"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-file-l2-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-handle-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-handle-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ab5489955e371b15f77906c08ec3c7affe2c7a46a08c514ca628768b4478974b"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-handle-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-heap-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-heap-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c70f9644d8377fa39c5b71f2e9734c1400d7598904fdeb772e8502099982dcb7"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-heap-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-interlocked-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-interlocked-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f8129710188e407bb0e6f46d30aeba277d67b947ece5fe09e883fde2323f3ae6"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-interlocked-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-kernel32-legacy-l1-1-1.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-kernel32-legacy-l1-1-1.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5200b16cb2ddc61cfc07373a9a84aa85a3ab50806ca96c879c883275832944c1"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-kernel32-legacy-l1-1-1.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-libraryloader-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-libraryloader-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "48786fb88b001dcd1f63acea903d3ca9cc0b3060d5a325e3f2f3cbc3bfd53166"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-libraryloader-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-localization-l1-2-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-localization-l1-2-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9ec3898f7eba91faa28b51616c211a2689e3a13aeef8de6e13cb674e49d689eb"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-localization-l1-2-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-memory-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-memory-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3a6cbc524c99e1cd80d5368f5601402a37ad602528b1ab628093573ef638eb3b"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-memory-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-namedpipe-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-namedpipe-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "97145ef89c44949fcf0f04ac834a8bc7d687ef49ee73ae9fc32f3c11136b7201"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-namedpipe-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-processenvironment-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-processenvironment-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8bc7c10b1851aea644e9c9f381cdb935e091fee6b0be3d3aedc6fffaac96adb7"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-processenvironment-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-processthreads-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-processthreads-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d8030b777617c71f0f94564607699dbf7561487d779db9756aed378c5675213f"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-processthreads-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-processthreads-l1-1-1.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-processthreads-l1-1-1.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f5e676713340f73a03a3d41a6ec9883b431da7d16c7f07bd0a920fb80e6c0753"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-processthreads-l1-1-1.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-profile-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-profile-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f023d47e44d3eea6b0743580f57e8c6ba81e79d5ebfa7da26250076c647b980e"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-profile-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-rtlsupport-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-rtlsupport-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9746d8930704153578a628c010638a5f818ffe5a927e25591b108e256dc6afca"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-rtlsupport-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-string-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-string-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7c53ae24c982d16ffd1bf7f918d115b11b7f30e57bc7feaa18cb9781e4abb926"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-string-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-synch-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-synch-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "56d9d62ca5dba79a6581b8d574a7d8b2a64a5ecb71e47dcf06ed0285708b1859"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-synch-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-synch-l1-2-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-synch-l1-2-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f6482bbec5612c39ecb4822787a333f2b7570f7a5f922a4059be41ba957bb372"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-synch-l1-2-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-sysinfo-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-sysinfo-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "272d02765fdd3582618236c2d309abba069642f9bc1062ede069d0c144e17007"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-sysinfo-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-sysinfo-l1-2-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-sysinfo-l1-2-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8a0900788859d0eb51c2f48f50cc6ed376a120b518100fa20e11d7702ccde260"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-sysinfo-l1-2-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-timezone-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-timezone-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "ff35de6c03812b332e140f17dade25c5dd4775156da9eeb1eaae3fddd27236ec"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-timezone-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-core-util-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-core-util-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "191ef3e98641a57296f19d572d8eb62489470ff1ef6030d136af170c2f835173"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-core-util-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-conio-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-conio-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "54ee5ec719a051496ff60aa00dbeaa94b9a7d2cdac27fe9b7317f1a666b6a2aa"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-conio-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-convert-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-convert-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8b94662429171019fcd63c70bbf2095a075170599704a5e7dcdbe3da13f3a429"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-convert-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-environment-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-environment-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "39e5929593709e8af3bc9e0a75ec1155778d6f4a247f4cdfc58928ad6db88434"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-environment-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-filesystem-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-filesystem-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5a8ecebac32edf4e1f3c5c6c1c8ea1a1add6cda4f9c9cb26f752fb295bea6865"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-filesystem-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-heap-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-heap-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c71080cbcb43bf1f8f3e391deb12a582eb0abefc80946f340675a2c616e4feb4"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-heap-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-locale-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-locale-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6c68648e524187e03c4ad9aaa4a99113c6ee9f29fb39cc0ed93f951975138e63"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-locale-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-math-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-math-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d4fbcccbe29371cbce431e43b2eb4f7ba9a6f04a3d740a071f02457a505e9dc8"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-math-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-private-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-private-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "29bf3d90617d3781d19b332d6ceb9f20ba5ce082ec74bf6c34d5d4aee56e48a1"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-private-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-process-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-process-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "47c1935942e3ac0812e4dcf18c0e265e565f0194a3349111c299712f5565f7ac"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-process-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-runtime-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-runtime-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "72adc1b3677e0814d9c4ebf0964000e84bb2acf67336c8963061665e44f78029"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-runtime-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-stdio-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-stdio-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "900afc3989673c9bb1a687ed38c192f46db9e6ba6d11a668898a539e7fc23798"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-stdio-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-string-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-string-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "fcf12466cc12fd3b73611fc0763a5a1f9d44e90349513c34a0c83b0f36421793"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-string-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-time-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-time-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "886e57c4a6adb299b38f02945369f590a67da4e79a798359fc60aaa067212d7c"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-time-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "api-ms-win-crt-utility-l1-1-0.dll",
+      "bom-ref": "file:_internal/api-ms-win-crt-utility-l1-1-0.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5f8f26b216ade615b67a41f6fbbb910972fc6153315a65bb8f09912be50215b1"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/api-ms-win-crt-utility-l1-1-0.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "_bcj.cp314-win_amd64.pyd",
+      "bom-ref": "file:_internal/bcj/_bcj.cp314-win_amd64.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a3ff887858f452403f2b65a11f540bba415ae1401e23891deede06c25f183336"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/bcj/_bcj.cp314-win_amd64.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_ARC4.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_ARC4.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "dd3a9c4651fae8ba9f44937dc5c3afd6e443f0a622036e21180fdf558cf163f6"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_ARC4.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_chacha20.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_chacha20.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a6ae1f2f1463e649660fb3f5585508b19944380d41371d43965645954b8a16db"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_chacha20.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_pkcs1_decode.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_pkcs1_decode.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6a23a4639eb6fb17ba079ac66226e371ecd6226a37d48de37f920feb607020e1"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_pkcs1_decode.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_aes.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_aes.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c476ef00bde0e7c9d70e3928f4bfe04b5b8707d30c295751cc1a5a6e69247472"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_aes.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_aesni.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_aesni.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4fb4db0f874d3c6c0f0b60bb054d1913106a8c155f33263ab43a28c6ada45f61"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_aesni.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_arc2.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_arc2.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "624a1c62f94e2d97c98b1b9abe445b35f3738dc69f31db38ccb3d533212c0463"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_arc2.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_blowfish.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_blowfish.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "fdc14a5a9f4c977ebe5f6a1a83a6aee916a7be3fc138755458e1e900b37ebfeb"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_blowfish.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_cast.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_cast.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b908734eef3113437ae4f27c2f550a282e0a18de3619cd436370efcc165a0718"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_cast.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_cbc.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_cbc.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "054910d9f916df27e12a2af768953f5b2c399ed877042e81c29e7b550ac0acba"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_cbc.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_cfb.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_cfb.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d832ec85310cd7f9abb56544f7522d28c0e47dd87f92dba038cc7a5471de7bbf"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_cfb.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_ctr.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_ctr.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b51570afc00f4208d20b0a9fda23294fc90dd76d0c0d14e97f307654a30d9862"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_ctr.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_des.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_des.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c7f7b4ddffb27fdee044701db76cc655b2090baef170b3c8d875e69b2bf86242"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_des.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_des3.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_des3.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "30681a8e5d35c9afe6c910559df2719ed38d155d472af39f6d008ec21e88cc46"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_des3.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_ecb.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_ecb.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3de1140d5bc0406009da25a7b512a0143b0538868a658faa3098f6934ab1337d"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_ecb.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_eksblowfish.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_eksblowfish.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8fbab48bfbafcd89fe95208a2e0ae287d6efdf8afb34e91ae3de0bd034b0acc4"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_eksblowfish.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_ocb.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_ocb.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8e52ed6946296e07f01d571937ba4b27878b8b44bc59e8fcfbc88bf37d6c28cd"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_ocb.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_raw_ofb.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_raw_ofb.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "50888d7356b74637fbca7ae75fbaf3cb6a00233465dee5c8e0910b3fe21d35ca"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_raw_ofb.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_Salsa20.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Cipher/_Salsa20.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "cf27f0b954cb12880813b274c2a6afbde7b9f82f6f9767a0b3ad49af5c452425"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Cipher/_Salsa20.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_BLAKE2b.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_BLAKE2b.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8ec098753c772b47230ba41e405913126dc05ab64b393333f36c318b51489590"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_BLAKE2b.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_BLAKE2s.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_BLAKE2s.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7c6049038561f0a5ced6e1e475f1efad7e40763987c4444979a5dedd613fc618"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_BLAKE2s.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_ghash_clmul.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_ghash_clmul.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "255486a3f9c18a66e5cbe4e0b7c4c8df7bbe17801ac037664020fb1b7345a360"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_ghash_clmul.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_ghash_portable.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_ghash_portable.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "886853a7d66cc698f4056054cc39742d4e7496371b5dfeb4c780f60943d7adb8"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_ghash_portable.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_keccak.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_keccak.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4731fcb3ba86ec62374e1f022a796cf951dabb2b2202b9e89004778061bffb4e"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_keccak.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_MD2.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_MD2.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b17c95abe715e67312a8ec4db515e5287ca5258158cf1a45905db08f49872731"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_MD2.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_MD4.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_MD4.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "10a4d1768ad89cdf96cded5fbcdee7ed223599c10c01d8075b8153c8019406b4"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_MD4.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_MD5.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_MD5.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "96381b3a405d1a5f4919500a25605a66aef21022f017a5ac6a62c639b79879ff"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_MD5.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_poly1305.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_poly1305.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8a29d20bfc01ff7948e2e116aa88003f668cd7a69f5b9e51efa2a5c7c2518feb"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_poly1305.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_RIPEMD160.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_RIPEMD160.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "782ebe9212b6a2dd8fe7b5617e38e334d2028f0e76d101c93386ed0ccde3706c"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_RIPEMD160.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_SHA1.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_SHA1.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "95a407910688654832b9c234fd493339b8463ac5a0cc499bb8e871452059e5bd"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_SHA1.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_SHA224.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_SHA224.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "528a3cca54cdefe104f378e6b6798d8796dba5a95eaf7d7bd0b1df489ca97f08"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_SHA224.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_SHA256.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_SHA256.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2faf8c0ba8b7dd04f53edde98a02f65654053184a95642bc42b0d9c100e09876"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_SHA256.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_SHA384.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_SHA384.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "90128cdd9d178ad1cbfa8d5ee16f43d95fe02c63cd7fa9f77f74fe182698c335"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_SHA384.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_SHA512.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Hash/_SHA512.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1f9a2b97c3d9a8198b1bcd810e3c2ef628b4b072dee92ecb0921cb13733377ca"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Hash/_SHA512.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_modexp.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Math/_modexp.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "fec06d1ef2ba26f193d7117508dd2be88bb3536ac1ea9f9f8e0dcc86cb14e851"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Math/_modexp.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_scrypt.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Protocol/_scrypt.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d6004b77fa942ee830039a67ac34b2a244162a66db7218b45bf0d0cc366fac2d"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Protocol/_scrypt.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_curve25519.pyd",
+      "bom-ref": "file:_internal/Cryptodome/PublicKey/_curve25519.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "13ff69fbb08c90faad33dc2facb25f6fd188e5011623a60a20bfa8aa04102d5a"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/PublicKey/_curve25519.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_curve448.pyd",
+      "bom-ref": "file:_internal/Cryptodome/PublicKey/_curve448.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4f7b5d9bde1788081882bb18cd9dcac6fa48285ca06b836e1d6871d7611d82f6"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/PublicKey/_curve448.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_ec_ws.pyd",
+      "bom-ref": "file:_internal/Cryptodome/PublicKey/_ec_ws.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a771ca51feb93b70532611c5fa3145ba3bd5019c412b365632df2058f3d42806"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/PublicKey/_ec_ws.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_ed25519.pyd",
+      "bom-ref": "file:_internal/Cryptodome/PublicKey/_ed25519.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "af1ebd5f5290d376537ef2dd06acbd5ee1054b834fac3bd4f20a2b7461685d48"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/PublicKey/_ed25519.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_ed448.pyd",
+      "bom-ref": "file:_internal/Cryptodome/PublicKey/_ed448.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "430c834c7ea0bd1dc413d6e711844ce2f879a5f517b8cb347610198becfa65ea"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/PublicKey/_ed448.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_cpuid_c.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Util/_cpuid_c.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8b3df53a5e7b9ca0c20db71cac696a0473c297bbead93ef7ea3bddf6f74d6aef"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Util/_cpuid_c.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_strxor.pyd",
+      "bom-ref": "file:_internal/Cryptodome/Util/_strxor.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "c2045e1eda9b76a7855140229fca3f2600f1e822cb28f988608f831d033f4be9"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/Cryptodome/Util/_strxor.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_rust.pyd",
+      "bom-ref": "file:_internal/cryptography/hazmat/bindings/_rust.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1d4332a447cab13dec8e3a533ad579e0e562b79e40822c931f33769758fc7156"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/cryptography/hazmat/bindings/_rust.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_inflate64.cp314-win_amd64.pyd",
+      "bom-ref": "file:_internal/inflate64/_inflate64.cp314-win_amd64.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "46a9f05eb9218a7759ca8887632303608d04814f192f447a8fc69458c7e2ac27"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/inflate64/_inflate64.cp314-win_amd64.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "libcrypto-3.dll",
+      "bom-ref": "file:_internal/libcrypto-3.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "75495fe0e079ab00d49be740d3c710a0b94e3f74f9648cb7cc9f768fc7f52319"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/libcrypto-3.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.5.9"
+    },
+    {
+      "type": "file",
+      "name": "libffi-8.dll",
+      "bom-ref": "file:_internal/libffi-8.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "eff52743773eb550fcc6ce3efc37c85724502233b6b002a35496d828bd7b280a"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/libffi-8.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "libssl-3.dll",
+      "bom-ref": "file:_internal/libssl-3.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8957182a9c385bfd9f3f790921de2ddc614cf91f99edbed4e9e5446a46504e32"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/libssl-3.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.5.9"
+    },
+    {
+      "type": "file",
+      "name": "libtommath.dll",
+      "bom-ref": "file:_internal/libtommath.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "aaea8a20db7a7a96d4bef74ad724c4a02595a9c47659f6cbd6f145af0c97aa78"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/libtommath.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "_psutil_windows.pyd",
+      "bom-ref": "file:_internal/psutil/_psutil_windows.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0035450801bd7d938e9e146c5ec28e619cb5a5f4a18cdc53ac7e9734c7f94f78"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/psutil/_psutil_windows.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "pyexpat.pyd",
+      "bom-ref": "file:_internal/pyexpat.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "36d775e2c2fa5bbda86ddc7c6ea632414df04f7a403b9e17587c99088d29cd7b"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/pyexpat.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "_ppmd.cp314-win_amd64.pyd",
+      "bom-ref": "file:_internal/pyppmd/c/_ppmd.cp314-win_amd64.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6ef660a6ee311bf2b270565090ddc090c17b5a4e6076941479e5301a6a08abb4"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/pyppmd/c/_ppmd.cp314-win_amd64.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "python3.dll",
+      "bom-ref": "file:_internal/python3.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "f9acdbcf3383a52353f8d7db3cbda3d3701b1cf7ac3053985fdac766c29e7808"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/python3.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "python314.dll",
+      "bom-ref": "file:_internal/python314.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "854fe7549eb4b2ac478935a38ae2ca1b774c6fdc3d87f0263fbd697ff86d7149"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/python314.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "select.pyd",
+      "bom-ref": "file:_internal/select.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a341519a00befc3b86dfddf5938915fed52ded1ad5aab518c57d0b3c8969e835"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/select.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "tcl90.dll",
+      "bom-ref": "file:_internal/tcl90.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4ea18c5f4f977b827c5d6e3894328105a4c2838d3f3f927b33f96578daa15271"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/tcl90.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "9.0.4"
+    },
+    {
+      "type": "file",
+      "name": "tcl9tk90.dll",
+      "bom-ref": "file:_internal/tcl9tk90.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "6a480fc83fba6e6a5ccc5979ba00313a1ac1d2a987cc764c4f5982895b18b00c"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/tcl9tk90.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "9.0.4"
+    },
+    {
+      "type": "file",
+      "name": "libtkdnd2.10.3.dll",
+      "bom-ref": "file:_internal/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.3.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "22dc45335018f291b98620d9d7fb2c398139306f555ce29a5032d275ca5de38a"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.3.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
+    },
+    {
+      "type": "file",
+      "name": "ucrtbase.dll",
+      "bom-ref": "file:_internal/ucrtbase.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "3239227d27667ba20d10a880751924e5719de0078f9fce232d149d383f7681f6"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/ucrtbase.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "10.0.26100.4654 (WinBuild.160101.0800)"
+    },
+    {
+      "type": "file",
+      "name": "unicodedata.pyd",
+      "bom-ref": "file:_internal/unicodedata.pyd",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0527fee5192ab4567451d1296533600661571f6ebf9e8f4e0f60b63a4a4fd2e8"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/unicodedata.pyd"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "3.14.8"
+    },
+    {
+      "type": "file",
+      "name": "VCRUNTIME140.dll",
+      "bom-ref": "file:_internal/VCRUNTIME140.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d1f4225df2cd877dbf130d5668a021dce3f94118455ff5ec952061c30afc9ce7"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/VCRUNTIME140.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "14.51.36247.0"
+    },
+    {
+      "type": "file",
+      "name": "VCRUNTIME140_1.dll",
+      "bom-ref": "file:_internal/VCRUNTIME140_1.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a7146c08f89fe5b04541ab507cdb59ff7b44534d4ba3c668a426c6450a03434e"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/VCRUNTIME140_1.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "14.51.36247.0"
+    },
+    {
+      "type": "file",
+      "name": "zlib1.dll",
+      "bom-ref": "file:_internal/zlib1.dll",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "241c35ccfd3b9fba5ea5ce9c9a3d6f532df10cc7236c985a1570a01c3cb714bb"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "_internal/zlib1.dll"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ],
+      "version": "1.3.2"
+    },
+    {
+      "type": "file",
+      "name": "PaxoInsight.exe",
+      "bom-ref": "file:PaxoInsight.exe",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "61239410be91d94996a00eb6ccee990ad6e2945168db3a3c7d58c3d043b0142a"
+        }
+      ],
+      "properties": [
+        {
+          "name": "paxoinsight:path",
+          "value": "PaxoInsight.exe"
+        },
+        {
+          "name": "paxoinsight:architecture",
+          "value": "x86_64"
+        }
+      ]
     }
   ],
   "dependencies": [
     {
-      "ref": "requirements-L10"
+      "ref": "pkg:pypi/brotli@1.2.0",
+      "dependsOn": []
     },
     {
-      "ref": "requirements-L11"
-    },
-    {
-      "ref": "requirements-L12"
-    },
-    {
-      "ref": "requirements-L13"
-    },
-    {
-      "ref": "requirements-L14"
-    },
-    {
-      "ref": "requirements-L15"
-    },
-    {
-      "ref": "requirements-L16"
-    },
-    {
-      "ref": "requirements-L3"
-    },
-    {
-      "ref": "requirements-L4",
+      "ref": "pkg:pypi/cffi@2.1.1",
       "dependsOn": [
-        "requirements-L12"
+        "pkg:pypi/pycparser@3.11"
       ]
     },
     {
-      "ref": "requirements-L5",
+      "ref": "pkg:pypi/cryptography@50.0.2",
       "dependsOn": [
-        "requirements-L4"
+        "pkg:pypi/cffi@2.1.1"
       ]
     },
     {
-      "ref": "requirements-L6"
+      "ref": "pkg:pypi/defusedxml@0.7.1",
+      "dependsOn": []
     },
     {
-      "ref": "requirements-L7"
+      "ref": "pkg:pypi/inflate64@1.0.4",
+      "dependsOn": []
     },
     {
-      "ref": "requirements-L8"
+      "ref": "pkg:pypi/multivolumefile@0.2.3",
+      "dependsOn": []
     },
     {
-      "ref": "requirements-L9",
+      "ref": "pkg:pypi/psutil@7.2.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/py7zr@1.1.4",
       "dependsOn": [
-        "requirements-L3",
-        "requirements-L6",
-        "requirements-L7",
-        "requirements-L8",
-        "requirements-L10",
-        "requirements-L11",
-        "requirements-L13",
-        "requirements-L15"
+        "pkg:pypi/brotli@1.2.0",
+        "pkg:pypi/inflate64@1.0.4",
+        "pkg:pypi/multivolumefile@0.2.3",
+        "pkg:pypi/psutil@7.2.2",
+        "pkg:pypi/pybcj@1.0.8",
+        "pkg:pypi/pycryptodomex@3.24.1",
+        "pkg:pypi/pyppmd@1.3.1",
+        "pkg:pypi/texttable@1.7.2"
       ]
     },
     {
-      "ref": "root-component",
+      "ref": "pkg:pypi/pybcj@1.0.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pycryptodomex@3.24.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pycparser@3.11",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pyppmd@1.3.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/rarfile@4.5",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/texttable@1.7.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/tkinterdnd2@0.6.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "cpython-3.14.8",
       "dependsOn": [
-        "requirements-L5",
-        "requirements-L9",
-        "requirements-L14",
-        "requirements-L16"
+        "file:PaxoInsight.exe",
+        "file:_internal/Cryptodome/Cipher/_ARC4.pyd",
+        "file:_internal/Cryptodome/Cipher/_Salsa20.pyd",
+        "file:_internal/Cryptodome/Cipher/_chacha20.pyd",
+        "file:_internal/Cryptodome/Cipher/_pkcs1_decode.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_aes.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_aesni.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_arc2.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_blowfish.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_cast.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_cbc.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_cfb.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_ctr.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_des.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_des3.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_ecb.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_eksblowfish.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_ocb.pyd",
+        "file:_internal/Cryptodome/Cipher/_raw_ofb.pyd",
+        "file:_internal/Cryptodome/Hash/_BLAKE2b.pyd",
+        "file:_internal/Cryptodome/Hash/_BLAKE2s.pyd",
+        "file:_internal/Cryptodome/Hash/_MD2.pyd",
+        "file:_internal/Cryptodome/Hash/_MD4.pyd",
+        "file:_internal/Cryptodome/Hash/_MD5.pyd",
+        "file:_internal/Cryptodome/Hash/_RIPEMD160.pyd",
+        "file:_internal/Cryptodome/Hash/_SHA1.pyd",
+        "file:_internal/Cryptodome/Hash/_SHA224.pyd",
+        "file:_internal/Cryptodome/Hash/_SHA256.pyd",
+        "file:_internal/Cryptodome/Hash/_SHA384.pyd",
+        "file:_internal/Cryptodome/Hash/_SHA512.pyd",
+        "file:_internal/Cryptodome/Hash/_ghash_clmul.pyd",
+        "file:_internal/Cryptodome/Hash/_ghash_portable.pyd",
+        "file:_internal/Cryptodome/Hash/_keccak.pyd",
+        "file:_internal/Cryptodome/Hash/_poly1305.pyd",
+        "file:_internal/Cryptodome/Math/_modexp.pyd",
+        "file:_internal/Cryptodome/Protocol/_scrypt.pyd",
+        "file:_internal/Cryptodome/PublicKey/_curve25519.pyd",
+        "file:_internal/Cryptodome/PublicKey/_curve448.pyd",
+        "file:_internal/Cryptodome/PublicKey/_ec_ws.pyd",
+        "file:_internal/Cryptodome/PublicKey/_ed25519.pyd",
+        "file:_internal/Cryptodome/PublicKey/_ed448.pyd",
+        "file:_internal/Cryptodome/Util/_cpuid_c.pyd",
+        "file:_internal/Cryptodome/Util/_strxor.pyd",
+        "file:_internal/VCRUNTIME140.dll",
+        "file:_internal/VCRUNTIME140_1.dll",
+        "file:_internal/_asyncio.pyd",
+        "file:_internal/_brotli.cp314-win_amd64.pyd",
+        "file:_internal/_bz2.pyd",
+        "file:_internal/_cffi_backend.cp314-win_amd64.pyd",
+        "file:_internal/_ctypes.pyd",
+        "file:_internal/_decimal.pyd",
+        "file:_internal/_elementtree.pyd",
+        "file:_internal/_hashlib.pyd",
+        "file:_internal/_lzma.pyd",
+        "file:_internal/_multiprocessing.pyd",
+        "file:_internal/_overlapped.pyd",
+        "file:_internal/_queue.pyd",
+        "file:_internal/_socket.pyd",
+        "file:_internal/_ssl.pyd",
+        "file:_internal/_tkinter.pyd",
+        "file:_internal/_uuid.pyd",
+        "file:_internal/_wmi.pyd",
+        "file:_internal/_zstd.pyd",
+        "file:_internal/api-ms-win-core-console-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-datetime-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-debug-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-errorhandling-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-fibers-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-fibers-l1-1-1.dll",
+        "file:_internal/api-ms-win-core-file-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-file-l1-2-0.dll",
+        "file:_internal/api-ms-win-core-file-l2-1-0.dll",
+        "file:_internal/api-ms-win-core-handle-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-heap-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-interlocked-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-kernel32-legacy-l1-1-1.dll",
+        "file:_internal/api-ms-win-core-libraryloader-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-localization-l1-2-0.dll",
+        "file:_internal/api-ms-win-core-memory-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-namedpipe-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-processenvironment-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-processthreads-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-processthreads-l1-1-1.dll",
+        "file:_internal/api-ms-win-core-profile-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-rtlsupport-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-string-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-synch-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-synch-l1-2-0.dll",
+        "file:_internal/api-ms-win-core-sysinfo-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-sysinfo-l1-2-0.dll",
+        "file:_internal/api-ms-win-core-timezone-l1-1-0.dll",
+        "file:_internal/api-ms-win-core-util-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-conio-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-convert-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-environment-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-filesystem-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-heap-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-locale-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-math-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-private-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-process-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-runtime-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-stdio-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-string-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-time-l1-1-0.dll",
+        "file:_internal/api-ms-win-crt-utility-l1-1-0.dll",
+        "file:_internal/bcj/_bcj.cp314-win_amd64.pyd",
+        "file:_internal/cryptography/hazmat/bindings/_rust.pyd",
+        "file:_internal/inflate64/_inflate64.cp314-win_amd64.pyd",
+        "file:_internal/libcrypto-3.dll",
+        "file:_internal/libffi-8.dll",
+        "file:_internal/libssl-3.dll",
+        "file:_internal/libtommath.dll",
+        "file:_internal/psutil/_psutil_windows.pyd",
+        "file:_internal/pyexpat.pyd",
+        "file:_internal/pyppmd/c/_ppmd.cp314-win_amd64.pyd",
+        "file:_internal/python3.dll",
+        "file:_internal/python314.dll",
+        "file:_internal/select.pyd",
+        "file:_internal/tcl90.dll",
+        "file:_internal/tcl9tk90.dll",
+        "file:_internal/tkinterdnd2/tkdnd/win-x64-tcl9/libtkdnd2.10.3.dll",
+        "file:_internal/ucrtbase.dll",
+        "file:_internal/unicodedata.pyd",
+        "file:_internal/zlib1.dll"
+      ]
+    },
+    {
+      "ref": "paxoinsight",
+      "dependsOn": [
+        "cpython-3.14.8",
+        "pkg:pypi/brotli@1.2.0",
+        "pkg:pypi/cffi@2.1.1",
+        "pkg:pypi/cryptography@50.0.2",
+        "pkg:pypi/defusedxml@0.7.1",
+        "pkg:pypi/inflate64@1.0.4",
+        "pkg:pypi/multivolumefile@0.2.3",
+        "pkg:pypi/psutil@7.2.2",
+        "pkg:pypi/py7zr@1.1.4",
+        "pkg:pypi/pybcj@1.0.8",
+        "pkg:pypi/pycparser@3.11",
+        "pkg:pypi/pycryptodomex@3.24.1",
+        "pkg:pypi/pyppmd@1.3.1",
+        "pkg:pypi/rarfile@4.5",
+        "pkg:pypi/texttable@1.7.2",
+        "pkg:pypi/tkinterdnd2@0.6.4"
       ]
     }
-  ],
-  "metadata": {
-    "component": {
-      "bom-ref": "root-component",
-      "description": "Standalone archive analysis and 7Z preparation application",
-      "name": "paxoinsight",
-      "type": "application",
-      "version": "6.1.0"
-    },
-    "properties": [
-      {
-        "name": "cdx:reproducible",
-        "value": "true"
-      }
-    ],
-    "tools": {
-      "components": [
-        {
-          "description": "CycloneDX Software Bill of Materials (SBOM) generator for Python projects and environments",
-          "externalReferences": [
-            {
-              "type": "build-system",
-              "url": "https://github.com/CycloneDX/cyclonedx-python/actions"
-            },
-            {
-              "type": "distribution",
-              "url": "https://pypi.org/project/cyclonedx-bom/"
-            },
-            {
-              "type": "documentation",
-              "url": "https://cyclonedx-bom-tool.readthedocs.io/"
-            },
-            {
-              "type": "issue-tracker",
-              "url": "https://github.com/CycloneDX/cyclonedx-python/issues"
-            },
-            {
-              "type": "license",
-              "url": "https://github.com/CycloneDX/cyclonedx-python/blob/main/LICENSE"
-            },
-            {
-              "type": "release-notes",
-              "url": "https://github.com/CycloneDX/cyclonedx-python/blob/main/CHANGELOG.md"
-            },
-            {
-              "type": "vcs",
-              "url": "https://github.com/CycloneDX/cyclonedx-python/"
-            },
-            {
-              "type": "website",
-              "url": "https://github.com/CycloneDX/cyclonedx-python/#readme"
-            }
-          ],
-          "group": "CycloneDX",
-          "licenses": [
-            {
-              "license": {
-                "acknowledgement": "declared",
-                "id": "Apache-2.0"
-              }
-            }
-          ],
-          "name": "cyclonedx-py",
-          "type": "application",
-          "version": "7.3.1"
-        },
-        {
-          "description": "Python library for CycloneDX",
-          "externalReferences": [
-            {
-              "type": "build-system",
-              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/actions"
-            },
-            {
-              "type": "distribution",
-              "url": "https://pypi.org/project/cyclonedx-python-lib/"
-            },
-            {
-              "type": "documentation",
-              "url": "https://cyclonedx-python-library.readthedocs.io/"
-            },
-            {
-              "type": "issue-tracker",
-              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/issues"
-            },
-            {
-              "type": "license",
-              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/blob/main/LICENSE"
-            },
-            {
-              "type": "release-notes",
-              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/blob/main/CHANGELOG.md"
-            },
-            {
-              "type": "vcs",
-              "url": "https://github.com/CycloneDX/cyclonedx-python-lib"
-            },
-            {
-              "type": "website",
-              "url": "https://github.com/CycloneDX/cyclonedx-python-lib/#readme"
-            }
-          ],
-          "group": "CycloneDX",
-          "licenses": [
-            {
-              "license": {
-                "acknowledgement": "declared",
-                "id": "Apache-2.0"
-              }
-            }
-          ],
-          "name": "cyclonedx-python-lib",
-          "type": "library",
-          "version": "11.12.0"
-        }
-      ]
-    }
-  },
-  "version": 1,
-  "$schema": "http://cyclonedx.org/schema/bom-1.6.schema.json",
-  "bomFormat": "CycloneDX",
-  "specVersion": "1.6"
+  ]
 }

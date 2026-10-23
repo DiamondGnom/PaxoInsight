@@ -5,7 +5,6 @@ import queue
 import sys
 import threading
 import tkinter as tk
-from contextlib import suppress
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 from tkinter import font as tkfont
@@ -17,18 +16,25 @@ from ..archive_service import (
     strip_archive_extension,
 )
 from ..attention import ARCHIVE_STYLE, KOTLIN_STYLE, classify_attention, classify_highlight
+from ..kotlin_coverage import coverage_text, percent
 from ..models import AnalysisOptions, Finding, OperationCancelled, PreparedSession
 from ..reporting import (
+    STATUS_LABELS,
     expected_class_names,
     extract_kotlin_mapping,
+    kotlin_table_rows,
     save_kotlin_html_report,
+    save_kotlin_text_report,
+    save_text_report,
 )
 from ..workflow import WorkflowService
+from .appearance import Color, Theme, load_theme, save_theme
+from .brand_logo import AdaptiveLogo
 from .password_dialog import ask_archive_password
 
 try:
     from tkinterdnd2 import DND_FILES, TkinterDnD
-except (ImportError, OSError):
+except ImportError, OSError:
     DND_FILES = None
     TkinterDnD = None
 
@@ -44,32 +50,31 @@ ARCHIVE_FILETYPES = [
     ("Все файлы", "*.*"),
 ]
 
-NAVY = "#0B2A5B"
-BRAND_BLUE = "#0098FF"
-CYAN = "#00D4FF"
-TEXT_PRIMARY = "#0F172A"
-TEXT_SECONDARY = "#64748B"
-BORDER = "#E2E8F0"
-SURFACE = "#F8FAFC"
-WHITE = "#FFFFFF"
-SUCCESS = "#22C55E"
-WARNING = "#F59E0B"
-DANGER = "#EF4444"
+NAVY = Color.HEADING
+BRAND_BLUE = Color.ACCENT
+TEXT_PRIMARY = Color.TEXT
+TEXT_SECONDARY = Color.MUTED
+BORDER = Color.BORDER
+SURFACE = Color.SURFACE
+WHITE = Color.CARD
+SUCCESS = Color.SUCCESS
+WARNING = Color.WARNING
+DANGER = Color.DANGER
 
 SEVERITY_COLORS = {
-    "critical": ("#FEE2E2", "#B91C1C"),
-    "high": ("#FFF7ED", "#C2410C"),
-    "medium": ("#FFFBEB", "#B45309"),
-    "low": ("#EFF6FF", "#1D4ED8"),
-    "info": (SURFACE, "#475569"),
+    "critical": (Color.DANGER_BG, Color.DANGER_TEXT),
+    "high": (Color.DANGER_BG, Color.DANGER_TEXT),
+    "medium": (Color.WARNING_BG, Color.WARNING_TEXT),
+    "low": (Color.INFO_BG, Color.INFO_TEXT),
+    "info": (SURFACE, TEXT_SECONDARY),
 }
 ATTENTION_COLORS = {
-    "package": ("#FEE2E2", "#B91C1C"),
-    "executable": ("#FEF2F2", "#DC2626"),
-    "application_container": ("#FFFBEB", "#B45309"),
-    "third_party_archive": (SURFACE, "#475569"),
-    "kotlin": ("#F3E8FF", "#7E22CE"),
-    "archive": ("#EFF6FF", "#1D4ED8"),
+    "package": (Color.DANGER_BG, Color.DANGER_TEXT),
+    "executable": (Color.DANGER_BG, Color.DANGER_TEXT),
+    "application_container": (Color.WARNING_BG, Color.WARNING_TEXT),
+    "third_party_archive": (SURFACE, TEXT_SECONDARY),
+    "kotlin": (Color.KOTLIN_BG, Color.KOTLIN_TEXT),
+    "archive": (Color.INFO_BG, Color.INFO_TEXT),
 }
 MAX_VISIBLE_ITEMS = 500
 
@@ -89,14 +94,19 @@ class PaxoInsightWindow:
         self.root.title(f"{APP_NAME} {VERSION}")
         self.root.geometry("1220x820")
         self.root.minsize(980, 680)
-        self.root.configure(bg=SURFACE)
+        self.theme = Theme(root, load_theme())
+        self.root._paxo_theme = self.theme
+        self.theme_var = tk.StringVar(root, value=self.theme.name)
+        self.theme.configure(self.root, bg=SURFACE)
 
         installed_fonts = set(tkfont.families(self.root))
         self.ui_font = "Inter" if "Inter" in installed_fonts else "Segoe UI"
         self.mono_font = "JetBrains Mono" if "JetBrains Mono" in installed_fonts else "Consolas"
+        self.theme.font = self.ui_font
         self.icon_image: tk.PhotoImage | None = None
         self.logo_image: tk.PhotoImage | None = None
         self.header_logo_image: tk.PhotoImage | None = None
+        self.header_logo: AdaptiveLogo | None = None
         self._load_brand_assets()
 
         self.workflow = WorkflowService()
@@ -129,98 +139,18 @@ class PaxoInsightWindow:
             self.logo_image = tk.PhotoImage(file=str(_resource_path("paxoinsight-logo.png")))
             self.header_logo_image = self.logo_image.subsample(2, 2)
             self.root.iconphoto(True, self.icon_image)
-        except (OSError, tk.TclError):
+        except OSError, tk.TclError:
             # The application stays usable even when a development checkout lacks assets.
             self.icon_image = None
             self.logo_image = None
             self.header_logo_image = None
 
     def _configure_styles(self) -> None:
-        style = ttk.Style(self.root)
-        with suppress(tk.TclError):
-            style.theme_use("clam")
-        style.configure("TFrame", background=SURFACE)
-        style.configure("Card.TFrame", background=WHITE, relief="solid", borderwidth=1)
-        style.configure(
-            "Card.TLabelframe",
-            background=WHITE,
-            bordercolor=BORDER,
-            lightcolor=BORDER,
-            darkcolor=BORDER,
-            padding=12,
-        )
-        style.configure(
-            "Card.TLabelframe.Label",
-            background=WHITE,
-            foreground=NAVY,
-            font=(self.ui_font, 10, "bold"),
-        )
-        style.configure(
-            "TLabel",
-            background=SURFACE,
-            foreground=TEXT_PRIMARY,
-            font=(self.ui_font, 10),
-        )
-        style.configure("Card.TLabel", background=WHITE, foreground=TEXT_PRIMARY)
-        style.configure(
-            "TButton",
-            background=WHITE,
-            foreground=NAVY,
-            bordercolor=BORDER,
-            focusthickness=1,
-            focuscolor=BRAND_BLUE,
-            font=(self.ui_font, 9),
-            padding=(11, 7),
-        )
-        style.map(
-            "TButton",
-            background=[("active", "#EFF6FF"), ("disabled", "#F1F5F9")],
-            foreground=[("disabled", "#94A3B8")],
-        )
-        style.configure(
-            "TProgressbar",
-            background=BRAND_BLUE,
-            troughcolor="#EAF2FB",
-            bordercolor="#EAF2FB",
-            lightcolor=BRAND_BLUE,
-            darkcolor=BRAND_BLUE,
-        )
-        style.configure(
-            "Treeview",
-            background=WHITE,
-            fieldbackground=WHITE,
-            foreground=TEXT_PRIMARY,
-            bordercolor=BORDER,
-            rowheight=27,
-            font=(self.ui_font, 9),
-        )
-        style.map("Treeview", background=[("selected", NAVY)], foreground=[("selected", WHITE)])
-        style.configure(
-            "Treeview.Heading",
-            background="#F1F5F9",
-            foreground=NAVY,
-            bordercolor=BORDER,
-            font=(self.ui_font, 9, "bold"),
-            padding=(7, 6),
-        )
-        style.map("Treeview.Heading", background=[("active", "#E2E8F0")])
-        style.configure("TNotebook", background=SURFACE, bordercolor=BORDER)
-        style.configure(
-            "TNotebook.Tab",
-            background="#EAF0F7",
-            foreground=TEXT_SECONDARY,
-            padding=(14, 8),
-            font=(self.ui_font, 9, "bold"),
-        )
-        style.map(
-            "TNotebook.Tab",
-            background=[("selected", WHITE), ("active", "#F1F5F9")],
-            foreground=[("selected", NAVY)],
-        )
+        self.theme.configure_styles()
 
     def _build_menu(self) -> None:
-        menu = tk.Menu(self.root)
-        self.report_menu = tk.Menu(menu, tearoff=False)
+        menu = self.theme.widget(tk.Menu, self.root)
+        self.report_menu = self.theme.widget(tk.Menu, menu, tearoff=False)
         self.report_menu.add_command(
             label="Показать Kotlin ↔ .class",
             command=self._show_kotlin_report,
@@ -232,51 +162,90 @@ class PaxoInsightWindow:
             command=self._save_kotlin_report,
             state="disabled",
         )
+        self.report_menu.add_command(
+            label="Сохранить Kotlin-отчёт в TXT…",
+            command=lambda: self._save_kotlin_report("txt"),
+            state="disabled",
+        )
+        self.report_menu.add_command(
+            label="Сохранить полное заключение в TXT…",
+            command=lambda: self._save_kotlin_report("full_txt"),
+            state="disabled",
+        )
         menu.add_cascade(label="Отчёт", menu=self.report_menu)
-        help_menu = tk.Menu(menu, tearoff=False)
+        view_menu = self.theme.widget(tk.Menu, menu, tearoff=False)
+        self.theme_menu = self.theme.widget(tk.Menu, view_menu, tearoff=False)
+        for name, label in (("light", "Светлая"), ("dark", "Тёмная")):
+            self.theme_menu.add_radiobutton(
+                label=label, value=name, variable=self.theme_var, command=self._change_theme
+            )
+        view_menu.add_cascade(label="Тема оформления", menu=self.theme_menu)
+        menu.add_cascade(label="Вид", menu=view_menu)
+        help_menu = self.theme.widget(tk.Menu, menu, tearoff=False)
         help_menu.add_command(label="О программе", command=self._show_about)
         menu.add_cascade(label="Справка", menu=help_menu)
-        self.root.configure(menu=menu)
+        self.theme.configure(self.root, menu=menu)
+
+    def _change_theme(self) -> None:
+        name = self.theme_var.get()
+        self.theme.apply(name)
+        try:
+            save_theme(name)
+        except OSError as error:
+            self._log(f"Тема применена, но не удалось сохранить настройку: {error}")
+            messagebox.showwarning(
+                "Настройка темы",
+                "Тема изменена для текущего запуска, но настройку не удалось сохранить.\n"
+                "При следующем запуске может использоваться прежняя тема.",
+                parent=self.root,
+            )
 
     def _build_ui(self) -> None:
-        header = tk.Frame(self.root, bg=WHITE, padx=24, pady=10)
+        header = self.theme.widget(tk.Frame, self.root, bg=WHITE, padx=24, pady=10)
         header.pack(fill="x")
-        title_column = tk.Frame(header, bg=WHITE)
+        title_column = self.theme.widget(tk.Frame, header, bg=WHITE)
         title_column.pack(side="left", fill="x", expand=True)
         if self.header_logo_image is not None:
-            tk.Label(title_column, image=self.header_logo_image, bg=WHITE, bd=0).pack(anchor="w")
+            self.header_logo = AdaptiveLogo(
+                title_column, self.header_logo_image, self.theme, self.ui_font
+            )
+            self.header_logo.pack(anchor="w")
         else:
-            tk.Label(
+            self.theme.widget(
+                tk.Label,
                 title_column,
                 text=APP_NAME,
                 bg=WHITE,
                 fg=NAVY,
                 font=(self.ui_font, 24, "bold"),
             ).pack(anchor="w")
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             title_column,
             text="Анализ и подготовка архивов и папок для последующего сканирования",
             bg=WHITE,
             fg=TEXT_SECONDARY,
             font=(self.ui_font, 10),
         ).pack(anchor="w", pady=(2, 0))
-        version_box = tk.Frame(header, bg="#EFF6FF", padx=12, pady=8)
+        version_box = self.theme.widget(tk.Frame, header, bg=Color.SUBTLE, padx=12, pady=8)
         version_box.pack(side="right", anchor="n", padx=(20, 0))
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             version_box,
             text=f"v{VERSION}",
-            bg="#EFF6FF",
+            bg=Color.SUBTLE,
             fg=NAVY,
             font=(self.ui_font, 10, "bold"),
         ).pack()
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             version_box,
             text="standalone",
-            bg="#EFF6FF",
+            bg=Color.SUBTLE,
             fg=BRAND_BLUE,
             font=(self.ui_font, 8),
         ).pack()
-        tk.Frame(self.root, bg=NAVY, height=4).pack(fill="x")
+        self.theme.widget(tk.Frame, self.root, bg=NAVY, height=4).pack(fill="x")
 
         body = ttk.Frame(self.root, padding=(20, 16))
         body.pack(fill="both", expand=True)
@@ -288,32 +257,35 @@ class PaxoInsightWindow:
         source_card.grid(row=0, column=0, sticky="nsew", padx=(0, 6), pady=(0, 10))
         source_card.columnconfigure(0, weight=1)
 
-        self.drop_frame = tk.Frame(
+        self.drop_frame = self.theme.widget(
+            tk.Frame,
             source_card,
-            bg="#F4F9FF",
-            highlightbackground="#9CCEFF",
+            bg=Color.DROP,
+            highlightbackground=Color.DROP_BORDER,
             highlightthickness=2,
             padx=16,
             pady=12,
         )
         self.drop_frame.grid(row=0, column=0, sticky="ew", pady=(0, 8))
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             self.drop_frame,
             text="Перетащите архив или папку сюда",
-            bg="#F4F9FF",
+            bg=Color.DROP,
             fg=NAVY,
             font=(self.ui_font, 12, "bold"),
         ).pack()
-        self.path_label = tk.Label(
+        self.path_label = self.theme.widget(
+            tk.Label,
             self.drop_frame,
             textvariable=self.path_var,
-            bg="#F4F9FF",
+            bg=Color.DROP,
             fg=TEXT_SECONDARY,
             font=(self.ui_font, 9),
             wraplength=660,
         )
         self.path_label.pack(fill="x", pady=(3, 7))
-        choose_row = tk.Frame(self.drop_frame, bg="#F4F9FF")
+        choose_row = self.theme.widget(tk.Frame, self.drop_frame, bg=Color.DROP)
         choose_row.pack()
         self.archive_button = ttk.Button(
             choose_row, text="Выбрать архив", command=self._choose_archive
@@ -326,9 +298,10 @@ class PaxoInsightWindow:
         self._register_drop_target(self.drop_frame)
         self._register_drop_target(self.path_label)
 
-        options = tk.Frame(source_card, bg=WHITE)
+        options = self.theme.widget(tk.Frame, source_card, bg=WHITE)
         options.grid(row=1, column=0, sticky="ew")
-        self.expand_check = tk.Checkbutton(
+        self.expand_check = self.theme.widget(
+            tk.Checkbutton,
             options,
             text="Распаковывать вложенные архивы",
             variable=self.expand_nested_var,
@@ -341,7 +314,8 @@ class PaxoInsightWindow:
             anchor="w",
         )
         self.expand_check.grid(row=0, column=0, columnspan=2, sticky="w")
-        self.replace_check = tk.Checkbutton(
+        self.replace_check = self.theme.widget(
+            tk.Checkbutton,
             options,
             text="Заменять их распакованным содержимым",
             variable=self.replace_nested_var,
@@ -354,7 +328,8 @@ class PaxoInsightWindow:
             anchor="w",
         )
         self.replace_check.grid(row=1, column=0, columnspan=2, sticky="w")
-        self.delete_check = tk.Checkbutton(
+        self.delete_check = self.theme.widget(
+            tk.Checkbutton,
             options,
             text="Удалять исходный архив после успешного анализа",
             variable=self.delete_source_var,
@@ -367,7 +342,8 @@ class PaxoInsightWindow:
             anchor="w",
         )
         self.delete_check.grid(row=2, column=0, columnspan=2, sticky="w")
-        self.container_check = tk.Checkbutton(
+        self.container_check = self.theme.widget(
+            tk.Checkbutton,
             options,
             text="Распаковывать ZIP/JAR-контейнеры",
             variable=self.unpack_containers_var,
@@ -380,20 +356,20 @@ class PaxoInsightWindow:
             anchor="w",
         )
         self.container_check.grid(row=3, column=0, sticky="w")
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             options,
             text="Макс. глубина:",
             bg=WHITE,
             fg=TEXT_SECONDARY,
             font=(self.ui_font, 9),
-        ).grid(
-            row=3, column=1, sticky="e", padx=(12, 4)
-        )
-        self.depth_spin = tk.Spinbox(
-            options, from_=1, to=10, textvariable=self.depth_var, width=4
+        ).grid(row=3, column=1, sticky="e", padx=(12, 4))
+        self.depth_spin = self.theme.widget(
+            tk.Spinbox, options, from_=1, to=10, textvariable=self.depth_var, width=4
         )
         self.depth_spin.grid(row=3, column=2, sticky="w")
-        self.report_check = tk.Checkbutton(
+        self.report_check = self.theme.widget(
+            tk.Checkbutton,
             options,
             text="Включить отчёты TXT/JSON/HTML в итоговый 7Z",
             variable=self.include_report_var,
@@ -407,11 +383,12 @@ class PaxoInsightWindow:
         )
         self.report_check.grid(row=4, column=0, columnspan=2, sticky="w")
 
-        action_row = tk.Frame(source_card, bg=WHITE)
+        action_row = self.theme.widget(tk.Frame, source_card, bg=WHITE)
         action_row.grid(row=2, column=0, sticky="ew", pady=(8, 0))
         action_row.columnconfigure(0, weight=1)
         action_row.columnconfigure(1, weight=1)
-        self.scan_button = tk.Button(
+        self.scan_button = self.theme.widget(
+            tk.Button,
             action_row,
             text="Запустить анализ",
             command=self._start_scan,
@@ -429,10 +406,11 @@ class PaxoInsightWindow:
         state_card = ttk.LabelFrame(body, text="Текущее задание", style="Card.TLabelframe")
         state_card.grid(row=0, column=1, sticky="nsew", padx=(6, 0), pady=(0, 10))
         state_card.columnconfigure(0, weight=1)
-        status_row = tk.Frame(state_card, bg=WHITE)
+        status_row = self.theme.widget(tk.Frame, state_card, bg=WHITE)
         status_row.grid(row=0, column=0, sticky="ew")
         status_row.columnconfigure(1, weight=1)
-        self.status_dot = tk.Label(
+        self.status_dot = self.theme.widget(
+            tk.Label,
             status_row,
             text="●",
             bg=WHITE,
@@ -440,7 +418,8 @@ class PaxoInsightWindow:
             font=(self.ui_font, 13, "bold"),
         )
         self.status_dot.grid(row=0, column=0, sticky="n", padx=(0, 7))
-        self.status_label = tk.Label(
+        self.status_label = self.theme.widget(
+            tk.Label,
             status_row,
             textvariable=self.status_var,
             bg=WHITE,
@@ -450,11 +429,12 @@ class PaxoInsightWindow:
             wraplength=410,
         )
         self.status_label.grid(row=0, column=1, sticky="ew")
-        self.status_badge = tk.Label(
+        self.status_badge = self.theme.widget(
+            tk.Label,
             status_row,
             text="ГОТОВО",
-            bg="#DCFCE7",
-            fg="#15803D",
+            bg=Color.SUCCESS_BG,
+            fg=Color.SUCCESS_TEXT,
             font=(self.ui_font, 8, "bold"),
             padx=7,
             pady=3,
@@ -462,7 +442,7 @@ class PaxoInsightWindow:
         self.status_badge.grid(row=0, column=2, sticky="ne", padx=(8, 0))
         self.progress = ttk.Progressbar(state_card, maximum=100)
         self.progress.grid(row=1, column=0, sticky="ew", pady=(8, 10))
-        metrics = tk.Frame(state_card, bg=WHITE)
+        metrics = self.theme.widget(tk.Frame, state_card, bg=WHITE)
         metrics.grid(row=2, column=0, sticky="nsew")
         for column in range(2):
             metrics.columnconfigure(column, weight=1)
@@ -470,7 +450,8 @@ class PaxoInsightWindow:
         self.metric_size = self._metric(metrics, 0, 1, "распаковано")
         self.metric_score = self._metric(metrics, 1, 0, "целостность")
         self.metric_findings = self._metric(metrics, 1, 1, "находок")
-        self.sast_label = tk.Label(
+        self.sast_label = self.theme.widget(
+            tk.Label,
             state_card,
             text="SAST: —",
             bg=SURFACE,
@@ -483,11 +464,12 @@ class PaxoInsightWindow:
             pady=6,
         )
         self.sast_label.grid(row=3, column=0, sticky="ew", pady=(8, 0))
-        self.preparation_hint = tk.Label(
+        self.preparation_hint = self.theme.widget(
+            tk.Label,
             state_card,
             text="",
-            bg="#FFFBEB",
-            fg="#B45309",
+            bg=Color.WARNING_BG,
+            fg=Color.WARNING_TEXT,
             font=(self.ui_font, 9),
             justify="left",
             anchor="w",
@@ -503,8 +485,40 @@ class PaxoInsightWindow:
         self.summary_text = self._text_tab("Заключение")
         self.kotlin_tree = self._tree_tab(
             "Kotlin ↔ .class",
-            ("mapping_status", "kotlin_source", "class_result"),
-            (150, 470, 350),
+            (
+                "mapping_status",
+                "kotlin_source",
+                "declaration",
+                "expected_class",
+                "class_result",
+                "mapping_context",
+                "mapping_reason",
+            ),
+            (190, 330, 210, 280, 420, 220, 500),
+        )
+        self.kotlin_coverage_var = tk.StringVar(
+            value="Покрытие Kotlin/JVM: н/д — анализ не выполнен"
+        )
+        coverage_label = self.theme.widget(
+            tk.Label,
+            self.kotlin_tree.master,
+            textvariable=self.kotlin_coverage_var,
+            bg=Color.SUBTLE,
+            fg=NAVY,
+            font=(self.ui_font, 10),
+            justify="left",
+            anchor="w",
+            padx=12,
+            pady=8,
+            wraplength=1000,
+        )
+        coverage_label.grid(row=2, column=0, columnspan=2, sticky="ew")
+        self.kotlin_tree.master.bind(
+            "<Configure>",
+            lambda event: self.theme.configure(
+                coverage_label, wraplength=max(250, event.width - 24)
+            ),
+            add="+",
         )
         self.findings_tree = self._tree_tab(
             "Находки", ("severity", "category", "title"), (110, 180, 620)
@@ -512,9 +526,7 @@ class PaxoInsightWindow:
         self.attention_tree = self._tree_tab(
             "Контроль файлов", ("group", "path", "state"), (210, 430, 330)
         )
-        self.extensions_tree = self._tree_tab(
-            "Состав", ("extension", "count"), (500, 130)
-        )
+        self.extensions_tree = self._tree_tab("Состав", ("extension", "count"), (500, 130))
         self.log_text = self._text_tab("Ход выполнения")
         self._configure_tree_tags()
 
@@ -530,7 +542,8 @@ class PaxoInsightWindow:
             footer, text="Открыть созданный 7Z", command=self._open_output
         )
         self.output_button.pack(side="left", padx=5)
-        self.package_button = tk.Button(
+        self.package_button = self.theme.widget(
+            tk.Button,
             footer,
             text="Собрать и проверить 7Z",
             command=self._start_package,
@@ -544,26 +557,28 @@ class PaxoInsightWindow:
         self.package_button.pack(side="right")
 
     def _metric(self, parent: tk.Widget, row: int, column: int, caption: str) -> tk.Label:
-        card = tk.Frame(parent, bg=WHITE, highlightbackground=BORDER, highlightthickness=1)
+        card = self.theme.widget(
+            tk.Frame, parent, bg=WHITE, highlightbackground=BORDER, highlightthickness=1
+        )
         card.grid(row=row, column=column, sticky="nsew", padx=4, pady=4)
-        value = tk.Label(
-            card, text="—", bg=WHITE, fg=NAVY, font=(self.ui_font, 17, "bold")
+        value = self.theme.widget(
+            tk.Label, card, text="—", bg=WHITE, fg=NAVY, font=(self.ui_font, 17, "bold")
         )
         value.pack(anchor="w", padx=10, pady=(7, 0))
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             card,
             text=caption,
             bg=WHITE,
             fg=TEXT_SECONDARY,
             font=(self.ui_font, 9),
-        ).pack(
-            anchor="w", padx=10, pady=(0, 7)
-        )
+        ).pack(anchor="w", padx=10, pady=(0, 7))
         return value
 
     def _text_tab(self, title: str) -> tk.Text:
         frame = ttk.Frame(self.notebook)
-        text = tk.Text(
+        text = self.theme.widget(
+            tk.Text,
             frame,
             wrap="word",
             bg=WHITE,
@@ -574,7 +589,7 @@ class PaxoInsightWindow:
             pady=8,
         )
         scroll = ttk.Scrollbar(frame, orient="vertical", command=text.yview)
-        text.configure(yscrollcommand=scroll.set, state="disabled")
+        self.theme.configure(text, yscrollcommand=scroll.set, state="disabled")
         text.pack(side="left", fill="both", expand=True)
         scroll.pack(side="right", fill="y")
         self.notebook.add(frame, text=title)
@@ -597,6 +612,10 @@ class PaxoInsightWindow:
             "mapping_status": "Статус",
             "kotlin_source": "Kotlin / .class",
             "class_result": "Результат сопоставления",
+            "declaration": "Объявление",
+            "expected_class": "Ожидаемый класс",
+            "mapping_context": "Модуль / набор",
+            "mapping_reason": "Основание / пояснение",
         }
         for column, width in zip(columns, widths, strict=True):
             tree.heading(column, text=headings[column])
@@ -607,7 +626,7 @@ class PaxoInsightWindow:
             )
         vertical = ttk.Scrollbar(frame, orient="vertical", command=tree.yview)
         horizontal = ttk.Scrollbar(frame, orient="horizontal", command=tree.xview)
-        tree.configure(yscrollcommand=vertical.set, xscrollcommand=horizontal.set)
+        self.theme.configure(tree, yscrollcommand=vertical.set, xscrollcommand=horizontal.set)
         frame.rowconfigure(0, weight=1)
         frame.columnconfigure(0, weight=1)
         tree.grid(row=0, column=0, sticky="nsew")
@@ -618,16 +637,43 @@ class PaxoInsightWindow:
 
     def _configure_tree_tags(self) -> None:
         for key, (background, foreground) in SEVERITY_COLORS.items():
-            self.findings_tree.tag_configure(key, background=background, foreground=foreground)
+            self.theme.tag_configure(
+                self.findings_tree, key, background=background, foreground=foreground
+            )
         for tree in (self.attention_tree, self.extensions_tree):
             for key, (background, foreground) in ATTENTION_COLORS.items():
-                tree.tag_configure(key, background=background, foreground=foreground)
-        self.kotlin_tree.tag_configure("matched", background="#F0FDF4", foreground="#15803D")
-        self.kotlin_tree.tag_configure("missing_main", background="#FEE2E2", foreground="#B91C1C")
-        self.kotlin_tree.tag_configure("missing_test", background="#FEF3C7", foreground="#B45309")
-        self.kotlin_tree.tag_configure("orphan", background="#EFF6FF", foreground="#1D4ED8")
-        self.kotlin_tree.tag_configure("ignored", background=SURFACE, foreground=TEXT_SECONDARY)
-        self.kotlin_tree.tag_configure("unavailable", background="#FEE2E2", foreground="#B91C1C")
+                self.theme.tag_configure(tree, key, background=background, foreground=foreground)
+        self.theme.tag_configure(
+            self.kotlin_tree, "matched", background=Color.SUCCESS_BG, foreground=Color.SUCCESS_TEXT
+        )
+        self.theme.tag_configure(
+            self.kotlin_tree,
+            "missing_main",
+            background=Color.DANGER_BG,
+            foreground=Color.DANGER_TEXT,
+        )
+        self.theme.tag_configure(
+            self.kotlin_tree,
+            "missing_test",
+            background=Color.WARNING_BG,
+            foreground=Color.WARNING_TEXT,
+        )
+        self.theme.tag_configure(
+            self.kotlin_tree, "orphan", background=Color.SUBTLE, foreground=Color.INFO_TEXT
+        )
+        self.theme.tag_configure(
+            self.kotlin_tree, "ignored", background=SURFACE, foreground=TEXT_SECONDARY
+        )
+        self.theme.tag_configure(
+            self.kotlin_tree,
+            "unavailable",
+            background=Color.DANGER_BG,
+            foreground=Color.DANGER_TEXT,
+        )
+        for tag in ("partial", "probable", "ambiguous", "unverified"):
+            self.theme.tag_configure(
+                self.kotlin_tree, tag, background=Color.WARNING_BG, foreground=Color.WARNING_TEXT
+            )
 
     def _register_drop_target(self, widget: tk.Widget) -> None:
         if DND_FILES is None or not hasattr(widget, "drop_target_register"):
@@ -643,7 +689,7 @@ class PaxoInsightWindow:
             values = self.root.tk.splitlist(event.data)
             if values:
                 self._set_source(Path(values[0]))
-        except (tk.TclError, ValueError):
+        except tk.TclError, ValueError:
             pass
         return "break"
 
@@ -686,7 +732,7 @@ class PaxoInsightWindow:
     def _options(self) -> AnalysisOptions:
         try:
             depth = max(1, min(10, int(self.depth_var.get())))
-        except (TypeError, ValueError, tk.TclError):
+        except TypeError, ValueError, tk.TclError:
             depth = 5
             self.depth_var.set(depth)
         return AnalysisOptions(
@@ -876,18 +922,22 @@ class PaxoInsightWindow:
         result = session.result
         if result is None:
             raise RuntimeError("Анализ завершился без результата")
-        self.metric_files.configure(text=f"{result.total_files:,}".replace(",", " "))
-        self.metric_size.configure(text=self._format_size(result.total_bytes))
+        self.theme.configure(self.metric_files, text=f"{result.total_files:,}".replace(",", " "))
+        self.theme.configure(self.metric_size, text=self._format_size(result.total_bytes))
         if result.integrity_score < 70:
             score_color = DANGER
         elif result.integrity_score < 90:
             score_color = WARNING
         else:
             score_color = SUCCESS
-        self.metric_score.configure(text=f"{result.integrity_score}/100", fg=score_color)
-        self.metric_findings.configure(text=str(len(result.findings)))
-        self.sast_label.configure(text=f"SAST: {result.sast_mode}\n{result.sast_reason}")
-        self.preparation_hint.configure(text=result.preparation_advice)
+        self.theme.configure(
+            self.metric_score, text=f"{result.integrity_score}/100", fg=score_color
+        )
+        self.theme.configure(self.metric_findings, text=str(len(result.findings)))
+        self.theme.configure(
+            self.sast_label, text=f"SAST: {result.sast_mode}\n{result.sast_reason}"
+        )
+        self.theme.configure(self.preparation_hint, text=result.preparation_advice)
         if result.preparation_advice:
             self.preparation_hint.grid()
         else:
@@ -923,10 +973,10 @@ class PaxoInsightWindow:
                 f"{kotlin_mapping.missing_count}.",
                 "warning",
             )
-        elif kotlin_mapping.orphan_kt_classes:
+        elif kotlin_mapping.issue_count:
             self._set_status(
-                "Анализ завершён. Kotlin-подобных .class без исходника: "
-                f"{len(kotlin_mapping.orphan_kt_classes)}.",
+                "Анализ завершён. Сопоставления Kotlin/JVM требуют проверки: "
+                f"{kotlin_mapping.issue_count}. Подробности в Kotlin ↔ .class.",
                 "warning",
             )
         elif result.attention_files:
@@ -946,14 +996,17 @@ class PaxoInsightWindow:
             self._log("Исходный архив удалён после полностью успешного анализа.")
 
     def _populate_summary(self, result) -> None:
-        self.summary_text.configure(state="normal")
+        self.theme.configure(self.summary_text, state="normal")
         self.summary_text.delete("1.0", "end")
         for key, (_background, foreground) in SEVERITY_COLORS.items():
-            self.summary_text.tag_configure(
-                key, foreground=foreground, font=(self.mono_font, 10, "bold")
+            self.theme.tag_configure(
+                self.summary_text, key, foreground=foreground, font=(self.mono_font, 10, "bold")
             )
-        self.summary_text.tag_configure(
-            "kotlin", foreground="#7E22CE", font=(self.mono_font, 10, "bold")
+        self.theme.tag_configure(
+            self.summary_text,
+            "kotlin",
+            foreground=Color.KOTLIN_TEXT,
+            font=(self.mono_font, 10, "bold"),
         )
         kotlin_section = False
         preparation_section = False
@@ -979,11 +1032,56 @@ class PaxoInsightWindow:
             elif preparation_section:
                 tag = "medium"
             self.summary_text.insert("end", line, tag or ())
-        self.summary_text.configure(state="disabled")
+        self.theme.configure(self.summary_text, state="disabled")
 
     def _populate_kotlin_mapping(self, result):
         self.kotlin_tree.delete(*self.kotlin_tree.get_children())
         mapping = extract_kotlin_mapping(result)
+        self.kotlin_coverage_var.set(coverage_text(mapping.coverage))
+        if mapping.records or mapping.invalid_classes:
+            tags = {"confirmed": "matched", "missing": "missing_main", "not_applicable": "ignored"}
+            for row in kotlin_table_rows(mapping):
+                status = row["status"]
+                tag = (
+                    "missing_test"
+                    if status == "missing" and row["test"]
+                    else tags.get(status, status)
+                )
+                self.kotlin_tree.insert(
+                    "",
+                    "end",
+                    values=(
+                        STATUS_LABELS.get(status, status),
+                        row["source"],
+                        row["declaration"],
+                        row["expected"],
+                        ", ".join(row["classes"]),
+                        row["context"],
+                        row["reason"],
+                    ),
+                    tags=(tag,),
+                )
+            for path in mapping.orphan_kt_classes:
+                self.kotlin_tree.insert(
+                    "",
+                    "end",
+                    values=(
+                        "БЕЗ ИСХОДНИКА",
+                        path,
+                        "",
+                        "",
+                        path,
+                        "",
+                        "Kotlin-байткод без сопоставленного исходника",
+                    ),
+                    tags=("orphan",),
+                )
+            self.notebook.tab(
+                self.kotlin_tree.master,
+                text="Kotlin ↔ .class · "
+                + percent(mapping.coverage.get("estimated_percent"), approximate=True),
+            )
+            return mapping
 
         if not mapping.available:
             self.kotlin_tree.insert(
@@ -1057,7 +1155,9 @@ class PaxoInsightWindow:
                 (item.severity for item in findings), key=lambda value: order.get(value, 5)
             )
         highest = highest if highest in SEVERITY_COLORS else "info"
-        self.metric_findings.configure(fg=SEVERITY_COLORS[highest][1] if findings else SUCCESS)
+        self.theme.configure(
+            self.metric_findings, fg=SEVERITY_COLORS[highest][1] if findings else SUCCESS
+        )
         for finding in sorted(findings, key=lambda item: order.get(item.severity, 5)):
             severity = finding.severity if finding.severity in SEVERITY_COLORS else "info"
             title = finding.title
@@ -1182,7 +1282,9 @@ class PaxoInsightWindow:
             return
         self.notebook.select(self.kotlin_tree.master)
 
-    def _save_kotlin_report(self) -> None:
+    def _save_kotlin_report(self, report_format: str = "html") -> None:
+        if self.busy_kind:
+            return
         if not self.session or not self.session.result:
             messagebox.showinfo(
                 "Kotlin-отчёт",
@@ -1193,19 +1295,31 @@ class PaxoInsightWindow:
 
         source = self.session.source_path
         base = source.name if self.session.source_is_directory else strip_archive_extension(source)
-        filename = f"{base or 'PaxoInsight'}_Kotlin_Report.html"
+        full = report_format == "full_txt"
+        extension = ".html" if report_format == "html" else ".txt"
+        description = "Полное заключение" if full else "Отчёт Kotlin ↔ .class"
+        filename = f"{base or 'PaxoInsight'}_{'Report' if full else 'Kotlin_Report'}{extension}"
         value = filedialog.asksaveasfilename(
             parent=self.root,
-            title="Сохранить отчёт Kotlin ↔ .class",
+            title=f"Сохранить: {description}",
             initialdir=str(source.parent),
             initialfile=filename,
-            defaultextension=".html",
-            filetypes=[("HTML-страница", "*.html"), ("Все файлы", "*.*")],
+            defaultextension=extension,
+            filetypes=[("HTML-страница", "*.html")]
+            if extension == ".html"
+            else [("Текстовый отчёт UTF-8", "*.txt")],
         )
         if not value:
             return
         try:
-            destination = save_kotlin_html_report(self.session.result, value)
+            exporter = (
+                save_text_report
+                if full
+                else save_kotlin_html_report
+                if extension == ".html"
+                else save_kotlin_text_report
+            )
+            destination = exporter(self.session.result, value)
         except OSError as error:
             self._set_status(f"Не удалось сохранить Kotlin-отчёт: {error}", "error")
             messagebox.showerror(
@@ -1214,11 +1328,12 @@ class PaxoInsightWindow:
                 parent=self.root,
             )
             return
-        self._set_status("HTML-отчёт Kotlin ↔ .class сохранён", "ready")
-        self._log(f"Kotlin HTML-отчёт: {destination}")
+        label = "HTML" if extension == ".html" else "TXT"
+        self._set_status(f"Сохранён отчёт: {description} ({label})", "ready")
+        self._log(f"{description} ({label}): {destination}")
         messagebox.showinfo(
-            "Kotlin-отчёт сохранён",
-            f"HTML-страница создана:\n\n{destination}",
+            "Отчёт сохранён",
+            f"{description} ({label}):\n\n{destination}",
             parent=self.root,
         )
 
@@ -1230,7 +1345,9 @@ class PaxoInsightWindow:
         source_exists = bool(self.source and self.source.exists())
         scan_enabled = not busy and (source_exists or has_session)
         package_enabled = analyzed and not busy
-        self.scan_button.configure(text="Повторить анализ" if has_session else "Запустить анализ")
+        self.theme.configure(
+            self.scan_button, text="Повторить анализ" if has_session else "Запустить анализ"
+        )
         self._style_action_button(self.scan_button, primary=not analyzed, enabled=scan_enabled)
         self._state(self.cancel_button, busy)
         self._style_action_button(self.package_button, primary=analyzed, enabled=package_enabled)
@@ -1238,8 +1355,8 @@ class PaxoInsightWindow:
         self._state(self.workspace_button, analyzed and not busy)
         self._state(self.output_button, packaged and not busy)
         report_state = "normal" if analyzed and not busy else "disabled"
-        self.report_menu.entryconfigure(0, state=report_state)
-        self.report_menu.entryconfigure(2, state=report_state)
+        for index in (0, 2, 3, 4):
+            self.report_menu.entryconfigure(index, state=report_state)
         for widget in (
             self.archive_button,
             self.folder_button,
@@ -1253,37 +1370,38 @@ class PaxoInsightWindow:
         source_is_archive = bool(self.source and self.source.is_file())
         self._state(self.delete_check, not busy and not has_session and source_is_archive)
 
-    @staticmethod
-    def _style_action_button(button: tk.Button, primary: bool, enabled: bool) -> None:
+    def _style_action_button(self, button: tk.Button, primary: bool, enabled: bool) -> None:
         if not enabled:
-            button.configure(
+            self.theme.configure(
+                button,
                 state="disabled",
-                bg="#E2E8F0",
-                fg="#94A3B8",
-                disabledforeground="#94A3B8",
-                activebackground="#E2E8F0",
-                activeforeground="#94A3B8",
+                bg=Color.DISABLED,
+                fg=Color.DISABLED_TEXT,
+                disabledforeground=Color.DISABLED_TEXT,
+                activebackground=Color.DISABLED,
+                activeforeground=Color.DISABLED_TEXT,
             )
         elif primary:
-            button.configure(
+            self.theme.configure(
+                button,
                 state="normal",
                 bg=BRAND_BLUE,
-                fg=WHITE,
-                activebackground="#007FD6",
-                activeforeground=WHITE,
+                fg=Color.ON_ACCENT,
+                activebackground=Color.ACCENT_HOVER,
+                activeforeground=Color.ON_ACCENT,
             )
         else:
-            button.configure(
+            self.theme.configure(
+                button,
                 state="normal",
-                bg="#EAF4FF",
+                bg=Color.SUBTLE,
                 fg=NAVY,
-                activebackground="#D7EBFF",
+                activebackground=Color.SUBTLE_HOVER,
                 activeforeground=NAVY,
             )
 
-    @staticmethod
-    def _state(widget: tk.Widget, enabled: bool) -> None:
-        widget.configure(state="normal" if enabled else "disabled")
+    def _state(self, widget: tk.Widget, enabled: bool) -> None:
+        self.theme.configure(widget, state="normal" if enabled else "disabled")
 
     def _clear_results(self, clear_log: bool) -> None:
         metrics = (
@@ -1293,14 +1411,14 @@ class PaxoInsightWindow:
             self.metric_findings,
         )
         for metric in metrics:
-            metric.configure(text="—", fg=NAVY)
-        self.sast_label.configure(text="SAST: —")
-        self.preparation_hint.configure(text="")
+            self.theme.configure(metric, text="—", fg=NAVY)
+        self.theme.configure(self.sast_label, text="SAST: —")
+        self.theme.configure(self.preparation_hint, text="")
         self.preparation_hint.grid_remove()
         for text in (self.summary_text,):
-            text.configure(state="normal")
+            self.theme.configure(text, state="normal")
             text.delete("1.0", "end")
-            text.configure(state="disabled")
+            self.theme.configure(text, state="disabled")
         for tree in (
             self.kotlin_tree,
             self.findings_tree,
@@ -1309,58 +1427,61 @@ class PaxoInsightWindow:
         ):
             tree.delete(*tree.get_children())
         self.notebook.tab(self.kotlin_tree.master, text="Kotlin ↔ .class")
+        self.kotlin_coverage_var.set("Покрытие Kotlin/JVM: н/д — анализ не выполнен")
         self.notebook.tab(self.findings_tree.master, text="Находки")
         self.notebook.tab(self.attention_tree.master, text="Контроль файлов")
         self.progress["value"] = 0
         if clear_log:
-            self.log_text.configure(state="normal")
+            self.theme.configure(self.log_text, state="normal")
             self.log_text.delete("1.0", "end")
-            self.log_text.configure(state="disabled")
+            self.theme.configure(self.log_text, state="disabled")
 
     def _set_status(self, text: str, kind: str) -> None:
         styles = {
-            "ready": (SUCCESS, "ГОТОВО", "#DCFCE7", "#15803D"),
-            "busy": (BRAND_BLUE, "В РАБОТЕ", "#DBEAFE", "#1D4ED8"),
-            "warning": (WARNING, "ВНИМАНИЕ", "#FEF3C7", "#B45309"),
-            "error": (DANGER, "ОШИБКА", "#FEE2E2", "#B91C1C"),
+            "ready": (SUCCESS, "ГОТОВО", Color.SUCCESS_BG, Color.SUCCESS_TEXT),
+            "busy": (BRAND_BLUE, "В РАБОТЕ", Color.INFO_BG, Color.INFO_TEXT),
+            "warning": (WARNING, "ВНИМАНИЕ", Color.WARNING_BG, Color.WARNING_TEXT),
+            "error": (DANGER, "ОШИБКА", Color.DANGER_BG, Color.DANGER_TEXT),
         }
         color, label, badge_bg, badge_fg = styles.get(kind, styles["ready"])
         self.status_var.set(text)
-        self.status_label.configure(fg=TEXT_PRIMARY)
-        self.status_dot.configure(fg=color)
-        self.status_badge.configure(text=label, bg=badge_bg, fg=badge_fg)
+        self.theme.configure(self.status_label, fg=TEXT_PRIMARY)
+        self.theme.configure(self.status_dot, fg=color)
+        self.theme.configure(self.status_badge, text=label, bg=badge_bg, fg=badge_fg)
 
     def _log(self, text: str) -> None:
-        self.log_text.configure(state="normal")
+        self.theme.configure(self.log_text, state="normal")
         self.log_text.insert("end", text + "\n")
         self.log_text.see("end")
-        self.log_text.configure(state="disabled")
+        self.theme.configure(self.log_text, state="disabled")
 
     def _show_about(self) -> None:
         seven_zip = self.workflow.archives.seven_zip_executable
         rar_status = str(seven_zip) if seven_zip else "не найден"
-        dialog = tk.Toplevel(self.root)
+        dialog = self.theme.widget(tk.Toplevel, self.root)
         dialog.title(f"О программе {APP_NAME}")
         dialog.geometry("700x690")
         dialog.resizable(False, False)
-        dialog.configure(bg=WHITE)
+        self.theme.configure(dialog, bg=WHITE)
         dialog.transient(self.root)
         if self.icon_image is not None:
             dialog.iconphoto(True, self.icon_image)
 
-        hero = tk.Frame(dialog, bg=WHITE, padx=28, pady=20)
+        hero = self.theme.widget(tk.Frame, dialog, bg=WHITE, padx=28, pady=20)
         hero.pack(fill="x")
         if self.logo_image is not None:
-            tk.Label(hero, image=self.logo_image, bg=WHITE, bd=0).pack(anchor="w")
+            AdaptiveLogo(hero, self.logo_image, self.theme, self.ui_font).pack(anchor="w")
         else:
-            tk.Label(
+            self.theme.widget(
+                tk.Label,
                 hero,
                 text=APP_NAME,
                 bg=WHITE,
                 fg=NAVY,
                 font=(self.ui_font, 24, "bold"),
             ).pack(anchor="w")
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             hero,
             text=f"Версия {VERSION} · самостоятельное приложение",
             bg=WHITE,
@@ -1368,21 +1489,23 @@ class PaxoInsightWindow:
             font=(self.ui_font, 10, "bold"),
         ).pack(anchor="w", pady=(4, 0))
 
-        tk.Frame(dialog, bg=NAVY, height=4).pack(fill="x")
+        self.theme.widget(tk.Frame, dialog, bg=NAVY, height=4).pack(fill="x")
         about_tabs = ttk.Notebook(dialog)
         about_tabs.pack(fill="both", expand=True, padx=24, pady=(18, 0))
-        content = tk.Frame(about_tabs, bg=SURFACE, padx=22, pady=18)
-        release = tk.Frame(about_tabs, bg=SURFACE, padx=22, pady=18)
+        content = self.theme.widget(tk.Frame, about_tabs, bg=SURFACE, padx=22, pady=18)
+        release = self.theme.widget(tk.Frame, about_tabs, bg=SURFACE, padx=22, pady=18)
         about_tabs.add(content, text="О программе")
         about_tabs.add(release, text=f"Релиз {VERSION}")
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             content,
             text="Что делает PaxoInsight",
             bg=SURFACE,
             fg=NAVY,
             font=(self.ui_font, 13, "bold"),
         ).pack(anchor="w")
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             content,
             text=(
                 "Анализирует переданные архивы и папки, раскрывает вложенные контейнеры, "
@@ -1395,14 +1518,16 @@ class PaxoInsightWindow:
             justify="left",
             wraplength=585,
         ).pack(anchor="w", pady=(7, 16))
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             content,
             text="Поддерживаемые форматы",
             bg=SURFACE,
             fg=NAVY,
             font=(self.ui_font, 11, "bold"),
         ).pack(anchor="w")
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             content,
             text=(
                 "ZIP, 7Z, RAR, TAR, TAR.GZ, TGZ, TAR.BZ2, TBZ2, TAR.XZ, TXZ, GZ, "
@@ -1416,39 +1541,43 @@ class PaxoInsightWindow:
             wraplength=585,
         ).pack(anchor="w", pady=(6, 16))
 
-        info = tk.Frame(content, bg="#EFF6FF", padx=13, pady=10)
+        info = self.theme.widget(tk.Frame, content, bg=Color.SUBTLE, padx=13, pady=10)
         info.pack(fill="x")
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             info,
             text="Локальная обработка",
-            bg="#EFF6FF",
+            bg=Color.SUBTLE,
             fg=NAVY,
             font=(self.ui_font, 9, "bold"),
         ).pack(anchor="w")
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             info,
             text=(
                 "История и база данных не используются. Исходные папки не изменяются.\n"
                 f"7-Zip для распаковки RAR: {rar_status}"
             ),
-            bg="#EFF6FF",
+            bg=Color.SUBTLE,
             fg=TEXT_SECONDARY,
             font=(self.ui_font, 9),
             justify="left",
             wraplength=555,
         ).pack(anchor="w", pady=(3, 0))
 
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             release,
             text=f"PaxoInsight {VERSION}",
             bg=SURFACE,
             fg=NAVY,
             font=(self.ui_font, 16, "bold"),
         ).pack(anchor="w")
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             release,
             text=(
-                "Стабильный релиз самостоятельного приложения для подготовки "
+                "Самостоятельное приложение для подготовки "
                 "программных архивов к последующему сканированию."
             ),
             bg=SURFACE,
@@ -1458,7 +1587,8 @@ class PaxoInsightWindow:
             wraplength=610,
         ).pack(anchor="w", pady=(5, 16))
 
-        release_card = tk.Frame(
+        release_card = self.theme.widget(
+            tk.Frame,
             release,
             bg=WHITE,
             highlightbackground=BORDER,
@@ -1468,26 +1598,27 @@ class PaxoInsightWindow:
         )
         release_card.pack(fill="x")
         release_items = (
-            "Исправлена вставка пароля: Ctrl+V, Shift+Insert и меню «Вставить».",
-            "Ускорена распаковка большого количества TGZ и TAR-контейнеров.",
-            "Добавлен счётчик файлов при распаковке текущего TAR-архива.",
-            "Добавлена рекомендация повторного анализа BAR и ZIP/JAR-контейнеров.",
-            "Обновлённый дизайн.",
-            "Добавлены новые форматы архивов и JAR-контейнеров.",
-            "Обновлён механизм работы с текущим архивом.",
-            "Выполнен переход на стабильный Python 3.14.",
+            "CPython 3.14.8 x64 и проверенные зависимости; усилен контроль распаковки.",
+            "Структурное сопоставление Kotlin/JVM: объявления, пакеты, модули и Metadata.",
+            "Оценочный и подтверждённый проценты; реальные пути классов и причины статусов.",
+            "Kotlin HTML/TXT и полное заключение TXT — через меню «Отчёт».",
+            "Светлая/тёмная темы и адаптивный логотип; выбор темы запоминается.",
+            "Один индекс на задание, без базы и истории; сохранены RAR, TGZ и сборка 7Z.",
+            "Процент отражает комплектность байткода, не SAST и не тождество исходников.",
         )
         for item in release_items:
-            row = tk.Frame(release_card, bg=WHITE)
+            row = self.theme.widget(tk.Frame, release_card, bg=WHITE)
             row.pack(fill="x", pady=3)
-            tk.Label(
+            self.theme.widget(
+                tk.Label,
                 row,
                 text="●",
                 bg=WHITE,
                 fg=BRAND_BLUE,
                 font=(self.ui_font, 9, "bold"),
             ).pack(side="left", anchor="n", padx=(0, 8))
-            tk.Label(
+            self.theme.widget(
+                tk.Label,
                 row,
                 text=item,
                 bg=WHITE,
@@ -1497,27 +1628,29 @@ class PaxoInsightWindow:
                 wraplength=550,
             ).pack(side="left", anchor="w")
 
-        tk.Label(
+        self.theme.widget(
+            tk.Label,
             release,
-            text="Совместимость: Windows x64 · CPython 3.14 · 7-Zip для архивов RAR",
-            bg="#EFF6FF",
+            text="Совместимость: Windows x64 · CPython 3.14.8+ · 7-Zip для архивов RAR",
+            bg=Color.SUBTLE,
             fg=NAVY,
             font=(self.ui_font, 9, "bold"),
             padx=12,
             pady=9,
         ).pack(fill="x", pady=(16, 0))
 
-        dialog_footer = tk.Frame(dialog, bg=WHITE, padx=28, pady=12)
+        dialog_footer = self.theme.widget(tk.Frame, dialog, bg=WHITE, padx=28, pady=12)
         dialog_footer.pack(fill="x")
 
-        close_button = tk.Button(
+        close_button = self.theme.widget(
+            tk.Button,
             dialog_footer,
             text="Закрыть",
             command=dialog.destroy,
             bg=BRAND_BLUE,
-            fg=WHITE,
-            activebackground="#007FD6",
-            activeforeground=WHITE,
+            fg=Color.ON_ACCENT,
+            activebackground=Color.ACCENT_HOVER,
+            activeforeground=Color.ON_ACCENT,
             relief="flat",
             bd=0,
             padx=24,

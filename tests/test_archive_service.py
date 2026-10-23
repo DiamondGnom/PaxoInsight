@@ -8,6 +8,7 @@ import tempfile
 import unittest
 import zipfile
 import zlib
+from contextlib import contextmanager
 from pathlib import Path
 from threading import Event
 from unittest.mock import patch
@@ -328,7 +329,7 @@ class ArchiveServiceTests(unittest.TestCase):
             for index in range(3):
                 archive.writestr(f"part-{index}.tgz", payload)
         for options in (
-            AnalysisOptions(max_files=7, delete_source_archive=False),
+            AnalysisOptions(max_files=10, delete_source_archive=False),
             AnalysisOptions(max_unpacked_bytes=len(payload) * 3 + 20, delete_source_archive=False),
         ):
             with self.subTest(options=options):
@@ -359,14 +360,16 @@ class ArchiveServiceTests(unittest.TestCase):
         destination = self.root / "cancelled"
         destination.mkdir()
         cancelled = Event()
-        original_extract = tarfile.TarFile._extract_member
+        original_extract = tarfile.TarFile.extractfile
 
+        @contextmanager
         def cancel_after_member(archive, *args, **kwargs):
-            original_extract(archive, *args, **kwargs)
+            with original_extract(archive, *args, **kwargs) as stream:
+                yield stream
             cancelled.set()
 
         with (
-            patch.object(tarfile.TarFile, "_extract_member", new=cancel_after_member),
+            patch.object(tarfile.TarFile, "extractfile", new=cancel_after_member),
             self.assertRaises(OperationCancelled),
         ):
             self.service._extract_tar(source, destination, AnalysisOptions(), cancelled)
@@ -499,7 +502,7 @@ class ArchiveServiceTests(unittest.TestCase):
 
     def test_rar_is_validated_and_extracted_with_7zip(self) -> None:
         source = self.root / "source.rar"
-        source.write_bytes(b"Rar! test")
+        source.write_bytes(b"Rar!\x1a\x07\x00 test")
         destination = self.root / "rar-output"
         fake_7zip = self.root / "7z.exe"
         fake_7zip.write_bytes(b"test executable")
@@ -528,13 +531,7 @@ class ArchiveServiceTests(unittest.TestCase):
             def infolist() -> list[Info]:
                 return [Info()]
 
-        class FakeRarModule:
-            @staticmethod
-            def RarFile(_source: Path) -> FakeArchive:  # noqa: N802
-                return FakeArchive()
-
         self.service._seven_zip = fake_7zip
-        self.service._rarfile = FakeRarModule()
 
         def run_7zip(command, **_kwargs):
             destination.mkdir(parents=True, exist_ok=True)
@@ -543,12 +540,13 @@ class ArchiveServiceTests(unittest.TestCase):
             return type(
                 "Completed",
                 (),
-                {"returncode": 0, "stdout": "Everything is Ok", "stderr": ""},
+                {"stdin": None, "poll": lambda _self: 0, "wait": lambda _self: 0},
             )()
 
-        with patch(
-            "paxoinsight.archive_service.subprocess.run", side_effect=run_7zip
-        ) as runner:
+        with (
+            patch("paxoinsight.archive_service.RarMetadataFile", return_value=FakeArchive()),
+            patch("paxoinsight.archive_service.subprocess.Popen", side_effect=run_7zip) as runner,
+        ):
             self.service._extract_rar(
                 source, destination, AnalysisOptions(), password=None
             )
@@ -595,15 +593,10 @@ class ArchiveServiceTests(unittest.TestCase):
             def needs_password() -> bool:
                 return True
 
-        class FakeRarModule:
-            @staticmethod
-            def RarFile(_source: Path) -> FakeArchive:  # noqa: N802
-                return FakeArchive()
-
         self.service._seven_zip = self.root / "7z.exe"
-        self.service._rarfile = FakeRarModule()
         with (
-            patch("paxoinsight.archive_service.subprocess.run") as runner,
+            patch("paxoinsight.archive_service.RarMetadataFile", return_value=FakeArchive()),
+            patch("paxoinsight.archive_service.subprocess.Popen") as runner,
             self.assertRaises(ArchivePasswordRequired),
         ):
             self.service._extract_rar(

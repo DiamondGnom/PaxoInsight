@@ -20,6 +20,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--counts", type=int, nargs="+", default=[60, 180])
     parser.add_argument("--files-per-tgz", type=int, default=16)
+    parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     service = ArchiveService()
     rows = []
@@ -73,7 +74,10 @@ def main() -> None:
                     })
                 finally:
                     service.cleanup(session)
-    print(json.dumps(rows, ensure_ascii=False, indent=2))
+    document = json.dumps(rows, ensure_ascii=False, indent=2)
+    if args.output:
+        args.output.write_text(document, encoding="utf-8")
+    print(document)
 
 
 if __name__ == "__main__":

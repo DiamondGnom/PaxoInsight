@@ -1,0 +1,24 @@
+{
+  "repository": "https://github.com/markokr/rarfile",
+  "commit": "d2f7df6fc843dae356fd6b0a85971dc36fd6e757",
+  "fixtures": [
+    {
+      "name": "rar3-comment-psw.rar",
+      "url": "https://raw.githubusercontent.com/markokr/rarfile/d2f7df6fc843dae356fd6b0a85971dc36fd6e757/test/files/rar3-comment-psw.rar",
+      "sha256": "ffb9b41571ac4d56ebf9a5ce5323740ea6150d66823b66abf7566f8dd2639803",
+      "size": 332
+    },
+    {
+      "name": "rar5-psw.rar",
+      "url": "https://raw.githubusercontent.com/markokr/rarfile/d2f7df6fc843dae356fd6b0a85971dc36fd6e757/test/files/rar5-psw.rar",
+      "sha256": "b6840e95152a1c3b5acd736dc34f988509866f04158b67da1b5a29e166a31355",
+      "size": 2403
+    },
+    {
+      "name": "rar5-hpsw.rar",
+      "url": "https://raw.githubusercontent.com/markokr/rarfile/d2f7df6fc843dae356fd6b0a85971dc36fd6e757/test/files/rar5-hpsw.rar",
+      "sha256": "9aff93dfd85b1e44daeef233105831999a2076299997b7790e1cf1fd557a4457",
+      "size": 2590
+    }
+  ]
+}

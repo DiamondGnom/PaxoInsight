@@ -1,0 +1,81 @@
+{
+  "rar": {
+    "status": "passed",
+    "cases": [
+      {
+        "fixture": "rar3-comment-psw.rar",
+        "sha256": "ffb9b41571ac4d56ebf9a5ce5323740ea6150d66823b66abf7566f8dd2639803",
+        "password_attempts": 2,
+        "files": [
+          "file1.txt",
+          "file2.txt"
+        ],
+        "sizes_verified": true,
+        "native_integrity_verified": true,
+        "additional_plain_crc_checks": 2
+      },
+      {
+        "fixture": "rar5-psw.rar",
+        "sha256": "b6840e95152a1c3b5acd736dc34f988509866f04158b67da1b5a29e166a31355",
+        "password_attempts": 2,
+        "files": [
+          "stest1.txt",
+          "stest2.txt"
+        ],
+        "sizes_verified": true,
+        "native_integrity_verified": true,
+        "additional_plain_crc_checks": 0
+      },
+      {
+        "fixture": "rar5-hpsw.rar",
+        "sha256": "9aff93dfd85b1e44daeef233105831999a2076299997b7790e1cf1fd557a4457",
+        "password_attempts": 2,
+        "files": [
+          "stest1.txt",
+          "stest2.txt"
+        ],
+        "sizes_verified": true,
+        "native_integrity_verified": true,
+        "additional_plain_crc_checks": 2
+      }
+    ],
+    "cleanup_verified": true,
+    "seven_zip": "c:\\program files\\7-zip\\7z.exe",
+    "scope": "Current source core, real native 7-Zip, public RAR3/RAR5 fixtures"
+  },
+  "portable": {
+    "status": "passed",
+    "zip_sha256": "87c9f76d3bd62711c33ae1b9f9daa13c8ee0f45bc778c057dfd068bddf4a6462",
+    "zip_size": 22531830,
+    "exe_sha256": "225c41e1dbdc254d28e09e649add7d33c4f89b2ecf3337c222a0c5d0789b6ae7",
+    "manifest_files_verified": 259,
+    "checks_passed": [
+      "--self-test",
+      "--gui-self-test",
+      "--security-self-test"
+    ],
+    "frozen_security_report": {
+      "version": "6.1.3",
+      "python": "3.14.8 (tags/v3.14.8:8e6e75d, Sep 30 2026, 18:19:33) [MSC v.1944 64 bit (AMD64)]",
+      "openssl": "OpenSSL 3.5.9 29 Sep 2026",
+      "expat": "expat_2.8.5",
+      "py7zr": "1.1.4",
+      "checks_passed": [
+        "zip_unsafe_paths_rejected",
+        "zip_duplicates_rejected",
+        "tar_directory_budget",
+        "zip_implicit_directory_budget",
+        "folder_directory_budget_and_source_preserved",
+        "7z_actual_write_budget_mocked_listing",
+        "disk_reserve_mocked_free_space",
+        "xml_dtd_rejected",
+        "html_report_escaped",
+        "zip_bzip2_decoder_allocation_bounded"
+      ],
+      "largest_zip_decoder_buffer": 1048576,
+      "test_payload_expansion_limit": 16777216,
+      "scope": "Synthetic regressions; not full native parser fuzzing or certification"
+    },
+    "scope": "Fresh temporary extraction; Python/backend overrides removed; not a separate clean Windows VM"
+  }
+}

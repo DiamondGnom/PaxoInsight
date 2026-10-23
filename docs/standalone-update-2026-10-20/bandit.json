@@ -1,0 +1,1808 @@
+{
+  "errors": [],
+  "generated_at": "2026-10-20T13:01:11Z",
+  "metrics": {
+    ".\\launcher.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 30,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "_totals": {
+      "CONFIDENCE.HIGH": 69,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 3,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 72,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 8313,
+      "nosec": 0,
+      "skipped_tests": 1
+    },
+    "src/paxoinsight\\__init__.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 5,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\__main__.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 10,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\_vendor\\__init__.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 1,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\_vendor\\analyzers.py": {
+      "CONFIDENCE.HIGH": 67,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 67,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 4390,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\analysis_inputs.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 29,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\analysis_service.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 325,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\archive_io.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 111,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\archive_service.py": {
+      "CONFIDENCE.HIGH": 2,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 2,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 975,
+      "nosec": 0,
+      "skipped_tests": 1
+    },
+    "src/paxoinsight\\attention.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 129,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\legacy_backend.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 6,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\models.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 156,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\rar_metadata.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 33,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\reporting.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 234,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\runtime.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 17,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\security_self_test.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 157,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\self_test.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 75,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\ui\\__init__.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 1,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\ui\\password_dialog.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 74,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\ui\\tk_main_window.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 3,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 3,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 1487,
+      "nosec": 0,
+      "skipped_tests": 0
+    },
+    "src/paxoinsight\\workflow.py": {
+      "CONFIDENCE.HIGH": 0,
+      "CONFIDENCE.LOW": 0,
+      "CONFIDENCE.MEDIUM": 0,
+      "CONFIDENCE.UNDEFINED": 0,
+      "SEVERITY.HIGH": 0,
+      "SEVERITY.LOW": 0,
+      "SEVERITY.MEDIUM": 0,
+      "SEVERITY.UNDEFINED": 0,
+      "loc": 68,
+      "nosec": 0,
+      "skipped_tests": 0
+    }
+  },
+  "results": [
+    {
+      "code": "294                                 candidates.append(os.path.join(path7z, \"7z.exe\"))\n295                     except Exception:\n296                         pass\n297         except Exception:\n",
+      "col_offset": 20,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 295,
+      "line_range": [
+        295,
+        296
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "296                         pass\n297         except Exception:\n298             pass\n299         home = os.environ.get(\"USERPROFILE\", \"\")\n",
+      "col_offset": 8,
+      "end_col_offset": 16,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 297,
+      "line_range": [
+        297,
+        298
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "485                                 break\n486             except Exception:\n487                 pass\n488     return suspicious\n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 486,
+      "line_range": [
+        486,
+        487
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "537             emails.extend(email_re.findall(s))\n538     except Exception:\n539         pass\n540     return {\"strings\": strings, \"urls\": list(set(urls)), \"ips\": list(set(ips)), \"emails\": list(set(emails))}\n",
+      "col_offset": 4,
+      "end_col_offset": 12,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 538,
+      "line_range": [
+        538,
+        539
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "557                     size_map[size].append(full)\n558             except Exception:\n559                 continue\n560     # Second pass: hash only files with same size\n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 558,
+      "line_range": [
+        558,
+        559
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "583                     \"detail\": f\"{len(content.splitlines())} \u0441\u0442\u0440\u043e\u043a\"})\n584             except Exception:\n585                 pass\n586         # Check signature files\n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 584,
+      "line_range": [
+        584,
+        585
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "628                 return f\"CN={cn}\"\n629     except Exception:\n630         pass\n631     return \"\"\n",
+      "col_offset": 4,
+      "end_col_offset": 12,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 629,
+      "line_range": [
+        629,
+        630
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "805                     \"date\": datetime.datetime.fromtimestamp(mtime).strftime(\"%Y-%m-%d %H:%M:%S\")})\n806             except Exception:\n807                 continue\n808     files_with_time.sort(key=lambda x: x[\"mtime\"], reverse=True)\n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 806,
+      "line_range": [
+        806,
+        807
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "889 \n890     except Exception:\n891         pass\n892 \n",
+      "col_offset": 4,
+      "end_col_offset": 12,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 890,
+      "line_range": [
+        890,
+        891
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "949 \n950             except Exception:\n951                 continue\n952 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 950,
+      "line_range": [
+        950,
+        951
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "978                     break\n979             except Exception:\n980                 pass\n981 \n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 979,
+      "line_range": [
+        979,
+        980
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "981 \n982     except Exception:\n983         pass\n984 \n",
+      "col_offset": 4,
+      "end_col_offset": 12,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 982,
+      "line_range": [
+        982,
+        983
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "1025                         abi = E_MACHINE_MAP.get(e_machine)\n1026                 except Exception:\n1027                     pass\n1028 \n",
+      "col_offset": 16,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 1026,
+      "line_range": [
+        1026,
+        1027
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "1040 \n1041     except Exception:\n1042         pass\n1043 \n",
+      "col_offset": 4,
+      "end_col_offset": 12,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 1041,
+      "line_range": [
+        1041,
+        1042
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "1115                     result[\"tool\"] = \"proguard\"\n1116             except Exception:\n1117                 pass\n1118 \n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 1116,
+      "line_range": [
+        1116,
+        1117
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "1121 \n1122     except Exception:\n1123         pass\n1124 \n",
+      "col_offset": 4,
+      "end_col_offset": 12,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 1122,
+      "line_range": [
+        1122,
+        1123
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "1176                 files_found.append(os.path.relpath(path, directory))\n1177             except Exception:\n1178                 continue\n1179 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 1177,
+      "line_range": [
+        1177,
+        1178
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "1195                     files_found.append(os.path.relpath(path, directory))\n1196                 except Exception:\n1197                     continue\n1198 \n",
+      "col_offset": 16,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 1196,
+      "line_range": [
+        1196,
+        1197
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "1208                 files_found.append(os.path.relpath(path, directory))\n1209             except Exception:\n1210                 continue\n1211 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 1209,
+      "line_range": [
+        1209,
+        1210
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "1225                 files_found.append(os.path.relpath(path, directory))\n1226             except Exception:\n1227                 continue\n1228 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 1226,
+      "line_range": [
+        1226,
+        1227
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "1238                 files_found.append(os.path.relpath(path, directory))\n1239             except Exception:\n1240                 continue\n1241 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 1239,
+      "line_range": [
+        1239,
+        1240
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "1248 \n1249     except Exception:\n1250         pass\n1251 \n",
+      "col_offset": 4,
+      "end_col_offset": 12,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 1249,
+      "line_range": [
+        1249,
+        1250
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "1329 \n1330     except Exception:\n1331         pass\n1332 \n",
+      "col_offset": 4,
+      "end_col_offset": 12,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 1330,
+      "line_range": [
+        1330,
+        1331
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "1421                                     })\n1422                 except Exception:\n1423                     continue\n1424 \n",
+      "col_offset": 16,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 1422,
+      "line_range": [
+        1422,
+        1423
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "1439                             })\n1440                     except Exception:\n1441                         pass\n1442 \n",
+      "col_offset": 20,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 1440,
+      "line_range": [
+        1440,
+        1441
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "1466                                             })\n1467                     except Exception:\n1468                         pass\n1469 \n",
+      "col_offset": 20,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 1467,
+      "line_range": [
+        1467,
+        1468
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "1469 \n1470     except Exception:\n1471         pass\n1472 \n",
+      "col_offset": 4,
+      "end_col_offset": 12,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 1470,
+      "line_range": [
+        1470,
+        1471
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "2175                         sec_entropy = _shannon_entropy(sample)\n2176                     except Exception:\n2177                         pass\n2178                     f.seek(saved_pos)\n",
+      "col_offset": 20,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 2176,
+      "line_range": [
+        2176,
+        2177
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "2252                                             imports.append(dll_name)\n2253                                     except Exception:\n2254                                         pass\n2255                                 f.seek(saved2)\n",
+      "col_offset": 36,
+      "end_col_offset": 44,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 2253,
+      "line_range": [
+        2253,
+        2254
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "2255                                 f.seek(saved2)\n2256             except Exception:\n2257                 pass\n2258 \n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 2256,
+      "line_range": [
+        2256,
+        2257
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "2637                         files[rel] = 0\n2638         except Exception:\n2639             pass\n2640         return files\n",
+      "col_offset": 8,
+      "end_col_offset": 16,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 2638,
+      "line_range": [
+        2638,
+        2639
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "2873                                             jar_version = val\n2874                     except Exception:\n2875                         pass\n2876 \n",
+      "col_offset": 20,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 2874,
+      "line_range": [
+        2874,
+        2875
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "2894                             _add(f\"{group_id}/{artifact_id}\", version, ecosystem=\"java\")\n2895                     except Exception:\n2896                         pass\n2897 \n",
+      "col_offset": 20,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 2895,
+      "line_range": [
+        2895,
+        2896
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "2907                             _add(f\"{gm.group(1)}/{gm.group(2)}\", gm.group(3).strip(), ecosystem=\"java\")\n2908                     except Exception:\n2909                         pass\n2910 \n",
+      "col_offset": 20,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 2908,
+      "line_range": [
+        2908,
+        2909
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "2920                                     _add(dep_name, ver_str, ecosystem=\"npm\")\n2921                     except Exception:\n2922                         pass\n2923 \n",
+      "col_offset": 20,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 2921,
+      "line_range": [
+        2921,
+        2922
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "2933                                     _add(req_m.group(1), (req_m.group(2) or \"\").strip(), ecosystem=\"pypi\")\n2934                     except Exception:\n2935                         pass\n2936 \n",
+      "col_offset": 20,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 2934,
+      "line_range": [
+        2934,
+        2935
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "2986                         graph[pkg].add(ref_pkg)\n2987             except Exception:\n2988                 pass\n2989     return dict(graph)\n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 2987,
+      "line_range": [
+        2987,
+        2988
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "3222                         kt_files.append(rel)\n3223     except Exception:\n3224         pass\n3225 \n",
+      "col_offset": 4,
+      "end_col_offset": 12,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 3223,
+      "line_range": [
+        3223,
+        3224
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "3239                 content = _read_limited(f)\n3240         except Exception:\n3241             continue\n3242         file_contents[src] = content\n",
+      "col_offset": 8,
+      "end_col_offset": 20,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 3240,
+      "line_range": [
+        3240,
+        3241
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "3278                         xml_refs.add(m.group(1).rsplit(\".\", 1)[-1])\n3279                 except Exception:\n3280                     continue\n3281     except Exception:\n",
+      "col_offset": 16,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 3279,
+      "line_range": [
+        3279,
+        3280
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "3280                     continue\n3281     except Exception:\n3282         pass\n3283 \n",
+      "col_offset": 4,
+      "end_col_offset": 12,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 3281,
+      "line_range": [
+        3281,
+        3282
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "3359                                         break\n3360                         except Exception:\n3361                             pass\n3362 \n",
+      "col_offset": 24,
+      "end_col_offset": 32,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 3360,
+      "line_range": [
+        3360,
+        3361
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "3421                                     break\n3422                 except Exception:\n3423                     continue\n3424     except Exception:\n",
+      "col_offset": 16,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 3422,
+      "line_range": [
+        3422,
+        3423
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "3423                     continue\n3424     except Exception:\n3425         pass\n3426 \n",
+      "col_offset": 4,
+      "end_col_offset": 12,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 3424,
+      "line_range": [
+        3424,
+        3425
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "3577                     sources.append(os.path.relpath(os.path.join(root, fname), directory))\n3578     except Exception:\n3579         pass\n3580 \n",
+      "col_offset": 4,
+      "end_col_offset": 12,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 3578,
+      "line_range": [
+        3578,
+        3579
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "3589                 content = _read_limited(f)\n3590         except Exception:\n3591             continue\n3592 \n",
+      "col_offset": 8,
+      "end_col_offset": 20,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 3590,
+      "line_range": [
+        3590,
+        3591
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "3831                             missing_by_file[rel].append(mod)\n3832             except Exception:\n3833                 continue\n3834 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 3832,
+      "line_range": [
+        3832,
+        3833
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "3906                                 })\n3907                     except Exception:\n3908                         pass\n3909             except Exception:\n",
+      "col_offset": 20,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 3907,
+      "line_range": [
+        3907,
+        3908
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "3908                         pass\n3909             except Exception:\n3910                 continue\n3911 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 3909,
+      "line_range": [
+        3909,
+        3910
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "3952                         findings.append({\"detail\": f\"{rel} (\u0437\u0430\u0433\u043b\u0443\u0448\u043a\u0430, {size} \u0431\u0430\u0439\u0442)\", \"severity\": \"medium\"})\n3953             except Exception:\n3954                 continue\n3955 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 3953,
+      "line_range": [
+        3953,
+        3954
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "3989                     })\n3990             except Exception:\n3991                 continue\n3992 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 3990,
+      "line_range": [
+        3990,
+        3991
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "4074                     missing[ref] += 1\n4075             except Exception:\n4076                 continue\n4077 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 4075,
+      "line_range": [
+        4075,
+        4076
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "4196                             })\n4197             except Exception:\n4198                 continue\n4199 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 4197,
+      "line_range": [
+        4197,
+        4198
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "4287                         has_android_signs = True\n4288                 except Exception:\n4289                     pass\n4290 \n",
+      "col_offset": 16,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 4288,
+      "line_range": [
+        4288,
+        4289
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "4323                     build_times.append(mtime)\n4324             except Exception:\n4325                 continue\n4326 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 4324,
+      "line_range": [
+        4324,
+        4325
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "4367                 class_sizes[key] = size\n4368         except Exception:\n4369             continue\n4370 \n",
+      "col_offset": 8,
+      "end_col_offset": 20,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 4368,
+      "line_range": [
+        4368,
+        4369
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "4393                     })\n4394             except Exception:\n4395                 continue\n4396 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 4394,
+      "line_range": [
+        4394,
+        4395
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "4430                             versions_found[f\"package.json ({rel})\"] = v\n4431                     except Exception:\n4432                         pass\n4433                 elif f == \"gradle.properties\":\n",
+      "col_offset": 20,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 4431,
+      "line_range": [
+        4431,
+        4432
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "4438                         versions_found[f\"gradle.properties ({rel})\"] = m.group(1).strip()\n4439             except Exception:\n4440                 continue\n4441 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 4439,
+      "line_range": [
+        4439,
+        4440
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "4471                 size = os.path.getsize(full)\n4472             except Exception:\n4473                 pass\n4474 \n",
+      "col_offset": 12,
+      "end_col_offset": 20,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 4472,
+      "line_range": [
+        4472,
+        4473
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "4483                                 break\n4484                 except Exception:\n4485                     pass\n4486 \n",
+      "col_offset": 16,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Pass detected.",
+      "line_number": 4484,
+      "line_range": [
+        4484,
+        4485
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b110_try_except_pass.html",
+      "test_id": "B110",
+      "test_name": "try_except_pass"
+    },
+    {
+      "code": "4535                     })\n4536             except Exception:\n4537                 continue\n4538 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 4536,
+      "line_range": [
+        4536,
+        4537
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "4569                 file_count += 1\n4570             except Exception:\n4571                 continue\n4572 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 4570,
+      "line_range": [
+        4570,
+        4571
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "4631                             detected_frameworks.append(fw_name)\n4632                 except Exception:\n4633                     continue\n4634 \n",
+      "col_offset": 16,
+      "end_col_offset": 28,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 4632,
+      "line_range": [
+        4632,
+        4633
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "4693                     })\n4694         except Exception:\n4695             continue\n4696 \n",
+      "col_offset": 8,
+      "end_col_offset": 20,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 4694,
+      "line_range": [
+        4694,
+        4695
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "4738                     generated_files += 1\n4739             except Exception:\n4740                 continue\n4741 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 4739,
+      "line_range": [
+        4739,
+        4740
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "4880                     low_count += 1\n4881             except Exception:\n4882                 continue\n4883 \n",
+      "col_offset": 12,
+      "end_col_offset": 24,
+      "filename": "src/paxoinsight\\_vendor\\analyzers.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 703,
+        "link": "https://cwe.mitre.org/data/definitions/703.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Try, Except, Continue detected.",
+      "line_number": 4881,
+      "line_range": [
+        4881,
+        4882
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b112_try_except_continue.html",
+      "test_id": "B112",
+      "test_name": "try_except_continue"
+    },
+    {
+      "code": "8 import stat\n9 import subprocess\n10 import sys\n",
+      "col_offset": 0,
+      "end_col_offset": 17,
+      "filename": "src/paxoinsight\\archive_service.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Consider possible security implications associated with the subprocess module.",
+      "line_number": 9,
+      "line_range": [
+        9
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/blacklists/blacklist_imports.html#b404-import-subprocess",
+      "test_id": "B404",
+      "test_name": "blacklist"
+    },
+    {
+      "code": "798                 stderr=subprocess.DEVNULL,\n799                 shell=False,\n800                 creationflags=creation_flags,\n801             )\n802             if password is not None:\n803                 # With no -p option, 7-Zip prompts on stdin. Never put an archive\n804                 # password in argv, environment, log output or an on-disk file.\n805                 try:\n806                     process.stdin.write((password + \"\\n\").encode(\"utf-8\"))\n807                     process.stdin.close()\n",
+      "col_offset": 22,
+      "end_col_offset": 13,
+      "filename": "src/paxoinsight\\archive_service.py",
+      "issue_confidence": "HIGH",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "subprocess call - check for execution of untrusted input.",
+      "line_number": 799,
+      "line_range": [
+        794,
+        795,
+        796,
+        797,
+        798,
+        799,
+        800,
+        801
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b603_subprocess_without_shell_equals_true.html",
+      "test_id": "B603",
+      "test_name": "subprocess_without_shell_equals_true"
+    },
+    {
+      "code": "797         resolved = threading.Event()\n798         response: dict[str, str | None] = {\"password\": None}\n799         self.events.put((\"password\", path, attempt, incorrect, resolved, response))\n",
+      "col_offset": 43,
+      "end_col_offset": 53,
+      "filename": "src/paxoinsight\\ui\\tk_main_window.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 259,
+        "link": "https://cwe.mitre.org/data/definitions/259.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Possible hardcoded password: 'None'",
+      "line_number": 798,
+      "line_range": [
+        798
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b105_hardcoded_password_string.html",
+      "test_id": "B105",
+      "test_name": "hardcoded_password_string"
+    },
+    {
+      "code": "1168         if self.session and self.session.content_root.is_dir():\n1169             os.startfile(self.session.content_root)\n1170 \n",
+      "col_offset": 12,
+      "end_col_offset": 51,
+      "filename": "src/paxoinsight\\ui\\tk_main_window.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process without a shell.",
+      "line_number": 1169,
+      "line_range": [
+        1169
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b606_start_process_with_no_shell.html",
+      "test_id": "B606",
+      "test_name": "start_process_with_no_shell"
+    },
+    {
+      "code": "1172         if self.session and self.session.output_archive and self.session.output_archive.exists():\n1173             os.startfile(self.session.output_archive)\n1174 \n",
+      "col_offset": 12,
+      "end_col_offset": 53,
+      "filename": "src/paxoinsight\\ui\\tk_main_window.py",
+      "issue_confidence": "MEDIUM",
+      "issue_cwe": {
+        "id": 78,
+        "link": "https://cwe.mitre.org/data/definitions/78.html"
+      },
+      "issue_severity": "LOW",
+      "issue_text": "Starting a process without a shell.",
+      "line_number": 1173,
+      "line_range": [
+        1173
+      ],
+      "more_info": "https://bandit.readthedocs.io/en/1.9.4/plugins/b606_start_process_with_no_shell.html",
+      "test_id": "B606",
+      "test_name": "start_process_with_no_shell"
+    }
+  ]
+}

@@ -1,20 +1,23 @@
 [build-system]
-requires = ["setuptools==84.0.0", "wheel==0.48.0"]
+requires = ["setuptools>=84.0.0,<85", "wheel==0.48.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "paxoinsight"
-version = "6.1.0"
+version = "6.3"
 description = "Standalone archive analysis and 7Z preparation application"
-requires-python = ">=3.14,<3.15"
+requires-python = ">=3.14.8,<3.15"
 license = { text = "Proprietary" }
 authors = [{ name = "Paxo" }]
 dependencies = [
-    "cryptography==50.0.1",
-    "py7zr==1.1.3",
+    "cryptography>=50.0.1,<51",
+    "defusedxml==0.7.1",
+    "py7zr>=1.1.3,<1.2",
     "rarfile==4.5",
-    "tkinterdnd2==0.6.3",
 ]
+
+[project.optional-dependencies]
+desktop = ["tkinterdnd2==0.6.4"]
 
 [project.scripts]
 paxoinsight = "paxoinsight.__main__:main"
@@ -28,6 +31,7 @@ where = ["src"]
 [tool.ruff]
 line-length = 100
 target-version = "py314"
+extend-exclude = ["src/paxoinsight/_vendor"]
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]

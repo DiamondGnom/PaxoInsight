@@ -1,42 +1,45 @@
+param([string]$BuildVariant = "python3148")
+
 $ErrorActionPreference = "Stop"
+if ($BuildVariant -notmatch '^[a-z0-9][a-z0-9.-]{0,63}$') {
+    throw "Invalid scoped build directory name"
+}
 
 $ProjectRoot = Split-Path -Parent $PSScriptRoot
 $WorkspaceRoot = Split-Path -Parent $ProjectRoot
-$DefaultPython = Join-Path $WorkspaceRoot ".venv314\Scripts\python.exe"
+$DefaultPython = Join-Path $WorkspaceRoot ".venv3148\Scripts\python.exe"
 $Python = if ($env:PAXOINSIGHT_BUILD_PYTHON) {
     $env:PAXOINSIGHT_BUILD_PYTHON
 } else {
     $DefaultPython
 }
-$LegacyRoot = Join-Path $WorkspaceRoot ".inspection_v5_1_0\PaxoInsight_v5.1.0_Portable"
 $SourceRoot = Join-Path $ProjectRoot "src"
-$BuildRoot = Join-Path $ProjectRoot "build\python314"
-$DistRoot = Join-Path $ProjectRoot "dist\python314"
+$BuildRoot = Join-Path $ProjectRoot "build\$BuildVariant"
+$DistRoot = Join-Path $ProjectRoot "dist\$BuildVariant"
 
 if (-not (Test-Path -LiteralPath $Python)) {
     throw "Python 3.14 build environment not found: $Python"
 }
-if (-not (Test-Path -LiteralPath (Join-Path $LegacyRoot "PaxoInsight.py"))) {
-    throw "PaxoInsight v5.1.0 analysis backend not found: $LegacyRoot"
+if (-not (Test-Path -LiteralPath (Join-Path $SourceRoot "paxoinsight\_vendor\analyzers.py"))) {
+    throw "Bundled PaxoInsight analysis backend not found"
 }
 
-$Version = & $Python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')"
-if ($LASTEXITCODE -ne 0 -or $Version.Trim() -ne "3.14") {
-    throw "PaxoInsight must be built with standard CPython 3.14; found: $Version"
-}
-& $Python -c "import sys; raise SystemExit(0 if getattr(sys, '_is_gil_enabled', lambda: True)() else 1)"
+$env:PYTHONPATH = $SourceRoot
+& $Python -c "from paxoinsight.runtime import require_supported_runtime; require_supported_runtime()"
 if ($LASTEXITCODE -ne 0) {
-    throw "The free-threaded Python build is not supported; use standard CPython 3.14"
+    throw "Use standard CPython 3.14.8+ x64 with GIL"
 }
 & $Python -m pip check
 if ($LASTEXITCODE -ne 0) {
     throw "The Python 3.14 build environment has broken dependencies"
 }
 
-# Never expose the legacy v5.1 lib directory here: it contains CPython 3.12
-# native extensions.  The spec locates only the pure-Python analyzer module.
-$env:PYTHONPATH = $SourceRoot
+# Analysis functions are bundled in src; old portable libraries are not used.
 Set-Location $ProjectRoot
+& $Python (Join-Path $PSScriptRoot "verify_desktop_build.py") --environment
+if ($LASTEXITCODE -ne 0) {
+    throw "Desktop environment does not match reviewed dependency locks"
+}
 
 & $Python -m PyInstaller `
     --noconfirm `
@@ -67,6 +70,10 @@ $Python314Dll = Get-ChildItem -LiteralPath $Distribution -Recurse -Filter "pytho
 if (-not $Python314Dll) {
     throw "python314.dll is missing from the portable build"
 }
+& $Python (Join-Path $PSScriptRoot "verify_desktop_build.py") --distribution $Distribution
+if ($LASTEXITCODE -ne 0) {
+    throw "Frozen module/DLL/source identity validation failed"
+}
 
 $SelfTest = Start-Process `
     -FilePath $Executable `
@@ -86,18 +93,33 @@ $GuiSelfTest = Start-Process `
 if ($GuiSelfTest.ExitCode -ne 0) {
     throw "Portable Tkinter/TkDnD self-test failed with exit code $($GuiSelfTest.ExitCode)"
 }
+$SecuritySelfTest = Start-Process `
+    -FilePath $Executable `
+    -ArgumentList @("--security-self-test", "--self-test-report", ('"' + (Join-Path $Distribution "SECURITY_SELF_TEST.json") + '"')) `
+    -WindowStyle Hidden `
+    -PassThru `
+    -Wait
+if ($SecuritySelfTest.ExitCode -ne 0) {
+    throw "Portable security regression self-test failed: $($SecuritySelfTest.ExitCode)"
+}
 
 $ReadmeTarget = Join-Path $Distribution "README.txt"
 Copy-Item -LiteralPath (Join-Path $ProjectRoot "README.md") -Destination $ReadmeTarget -Force
+Copy-Item -LiteralPath (Join-Path $ProjectRoot "CHANGELOG.md") -Destination $Distribution -Force
+& $Python (Join-Path $PSScriptRoot "desktop_sbom.py") --distribution $Distribution
+if ($LASTEXITCODE -ne 0) {
+    throw "Artifact SBOM generation failed"
+}
+Copy-Item -LiteralPath (Join-Path $ProjectRoot "SBOM.cdx.json") -Destination $Distribution -Force
 
 $AppVersion = & $Python -c "from paxoinsight import VERSION; print(VERSION)"
 if ($LASTEXITCODE -ne 0) {
     throw "Cannot determine the application version"
 }
 $AppVersion = $AppVersion.Trim()
-$Zip = Join-Path $ProjectRoot "dist\PaxoInsight_v${AppVersion}_Python314_Portable.zip"
+$Zip = Join-Path $ProjectRoot "dist\PaxoInsight_v${AppVersion}_Python3148_Portable.zip"
 if (Test-Path -LiteralPath $Zip) {
-    Remove-Item -LiteralPath $Zip -Force
+    throw "Release ZIP already exists; preserve it and use a new version or output name: $Zip"
 }
 
 # Antivirus scanners can briefly keep the newly created executable open after

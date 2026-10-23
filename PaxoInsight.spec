@@ -1,28 +1,31 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 from pathlib import Path
+from PyInstaller.utils.hooks import copy_metadata
 
 project_root = Path(SPECPATH)
-workspace_root = project_root.parent
 src_root = project_root / "src"
-legacy_root = workspace_root / ".inspection_v5_1_0" / "PaxoInsight_v5.1.0_Portable"
+runtime_metadata = []
+for line in (project_root / "requirements-runtime.lock.txt").read_text(encoding="utf-8").splitlines():
+    if "==" in line and not line.startswith("#"):
+        runtime_metadata.extend(copy_metadata(line.split("==", 1)[0]))
+runtime_metadata.extend(copy_metadata("paxoinsight"))
 
 a = Analysis(
     [str(project_root / "launcher.py")],
     pathex=[
         str(src_root),
-        str(legacy_root),
     ],
     binaries=[],
     # The current PyInstaller hook selects only the Windows x64/Tcl 9 TkDnD
     # payload.  Collecting the whole package would also ship unrelated Linux,
     # macOS, x86 and ARM binaries.
-    datas=[
+    datas=runtime_metadata + [
         (str(project_root / "assets" / "paxoinsight-icon.png"), "assets"),
         (str(project_root / "assets" / "paxoinsight-logo.png"), "assets"),
     ],
     hiddenimports=[
-        "PaxoInsight",
+        "paxoinsight._vendor.analyzers",
         "py7zr",
         "rarfile",
         "tkinter",
@@ -32,7 +35,10 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=["PySide6", "shiboken6"],
+    excludes=[
+        "PySide6", "shiboken6", "fastapi", "uvicorn", "httpx",
+        "pip", "setuptools", "pkg_resources", "wheel", "PaxoInsight",
+    ],
     noarchive=False,
     optimize=1,
 )

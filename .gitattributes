@@ -1,0 +1,2 @@
+# Keep the SBOM byte-identical to the released asset and its published SHA-256.
+SBOM.cdx.json -text

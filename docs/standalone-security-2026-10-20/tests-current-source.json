@@ -1,0 +1,17 @@
+{
+  "run": 63,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "success": true,
+  "modules": [
+    "test_analysis_service",
+    "test_archive_service",
+    "test_attention",
+    "test_password_dialog",
+    "test_python314_migration",
+    "test_reporting",
+    "test_security_audit.UntrustedInputsTests"
+  ],
+  "scope": "Current sources, not shipped EXE"
+}

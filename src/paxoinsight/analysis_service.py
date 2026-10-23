@@ -14,6 +14,7 @@ from .archive_service import (
     archive_extension,
 )
 from .attention import classify_attention
+from .kotlin_analysis import KotlinIndex
 from .legacy_backend import load_legacy_backend
 from .models import (
     AnalysisResult,
@@ -67,29 +68,26 @@ class AnalysisService:
             findings.append(Finding.from_mapping(item))
 
         self._check_cancelled(cancelled)
+        progress(48, "Структурный анализ Kotlin и JVM-байткода")
+        kotlin_index = KotlinIndex(root, cancelled)
+        kotlin_index.index_classes(classes)
+        expanded = set(session.expanded_archives)
+        uninspected = [path for path in remaining_archives if path not in expanded]
+        mapping = kotlin_index.mapping(kotlins, uninspected)
+        analysis_data["kotlin_mapping"] = mapping
+        analysis_data["bytecode_versions"] = kotlin_index.bytecode_versions()
         progress(52, "Определение режима SAST")
         recommendations = self._run(
             "appscreener",
             lambda: self._backend._generate_appscreener_recommendations(
-                str(root), ext_counts, classes, kotlins, specials, integrity
+                str(root), ext_counts, classes, kotlins, specials, integrity,
+                kotlin_mapping=mapping,
             ),
             analysis_data,
             findings,
         ) or {}
 
         stages: list[tuple[int, str, str, Callable[[], Any]]] = [
-            (
-                58,
-                "Анализ Kotlin и Java bytecode",
-                "kotlin_mapping",
-                lambda: self._backend._check_kotlin_class_mapping(classes, kotlins),
-            ),
-            (
-                62,
-                "Проверка версий bytecode",
-                "bytecode_versions",
-                lambda: self._backend._check_bytecode_versions(str(root), classes),
-            ),
             (
                 66,
                 "Поиск подозрительных файлов",

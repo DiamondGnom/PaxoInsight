@@ -14,7 +14,11 @@ class Python314MigrationTests(unittest.TestCase):
         legacy_lib = Path(backend.__file__).resolve().parent / "lib"
 
         self.assertNotIn(str(legacy_lib), sys.path)
-        for name in ("cryptography", "py7zr", "rarfile", "tkinterdnd2"):
+        names = ["cryptography", "py7zr", "rarfile"]
+        # Tk drag-and-drop is an optional desktop extra; the server does not use it.
+        if importlib.util.find_spec("tkinterdnd2") is not None:
+            names.append("tkinterdnd2")
+        for name in names:
             module = importlib.import_module(name)
             module_path = Path(module.__file__).resolve()
             self.assertFalse(

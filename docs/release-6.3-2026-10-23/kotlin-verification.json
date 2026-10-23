@@ -1,0 +1,83 @@
+{
+  "real_library": {
+    "classes_parsed": 995,
+    "metadata_kinds": {
+      "2": 104,
+      "1": 665,
+      "4": 30,
+      "5": 88,
+      "3": 64,
+      "0": 44
+    },
+    "seconds": 0.4282,
+    "binary_sha256": "bd8250210584cb659847dce9cda660f8e9906e5def7fbebcea93dc6dcb6a88a3",
+    "source_sha256": "1e29c0668b0aa555e7b154e5da2e8094e1b755cfee25737839195bbbdad8a4a2",
+    "real_source_mapping": {
+      "source": "src/commonMain/kotlin/kotlin/Tuples.kt",
+      "status": "confirmed",
+      "classes": [
+        "build/classes/kotlin/main/kotlin/Pair.class",
+        "build/classes/kotlin/main/kotlin/Triple.class",
+        "build/classes/kotlin/main/kotlin/TuplesKt.class"
+      ],
+      "declarations": [
+        {
+          "declaration": "class Pair",
+          "expected": "kotlin/Pair.class",
+          "classes": [
+            "build/classes/kotlin/main/kotlin/Pair.class"
+          ],
+          "status": "confirmed",
+          "reason": "Внутреннее имя, SourceFile, Kotlin Metadata и контекст сборки",
+          "shared_facade": false
+        },
+        {
+          "declaration": "class Triple",
+          "expected": "kotlin/Triple.class",
+          "classes": [
+            "build/classes/kotlin/main/kotlin/Triple.class"
+          ],
+          "status": "confirmed",
+          "reason": "Внутреннее имя, SourceFile, Kotlin Metadata и контекст сборки",
+          "shared_facade": false
+        },
+        {
+          "declaration": "Фасад пакетных объявлений",
+          "expected": "kotlin/TuplesKt.class",
+          "classes": [
+            "build/classes/kotlin/main/kotlin/TuplesKt.class"
+          ],
+          "status": "confirmed",
+          "reason": "Внутреннее имя, SourceFile, Kotlin Metadata и контекст сборки",
+          "shared_facade": false
+        }
+      ],
+      "reason": "Подтверждена структурная связь исходника и байткода; тождество версии исходников не проверяется",
+      "context": {
+        "module": "",
+        "source_set": "commonMain",
+        "variant": "",
+        "test": false,
+        "non_jvm": false,
+        "dependency": false,
+        "target": "",
+        "source_group": "main"
+      },
+      "recognition_complete": true,
+      "auxiliary_classes": []
+    },
+    "source": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.4.21/",
+    "jar_executed": false
+  },
+  "gui": {
+    "status": "passed",
+    "columns": 7,
+    "partial_and_missing_visible": true,
+    "real_class_paths_visible": true,
+    "rescan_discards_old_index": true,
+    "partial_coverage_percent": 50.0,
+    "rescanned_coverage_percent": 100.0,
+    "new_task_clears_coverage": true,
+    "scope": "Actual withdrawn Tk widgets; no interactive desktop screenshot"
+  }
+}

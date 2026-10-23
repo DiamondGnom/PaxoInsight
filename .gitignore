@@ -20,6 +20,15 @@ htmlcov/
 # Packaging and generated artifacts
 dist/
 build/python314/
+build/python3148/
+build/downloads/
+build/wheels3148/
+build/kotlin-fixtures/
+build/kotlin-6.1.2/
+build/kotlin-6.1.3/
+build/desktop-6.1.4/
+build/desktop-6.1.5/
+build/release-6.3/
 build/PaxoInsight/
 *.egg-info/
 *.spec.bak
@@ -28,6 +37,7 @@ build/PaxoInsight/
 *.log
 PaxoInsight_Report.*
 PaxoInsight_Kotlin_Report.html
+PaxoInsight_Kotlin_Report.txt
 
 # Editors and operating systems
 .idea/
@@ -35,3 +45,9 @@ PaxoInsight_Kotlin_Report.html
 .DS_Store
 Thumbs.db
 Desktop.ini
+
+# Web runtime data and credentials
+.web*
+.env
+.env.*
+!.env.example

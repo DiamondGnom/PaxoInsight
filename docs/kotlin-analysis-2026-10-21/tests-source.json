@@ -1,0 +1,8 @@
+{
+  "python": "3.14.8 (tags/v3.14.8:8e6e75d, Sep 30 2026, 18:19:33) [MSC v.1944 64 bit (AMD64)]",
+  "run": 152,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 1,
+  "success": true
+}
